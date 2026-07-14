@@ -35,8 +35,28 @@ const corsHeaders = {
   "Content-Type": "application/json",
 };
 
+// Anti-abuso: la fn es pública (pre-login). El navegador del landing SIEMPRE manda Origin;
+// las llamadas server-to-server del runtime (tools de WhatsApp/voz) NO mandan Origin y suelen
+// traer el service role → se les hace bypass. El resto (incl. floods por curl) va por rate-limit por IP.
+const ALLOWED_ORIGIN = /^https?:\/\/(jacobo\.yaub\.ai|([a-z0-9-]+\.)?vercel\.app|localhost(:\d+)?|127\.0\.0\.1(:\d+)?)$/i;
+const RATE_LIMITS: Record<string, { limit: number; win: number }> = {
+  analyze:      { limit: 25, win: 600 },
+  plan:         { limit: 25, win: 600 },
+  contact:      { limit: 15, win: 3600 },
+  agenda_slots: { limit: 90, win: 600 },
+  agenda_book:  { limit: 30, win: 3600 },
+  plan_pdf:     { limit: 40, win: 3600 },
+};
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: corsHeaders });
+}
+
+// Escapa HTML para interpolar datos del usuario en el correo de notificación sin inyección.
+function esc(s: unknown): string {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 function withTimeout(ms: number): { signal: AbortSignal; cancel: () => void } {
@@ -49,11 +69,28 @@ function normalizeUrl(raw: string): string | null {
   let u = (raw || "").trim();
   if (!u) return null;
   if (!/^https?:\/\//i.test(u)) u = "https://" + u;
+  let parsed: URL;
   try {
-    return new URL(u).toString();
+    parsed = new URL(u);
   } catch (_e) {
     return null;
   }
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return null;
+  // Bloquea hosts privados/reservados: evita usar Firecrawl para raspar red interna / metadata (SSRF/abuso).
+  const host = parsed.hostname.toLowerCase();
+  if (host === "localhost" || host.endsWith(".localhost") || host.endsWith(".local") || host.endsWith(".internal")) return null;
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(host)) {
+    const p = host.split(".").map(Number);
+    if (p[0] === 0 || p[0] === 10 || p[0] === 127) return null;
+    if (p[0] === 169 && p[1] === 254) return null;              // link-local / metadata (169.254.169.254)
+    if (p[0] === 172 && p[1] >= 16 && p[1] <= 31) return null;  // 172.16/12
+    if (p[0] === 192 && p[1] === 168) return null;              // 192.168/16
+    if (p[0] === 100 && p[1] >= 64 && p[1] <= 127) return null; // CGNAT 100.64/10
+  }
+  if (host.includes(":")) { // IPv6 loopback / privados
+    if (host === "::1" || host === "::" || host.startsWith("fc") || host.startsWith("fd") || host.startsWith("fe80")) return null;
+  }
+  return parsed.toString();
 }
 
 async function firecrawlScrape(url: string): Promise<string> {
@@ -252,7 +289,7 @@ async function handleContact(body: any) {
   if (error || !lead) return json({ ok: false, error: "lead_no_encontrado" }, 404);
 
   if (RESEND_API_KEY) {
-    const skills = (lead.plan?.skills ?? []).map((s: any) => `<li><strong>${s.name}</strong> — ${s.desc}</li>`).join("");
+    const skills = (lead.plan?.skills ?? []).map((s: any) => `<li><strong>${esc(s.name)}</strong> — ${esc(s.desc)}</li>`).join("");
     try {
       await fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -260,17 +297,17 @@ async function handleContact(body: any) {
         body: JSON.stringify({
           from: FROM_EMAIL,
           to: NOTIFICATION_EMAILS,
-          subject: `🔥 Lead del landing IA a tu medida: ${lead.rol || "sin rol"} (${contacto})`,
+          subject: `🔥 Lead del landing IA a tu medida: ${(lead.rol || "sin rol").toString().replace(/[\r\n]+/g, " ").slice(0, 120)} (${contacto.replace(/[\r\n]+/g, " ")})`,
           html: `<div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;">
             <h2>Nuevo lead del consultor IA</h2>
-            <p><strong>Contacto:</strong> ${contacto}</p>
-            <p><strong>Rol:</strong> ${lead.rol || "—"}<br/>
-            <strong>Sitio:</strong> ${lead.sitio || "—"}<br/>
-            <strong>Paquete recomendado:</strong> ${lead.pkg || "—"}</p>
-            <p><strong>Su día a día:</strong><br/>${lead.proyecto || "—"}</p>
-            <p><strong>Resumen del negocio:</strong><br/>${lead.site_summary || "—"}</p>
+            <p><strong>Contacto:</strong> ${esc(contacto)}</p>
+            <p><strong>Rol:</strong> ${esc(lead.rol) || "—"}<br/>
+            <strong>Sitio:</strong> ${esc(lead.sitio) || "—"}<br/>
+            <strong>Paquete recomendado:</strong> ${esc(lead.pkg) || "—"}</p>
+            <p><strong>Su día a día:</strong><br/>${esc(lead.proyecto) || "—"}</p>
+            <p><strong>Resumen del negocio:</strong><br/>${esc(lead.site_summary) || "—"}</p>
             ${skills ? `<p><strong>Skills propuestas:</strong></p><ul>${skills}</ul>` : ""}
-            <p style="color:#888;font-size:12px;">Lead ${lead.id} · tabla landing_leads</p>
+            <p style="color:#888;font-size:12px;">Lead ${esc(lead.id)} · tabla landing_leads</p>
           </div>`,
         }),
       });
@@ -466,6 +503,25 @@ Deno.serve(async (req) => {
   const body = await req.json().catch(() => null);
   if (!body?.action) return json({ error: "missing_action" }, 400);
 
+  // ── Anti-abuso (solo para llamadas no confiables) ──
+  const bearer = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "").trim();
+  const isTrusted = !!bearer && bearer === SUPABASE_SERVICE_ROLE_KEY; // runtime server-to-server
+  if (!isTrusted) {
+    const origin = req.headers.get("origin") || "";
+    if (origin && !ALLOWED_ORIGIN.test(origin)) return json({ ok: false, error: "forbidden_origin" }, 403);
+    const rl = RATE_LIMITS[body.action];
+    if (rl) {
+      const ip = (req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "unknown").trim();
+      try {
+        const { data, error } = await supabase.rpc("landing_rl_hit", { p_ip: ip, p_action: body.action, p_limit: rl.limit, p_window_secs: rl.win });
+        if (error) console.error("rate-limit rpc error:", error); // fail-open: un fallo del RPC no tumba el landing
+        else if (data === false) return json({ ok: false, error: "rate_limited", message: "Demasiadas solicitudes. Espera un momento y vuelve a intentar." }, 429);
+      } catch (e) {
+        console.error("rate-limit error:", e);
+      }
+    }
+  }
+
   try {
     switch (body.action) {
       case "analyze": return await handleAnalyze(body);
@@ -477,7 +533,7 @@ Deno.serve(async (req) => {
       default: return json({ error: "unknown_action" }, 400);
     }
   } catch (e) {
-    console.error("landing-consultor error:", e);
-    return json({ ok: false, error: "internal", detail: (e as Error)?.message }, 500);
+    console.error("landing-consultor error:", e); // detalle solo en logs; al cliente mensaje genérico
+    return json({ ok: false, error: "internal" }, 500);
   }
 });
