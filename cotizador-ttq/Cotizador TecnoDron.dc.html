@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#f7f3ea;}
+x-dc{--accent:#F43F5E;--accent-soft:rgba(244,63,94,.12);--accent-glow:rgba(244,63,94,.35);}
+a{color:#F43F5E;} a:hover{color:#0f1b2d;}
+@keyframes orb{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(44px,-36px) scale(1.07);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+@keyframes chipIn{from{opacity:0;transform:translateY(10px) scale(.95);}to{opacity:1;transform:none;}}
+@keyframes scan{0%{top:4%;}50%{top:86%;}100%{top:4%;}}
+@keyframes glowPulse{0%,100%{box-shadow:0 10px 30px rgba(15,27,45,.06);}50%{box-shadow:0 0 30px 2px var(--accent-glow);}}
+@keyframes barGrow{from{width:0;}}
+@keyframes blink{0%,100%{opacity:.3;}50%{opacity:1;}}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; --accent-soft: {{accentSoft}}; --accent-glow: {{accentGlow}}; position:fixed; inset:0; overflow:hidden; background:#f7f3ea; font-family:Inter,system-ui,sans-serif; color:#0f1b2d;">
+  <div style="position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle at 35% 35%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-160px;left:-140px;filter:blur(14px);animation:orb 15s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:680px;height:680px;border-radius:50%;background:radial-gradient(circle at 60% 40%, rgba(15,27,45,.07), rgba(255,255,255,0) 70%);bottom:-240px;right:-180px;filter:blur(16px);animation:orb 19s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.95), rgba(255,255,255,0) 70%);top:32%;left:46%;filter:blur(10px);animation:orb 17s ease-in-out infinite;"></div>
+
+  <div style="position:absolute;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 34px;z-index:20;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:36px;height:36px;border-radius:11px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:14px;box-shadow:0 8px 20px var(--accent-glow);">TD</div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16px;color:#0f1b2d;">TecnoDron <span style="color:#5a6478;font-weight:600;">· Cotizador Inteligente</span></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px;padding:7px 15px;border-radius:999px;background:rgba(255,255,255,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.9);font-size:11px;font-weight:700;letter-spacing:.15em;color:#5a6478;font-family:Manrope,sans-serif;">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 2.2s infinite;"></span>POWERED BY YAUB
+    </div>
+  </div>
+
+  <sc-if value="{{s1}}" hint-placeholder-val="{{ true }}">
+  <div data-screen-label="1 · Entrada dual" style="position:absolute;inset:0;overflow:auto;padding:116px 48px 110px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:38px;align-items:center;">
+      <div style="text-align:center;display:flex;flex-direction:column;gap:14px;max-width:800px;align-items:center;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">COTIZADOR AGÉNTICO · TECNODRON</div>
+        <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:47px;line-height:1.08;margin:0;color:#0f1b2d;text-wrap:balance;">¿Qué dron le conviene a tu operación?</h1>
+        <p style="margin:0;font-size:18px;color:#5a6478;">Deja que el agente lo descubra. Sin catálogos, sin formularios.</p>
+      </div>
+      <div style="display:flex;gap:26px;width:100%;justify-content:center;flex-wrap:wrap;">
+        <div style="flex:1;min-width:390px;max-width:480px;display:flex;flex-direction:column;gap:16px;padding:30px 32px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border:1px solid rgba(255,255,255,.9);border-radius:26px;box-shadow:0 24px 60px rgba(15,27,45,.08), inset 0 1px 0 rgba(255,255,255,.95);">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:46px;height:46px;border-radius:15px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14 L14 10"></path><path d="M9.5 13 l-3.2 3.2 a3.9 3.9 0 0 0 5.5 5.5 L15 18.5"></path><path d="M14.5 11 l3.2-3.2 a3.9 3.9 0 0 0 -5.5-5.5 L9 5.5"></path></svg>
+            </div>
+            <div>
+              <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:19px;">Pega tu sitio web</div>
+              <div style="font-size:13.5px;color:#5a6478;">El agente lee tu negocio y encuentra dónde cabe un dron.</div>
+            </div>
+          </div>
+          <input value="{{siteUrl}}" onChange="{{onUrl}}" style="width:100%;box-sizing:border-box;padding:14px 18px;border-radius:14px;border:1px solid rgba(15,27,45,.12);background:rgba(255,255,255,.85);font-size:15px;font-family:Inter,sans-serif;color:#0f1b2d;outline:none;">
+          <button onClick="{{startA}}" style="padding:14px 20px;border-radius:14px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);" style-hover="filter:brightness(1.06);">Analizar mi negocio</button>
+        </div>
+        <div style="flex:1;min-width:390px;max-width:480px;display:flex;flex-direction:column;gap:16px;padding:30px 32px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border:1px solid rgba(255,255,255,.9);border-radius:26px;box-shadow:0 24px 60px rgba(15,27,45,.08), inset 0 1px 0 rgba(255,255,255,.95);">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:46px;height:46px;border-radius:15px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7 a3 3 0 0 1 3-3 h10 a3 3 0 0 1 3 3 v6 a3 3 0 0 1 -3 3 h-7 l-4 4 v-4 a3 3 0 0 1 -2-3 z"></path><path d="M8.5 9.5 h7"></path><path d="M8.5 12.5 h4.5"></path></svg>
+            </div>
+            <div>
+              <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:19px;">Platícanos tu proyecto</div>
+              <div style="font-size:13.5px;color:#5a6478;">Cuéntale al agente y él pregunta lo mínimo.</div>
+            </div>
+          </div>
+          <textarea value="{{proyecto}}" onChange="{{onProyecto}}" rows="3" style="width:100%;box-sizing:border-box;padding:14px 18px;border-radius:14px;border:1px solid rgba(15,27,45,.12);background:rgba(255,255,255,.85);font-size:15px;font-family:Inter,sans-serif;color:#0f1b2d;outline:none;resize:none;line-height:1.5;"></textarea>
+          <button onClick="{{startB}}" style="padding:14px 20px;border-radius:14px;border:1.5px solid var(--accent);background:rgba(255,255,255,.7);color:var(--accent);font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="background:var(--accent-soft);">Recomendar mi equipo</button>
+        </div>
+      </div>
+      <div style="font-size:13px;color:#8a93a6;">El agente conoce el catálogo completo: agrícolas EAVision · enterprise Autel · antidron Skyfend</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s2}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="2 · Análisis del agente" style="position:absolute;inset:0;overflow:auto;padding:100px 48px 110px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:24px;">
+      <div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">PASO 2 · EL AGENTE ENTIENDE TU NEGOCIO</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;margin:10px 0 0;color:#0f1b2d;">{{screen2Title}}</h2>
+      </div>
+      <sc-if value="{{routeA}}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:26px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:18px;">
+          <div style="position:relative;overflow:hidden;border-radius:22px;border:1px solid rgba(15,27,45,.08);background:#ffffff;box-shadow:0 22px 54px rgba(15,27,45,.09);">
+            <div style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(15,27,45,.06);">
+              <span style="width:9px;height:9px;border-radius:50%;background:#e6e0d2;"></span><span style="width:9px;height:9px;border-radius:50%;background:#e6e0d2;"></span><span style="width:9px;height:9px;border-radius:50%;background:#e6e0d2;"></span>
+              <span style="flex:1;text-align:center;font-size:12px;color:#8a93a6;background:rgba(15,27,45,.04);border-radius:8px;padding:4px 12px;">{{siteUrlShown}}</span>
+            </div>
+            <div style="padding:22px 26px;display:flex;flex-direction:column;gap:14px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div style="width:88px;height:14px;border-radius:6px;background:rgba(15,27,45,.14);"></div>
+                <div style="display:flex;gap:8px;"><span style="width:38px;height:8px;border-radius:4px;background:rgba(15,27,45,.08);"></span><span style="width:38px;height:8px;border-radius:4px;background:rgba(15,27,45,.08);"></span><span style="width:38px;height:8px;border-radius:4px;background:rgba(15,27,45,.08);"></span></div>
+              </div>
+              <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:21px;color:#0f1b2d;">{{empresa}}</div>
+              <div style="font-size:13px;color:#5a6478;">{{siteLine1}}</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+                <div style="height:64px;border-radius:12px;background:rgba(15,27,45,.06);"></div>
+                <div style="height:64px;border-radius:12px;background:rgba(15,27,45,.06);"></div>
+                <div style="height:64px;border-radius:12px;background:rgba(15,27,45,.06);"></div>
+              </div>
+              <div style="font-size:13px;color:#8a93a6;">{{siteLine2}} · {{siteLine3}}</div>
+            </div>
+            <div style="position:absolute;left:0;right:0;height:52px;top:8%;background:linear-gradient(180deg, rgba(255,255,255,0), var(--accent-soft) 50%, rgba(255,255,255,0));border-top:1.5px solid var(--accent);animation:scan 3.4s ease-in-out infinite;pointer-events:none;"></div>
+          </div>
+          <div style="padding:20px 24px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.45));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.9);border-radius:22px;box-shadow:0 18px 44px rgba(15,27,45,.07);">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">RECOMENDACIÓN EN VIVO</div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;"><span>{{meterL}}</span><span>{{meterR}}</span></div>
+            <div style="position:relative;height:10px;border-radius:999px;background:linear-gradient(90deg, rgba(15,27,45,.1), var(--accent-soft));">
+              <div style="position:absolute;top:50%;left:{{meterPos}}%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(255,255,255,.85), 0 0 18px var(--accent-glow);transition:left .6s cubic-bezier(.4,0,.2,1);"></div>
+            </div>
+            <div style="font-size:13.5px;color:#5a6478;">El agente se inclina por <strong style="color:#0f1b2d;">{{meterLead}}</strong></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 1.6s infinite;"></span><span style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">HALLAZGOS DEL AGENTE</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <sc-for list="{{chips}}" as="c" hint-placeholder-count="4">
+              <div style="display:flex;gap:7px;align-items:center;padding:9px 15px;border-radius:999px;background:rgba(255,255,255,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(15,27,45,.08);animation:chipIn .5s ease both;animation-delay:{{c.delay}};font-size:13.5px;box-shadow:0 6px 16px rgba(15,27,45,.05);">
+                <span style="color:#8a93a6;">{{c.k}}</span><span style="font-weight:700;color:#0f1b2d;">{{c.v}}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:6px;">
+            <sc-for list="{{askedQs}}" as="qa" hint-placeholder-count="1">
+              <div style="display:flex;flex-direction:column;gap:10px;animation:fadeUp .4s ease both;">
+                <div style="align-self:flex-start;display:flex;gap:10px;align-items:flex-start;max-width:540px;">
+                  <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></span></div>
+                  <div style="background:rgba(255,255,255,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.95);padding:13px 17px;border-radius:4px 18px 18px 18px;font-size:14.5px;line-height:1.45;box-shadow:0 8px 22px rgba(15,27,45,.05);">{{qa.q}}</div>
+                </div>
+                <sc-if value="{{qa.answered}}" hint-placeholder-val="{{ false }}">
+                  <div style="align-self:flex-end;background:var(--accent);color:#fff;padding:10px 17px;border-radius:18px 18px 4px 18px;font-size:14px;font-weight:600;">{{qa.answered}}</div>
+                </sc-if>
+                <sc-if value="{{qa.open}}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;padding-left:38px;">
+                    <sc-for list="{{qa.opts}}" as="o" hint-placeholder-count="2">
+                      <button onClick="{{o.pick}}" style="padding:10px 19px;border-radius:999px;border:1.5px solid var(--accent);background:rgba(255,255,255,.75);color:#0f1b2d;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);">{{o.label}}</button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+            <sc-if value="{{allAnswered}}" hint-placeholder-val="{{ false }}">
+              <div style="align-self:flex-start;display:flex;gap:10px;align-items:flex-start;max-width:560px;animation:fadeUp .4s ease both;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></span></div>
+                <div style="background:rgba(255,255,255,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.95);padding:13px 17px;border-radius:4px 18px 18px 18px;font-size:14.5px;line-height:1.45;box-shadow:0 8px 22px rgba(15,27,45,.05);">{{analysisSummary}}</div>
+              </div>
+              <input value="{{extra}}" onChange="{{onExtra}}" placeholder="Dime algo más que deba saber antes de generarte tu propuesta en segundos…" style="width:100%;box-sizing:border-box;padding:13px 17px;border-radius:14px;border:1.5px solid rgba(15,27,45,.16);background:rgba(255,255,255,.92);font-size:14px;font-family:Inter,sans-serif;color:#0f1b2d;outline:none;animation:fadeUp .4s ease both;">
+            <button onClick="{{goDiagram}}" style="align-self:center;margin-top:8px;padding:15px 30px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);animation:fadeUp .4s ease both;" style-hover="filter:brightness(1.06);">Ver dónde cabe en mi negocio →</button>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{routeB}}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:1.35fr .85fr;gap:26px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:12px;padding:26px 28px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border:1px solid rgba(255,255,255,.9);border-radius:26px;box-shadow:0 24px 60px rgba(15,27,45,.08);">
+          <div style="align-self:flex-end;max-width:520px;background:#0f1b2d;color:#f7f3ea;padding:14px 18px;border-radius:18px 18px 4px 18px;font-size:14.5px;line-height:1.5;">{{proyectoShown}}</div>
+          <sc-for list="{{askedQs}}" as="qb" hint-placeholder-count="1">
+            <div style="display:flex;flex-direction:column;gap:10px;animation:fadeUp .4s ease both;">
+              <div style="align-self:flex-start;display:flex;gap:10px;align-items:flex-start;max-width:540px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></span></div>
+                <div style="background:rgba(255,255,255,.85);border:1px solid rgba(15,27,45,.06);padding:13px 17px;border-radius:4px 18px 18px 18px;font-size:14.5px;line-height:1.45;">{{qb.q}}</div>
+              </div>
+              <sc-if value="{{qb.answered}}" hint-placeholder-val="{{ false }}">
+                <div style="align-self:flex-end;background:var(--accent);color:#fff;padding:10px 17px;border-radius:18px 18px 4px 18px;font-size:14px;font-weight:600;">{{qb.answered}}</div>
+              </sc-if>
+              <sc-if value="{{qb.open}}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;padding-left:38px;">
+                  <sc-for list="{{qb.opts}}" as="ob" hint-placeholder-count="2">
+                    <button onClick="{{ob.pick}}" style="padding:10px 19px;border-radius:999px;border:1.5px solid var(--accent);background:rgba(255,255,255,.75);color:#0f1b2d;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);">{{ob.label}}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{allAnswered}}" hint-placeholder-val="{{ false }}">
+            <div style="align-self:flex-start;padding-left:38px;font-size:14.5px;color:#5a6478;animation:fadeUp .4s ease both;">{{analysisSummary}}</div>
+            <input value="{{extra}}" onChange="{{onExtra}}" placeholder="Dime algo más que deba saber antes de generarte tu propuesta en segundos…" style="width:100%;box-sizing:border-box;padding:13px 17px;border-radius:14px;border:1.5px solid rgba(15,27,45,.16);background:rgba(255,255,255,.92);font-size:14px;font-family:Inter,sans-serif;color:#0f1b2d;outline:none;animation:fadeUp .4s ease both;">
+            <button onClick="{{goDiagram}}" style="align-self:center;margin-top:8px;padding:15px 30px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);animation:fadeUp .4s ease both;" style-hover="filter:brightness(1.06);">Ver dónde cabe en mi negocio →</button>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="padding:20px 24px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.45));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.9);border-radius:22px;box-shadow:0 18px 44px rgba(15,27,45,.07);">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">RECOMENDACIÓN EN VIVO</div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;"><span>{{meterL}}</span><span>{{meterR}}</span></div>
+            <div style="position:relative;height:10px;border-radius:999px;background:linear-gradient(90deg, rgba(15,27,45,.1), var(--accent-soft));">
+              <div style="position:absolute;top:50%;left:{{meterPos}}%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(255,255,255,.85), 0 0 18px var(--accent-glow);transition:left .6s cubic-bezier(.4,0,.2,1);"></div>
+            </div>
+            <div style="font-size:13.5px;color:#5a6478;">El agente se inclina por <strong style="color:#0f1b2d;">{{meterLead}}</strong></div>
+          </div>
+          <div style="padding:18px 22px;border-radius:20px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.85);font-size:13px;color:#5a6478;line-height:1.55;">Cada respuesta mueve la recomendación en vivo. El agente ya conoce tanques, anchos de aplicación y terrenos — pregunta solo lo que cambia la decisión.</div>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s3}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="3 · Dónde cabe en tu negocio" style="position:absolute;inset:0;overflow:auto;padding:96px 40px 104px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:10px;align-items:center;">
+      <div style="text-align:center;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">PASO 3 · TU OPERACIÓN, NO UN CATÁLOGO</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:33px;margin:10px 0 4px;color:#0f1b2d;">Dónde cabe en {{clientLabel}}</h2>
+        <div style="font-size:15px;color:#5a6478;">Así se ve tu operación con equipo TecnoDron trabajando en cada etapa.</div>
+      </div>
+      <div style="position:relative;width:1160px;height:540px;flex:none;">
+        <svg viewBox="0 0 1160 540" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+          <defs><marker id="arrA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".7"></path></marker></defs>
+          <sc-for list="{{links}}" as="ln" hint-placeholder-count="2">
+            <path d="{{ln.d}}" stroke="rgba(15,27,45,.22)" stroke-width="1.5" stroke-dasharray="2 6" fill="none"></path>
+            <circle r="3" fill="#0f1b2d" opacity=".5"><animateMotion dur="{{ln.dur}}" begin="{{ln.begin}}" repeatCount="indefinite" path="{{ln.d}}"></animateMotion></circle>
+          </sc-for>
+          <sc-for list="{{cons}}" as="cn" hint-placeholder-count="2">
+            <path d="{{cn.d}}" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 7" fill="none" opacity=".5" marker-end="url(#arrA)"></path>
+            <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="{{cn.dur}}" begin="{{cn.begin}}" repeatCount="indefinite" path="{{cn.d}}"></animateMotion></circle>
+          </sc-for>
+        </svg>
+        <sc-for list="{{stages}}" as="st" hint-placeholder-count="3">
+          <div style="position:absolute;top:60px;left:{{st.left}}px;width:190px;box-sizing:border-box;padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);animation:{{st.anim}};">
+            <div style="font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--accent);font-family:Manrope,sans-serif;">{{st.num}}</div>
+            <div style="font-size:15.5px;font-weight:700;color:#0f1b2d;margin-top:4px;">{{st.label}}</div>
+            <div style="font-size:12px;color:#8a93a6;margin-top:3px;">{{st.sub}}</div>
+          </div>
+        </sc-for>
+        <sc-for list="{{cons}}" as="cl" hint-placeholder-count="2">
+          <div style="position:absolute;left:{{cl.lx}}px;top:{{cl.ly}}px;padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid var(--accent-soft);font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;font-family:Manrope,sans-serif;">{{cl.label}}</div>
+        </sc-for>
+        <sc-for list="{{equipos}}" as="eq" hint-placeholder-count="3">
+          <div style="position:absolute;top:396px;left:{{eq.left}}px;width:234px;box-sizing:border-box;padding:16px 18px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border:1px solid rgba(255,255,255,.95);box-shadow:0 16px 40px rgba(15,27,45,.08);display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;flex:none;"></span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:16px;color:#0f1b2d;">{{eq.name}}</span></div>
+            <div style="font-size:12px;color:#8a93a6;">{{eq.sub}}</div>
+            <div style="font-size:12.5px;color:#0f1b2d;background:var(--accent-soft);padding:7px 10px;border-radius:10px;font-weight:600;line-height:1.4;">{{eq.ben}}</div>
+          </div>
+        </sc-for>
+      </div>
+      <button onClick="{{goConfig}}" style="padding:15px 32px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);" style-hover="filter:brightness(1.06);">Armar mi configuración y cotizar →</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s4}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="4 · Configuración y cotización" style="position:absolute;inset:0;overflow:auto;padding:96px 44px 104px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.12fr .88fr;gap:26px;align-items:start;">
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div style="padding:26px 30px;border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border:1px solid rgba(255,255,255,.95);box-shadow:0 22px 54px rgba(15,27,45,.08);display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">EL AGENTE COMPARÓ</div>
+            <div style="padding:6px 16px;border-radius:999px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;box-shadow:0 6px 16px var(--accent-glow);">Recomendado: {{winnerName}}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 170px 1fr;gap:12px;align-items:end;">
+            <div><div style="{{nameAStyle}}">{{cardAName}}</div><div style="font-size:12px;color:#8a93a6;margin-top:3px;">{{cardATag}}</div></div>
+            <div style="text-align:center;font-size:12px;font-weight:700;color:#8a93a6;padding-bottom:4px;">vs</div>
+            <div style="text-align:right;"><div style="{{nameBStyle}}">{{cardBName}}</div><div style="font-size:12px;color:#8a93a6;margin-top:3px;">{{cardBTag}}</div></div>
+          </div>
+          <sc-for list="{{compareRows}}" as="r" hint-placeholder-count="3">
+            <div style="display:grid;grid-template-columns:1fr 170px 1fr;gap:12px;align-items:center;padding:9px 0;border-top:1px solid rgba(15,27,45,.06);">
+              <div style="display:flex;align-items:center;gap:10px;flex-direction:row-reverse;">
+                <span style="font-size:13px;font-weight:700;white-space:nowrap;">{{r.a}}</span>
+                <div style="flex:1;height:8px;border-radius:99px;background:rgba(15,27,45,.07);overflow:hidden;display:flex;justify-content:flex-end;"><div style="width:{{r.apw}};height:100%;border-radius:99px;background:{{r.aBar}};animation:barGrow .8s ease both;"></div></div>
+              </div>
+              <div style="text-align:center;font-size:12.5px;color:#5a6478;font-weight:600;">{{r.spec}}</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="flex:1;height:8px;border-radius:99px;background:rgba(15,27,45,.07);overflow:hidden;"><div style="width:{{r.bpw}};height:100%;border-radius:99px;background:{{r.bBar}};animation:barGrow .8s ease both;"></div></div>
+                <span style="font-size:13px;font-weight:700;white-space:nowrap;">{{r.b}}</span>
+              </div>
+            </div>
+          </sc-for>
+          <div style="font-size:13px;color:#5a6478;line-height:1.5;border-top:1px solid rgba(15,27,45,.06);padding-top:12px;">{{winnerReason}}</div>
+          <div style="display:flex;gap:20px;align-items:center;padding:16px;border-radius:18px;background:rgba(255,255,255,.55);border:1px solid rgba(15,27,45,.05);">
+            <sc-if value="{{isAgro}}" hint-placeholder-val="{{ true }}">
+            <svg width="270" height="130" viewBox="0 0 270 130" style="flex:none;">
+              <rect x="6" y="6" width="258" height="118" rx="14" fill="#e9f0da" stroke="#cfdcb4"></rect>
+              <line x1="20" y1="40" x2="250" y2="40" stroke="#dbe6c6" stroke-width="1.5"></line>
+              <line x1="20" y1="65" x2="250" y2="65" stroke="#dbe6c6" stroke-width="1.5"></line>
+              <line x1="20" y1="90" x2="250" y2="90" stroke="#dbe6c6" stroke-width="1.5"></line>
+              <path d="M22,28 H248 V52 H22 V78 H248 V102 H22" stroke="var(--accent)" stroke-width="1.2" opacity=".35" fill="none" stroke-dasharray="3 5"></path>
+              <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="9s" repeatCount="indefinite" path="M22,28 H248 V52 H22 V78 H248 V102 H22"></animateMotion></circle>
+            </svg>
+            </sc-if>
+            <sc-if value="{{isSeg}}" hint-placeholder-val="{{ false }}">
+            <svg width="270" height="130" viewBox="0 0 270 130" style="flex:none;">
+              <rect x="6" y="6" width="258" height="118" rx="14" fill="#e8ecf2" stroke="#ccd5e0"></rect>
+              <rect x="85" y="42" width="100" height="46" rx="6" fill="rgba(15,27,45,.12)"></rect>
+              <path d="M30,25 H240 V105 H30 Z" stroke="var(--accent)" stroke-width="1.2" opacity=".4" fill="none" stroke-dasharray="3 5"></path>
+              <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="7s" repeatCount="indefinite" path="M30,25 H240 V105 H30 Z"></animateMotion></circle>
+            </svg>
+            </sc-if>
+            <div>
+              <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:30px;color:#0f1b2d;">{{coverNum}}</div>
+              <div style="font-size:13px;color:#5a6478;">{{coverLabel}}</div>
+              <div style="font-size:12.5px;color:#8a93a6;font-style:italic;margin-top:4px;">{{coverNote}}</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:24px 30px;border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border:1px solid rgba(255,255,255,.95);box-shadow:0 22px 54px rgba(15,27,45,.08);">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">ARMA TU KIT</div>
+            <div style="font-size:12.5px;color:#8a93a6;">prende y apaga piezas — la cotización se actualiza en vivo</div>
+          </div>
+          <sc-for list="{{kitItems}}" as="k" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:14px;padding:12px 2px;border-top:1px solid rgba(15,27,45,.06);opacity:{{k.rowOp}};transition:opacity .3s;">
+              <button onClick="{{k.toggle}}" style="{{k.swStyle}}"><span style="{{k.knobStyle}}"></span></button>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:700;color:#0f1b2d;">{{k.name}}</div><div style="font-size:12.5px;color:#8a93a6;">{{k.desc}}</div></div>
+              <div style="font-size:13px;font-weight:600;white-space:nowrap;color:#0f1b2d;">{{k.range}}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.94);border:1px solid rgba(15,27,45,.08);border-radius:24px;box-shadow:0 28px 70px rgba(15,27,45,.13);padding:28px 30px;display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:38px;height:38px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:13px;">TD</div>
+          <div>
+            <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16px;color:#0f1b2d;">Cotización de referencia</div>
+            <div style="font-size:12px;color:#8a93a6;">Folio {{folio}} · 13 de julio de 2026</div>
+          </div>
+        </div>
+        <svg width="100%" height="14" viewBox="0 0 360 14" preserveAspectRatio="none" style="display:block;">
+          <path d="M0,7 L360,7" stroke="var(--accent-soft)" stroke-width="2"></path>
+          <circle r="3.5" fill="var(--accent)"><animateMotion dur="2.2s" repeatCount="indefinite" path="M0,7 L360,7"></animateMotion></circle>
+        </svg>
+        <div style="font-size:13px;color:#5a6478;">Cliente: <strong style="color:#0f1b2d;">{{quoteClient}}</strong></div>
+        <sc-if value="{{hasExtra}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;color:#5a6478;background:rgba(15,27,45,.04);border-radius:10px;padding:9px 13px;">Nota del cliente: <em style="color:#0f1b2d;">“{{extra}}”</em></div></sc-if>
+        <div style="display:flex;background:rgba(15,27,45,.06);border-radius:13px;padding:4px;gap:4px;">
+          <button onClick="{{setFinal}}" style="{{finalStyle}}">Cliente final</button>
+          <button onClick="{{setDist}}" style="{{distStyle}}">Distribuidor −12%</button>
+        </div>
+        <div style="display:flex;flex-direction:column;">
+          <sc-for list="{{quoteLines}}" as="ql" hint-placeholder-count="4">
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid rgba(15,27,45,.05);">
+              <span style="font-size:13.5px;color:#0f1b2d;flex:1;">{{ql.name}}</span>
+              <span style="font-size:13px;font-weight:600;color:#0f1b2d;white-space:nowrap;">{{ql.r}}</span>
+            </div>
+          </sc-for>
+          <sc-if value="{{hasDisc}}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid rgba(15,27,45,.05);">
+              <span style="font-size:13.5px;color:var(--accent);font-weight:600;">{{discName}}</span>
+              <span style="font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap;">{{discVal}}</span>
+            </div>
+          </sc-if>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:4px;">
+          <span style="font-size:13.5px;color:#5a6478;">Total estimado</span>
+          <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:21px;color:#0f1b2d;text-align:right;">{{totalText}}</span>
+        </div>
+        <div style="font-size:11.5px;color:#8a93a6;line-height:1.5;">Precio de referencia · sujeto a configuración y tipo de cambio · Vigencia: 7 días</div>
+        <button style="padding:14px;border-radius:14px;border:none;background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);" style-hover="filter:brightness(1.06);">Recibir por WhatsApp</button>
+        <button style="padding:13px;border-radius:14px;border:1.5px solid rgba(15,27,45,.16);background:transparent;color:#0f1b2d;font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="border-color:var(--accent);color:var(--accent);">Agendar demo de vuelo</button>
+        <div style="text-align:center;font-size:11px;color:#8a93a6;letter-spacing:.1em;">EL AGENTE PREPARÓ ESTA COTIZACIÓN · POWERED BY YAUB</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s5}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="5 · Panel TecnoDron" style="position:absolute;inset:0;overflow:auto;padding:96px 44px 104px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:20px;">
+      <div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">VISTA INTERNA · SOLO EQUIPO TECNODRON</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;margin:10px 0 2px;color:#0f1b2d;">Panel TecnoDron</h2>
+        <div style="font-size:14.5px;color:#5a6478;">Lo que el agente trabajó hoy, mientras el equipo vendía.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;">
+        <div style="padding:20px 24px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:#0f1b2d;">14</div><div style="font-size:13px;color:#5a6478;">cotizaciones hoy</div><div style="font-size:12px;color:var(--accent);font-weight:700;margin-top:4px;">+5 vs ayer</div></div>
+        <div style="padding:20px 24px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:#0f1b2d;">$8.4 M</div><div style="font-size:13px;color:#5a6478;">pipeline MXN</div><div style="font-size:12px;color:#8a93a6;margin-top:4px;">precio de referencia</div></div>
+        <div style="padding:20px 24px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:#0f1b2d;">32</div><div style="font-size:13px;color:#5a6478;">sitios analizados</div><div style="font-size:12px;color:#8a93a6;margin-top:4px;">análisis de sitio web</div></div>
+        <div style="padding:20px 24px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:var(--accent);">87%</div><div style="font-size:13px;color:#5a6478;">armado por el agente</div><div style="font-size:12px;color:#8a93a6;margin-top:4px;">13% pasó a un asesor</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:20px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div style="padding:22px 26px;border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);display:flex;flex-direction:column;gap:14px;">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">COTIZACIONES POR LÍNEA</div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="font-weight:700;">Agrícola EAVision</span><span style="color:#5a6478;">62% · $5.2 M</span></div><div style="height:9px;border-radius:99px;background:rgba(15,27,45,.07);"><div style="width:62%;height:100%;border-radius:99px;background:var(--accent);animation:barGrow 1s ease both;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="font-weight:700;">Enterprise Autel</span><span style="color:#5a6478;">27% · $2.3 M</span></div><div style="height:9px;border-radius:99px;background:rgba(15,27,45,.07);"><div style="width:27%;height:100%;border-radius:99px;background:rgba(15,27,45,.4);animation:barGrow 1s ease both;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="font-weight:700;">Antidron Skyfend</span><span style="color:#5a6478;">11% · $0.9 M</span></div><div style="height:9px;border-radius:99px;background:rgba(15,27,45,.07);"><div style="width:11%;height:100%;border-radius:99px;background:rgba(15,27,45,.2);animation:barGrow 1s ease both;"></div></div></div>
+          </div>
+          <div style="padding:22px 26px;border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">LEADS POR ESTADO</div>
+            <svg viewBox="0 0 540 280" style="width:100%;height:auto;margin-top:8px;">
+              <path d="M60,58 L118,40 L196,44 L236,26 L282,34 L306,72 L318,64 L340,70 L344,108 L332,140 L356,166 L398,180 L442,176 L452,160 L488,158 L508,170 L512,196 L488,214 L462,206 L446,222 L430,244 L398,240 L360,224 L318,204 L282,192 L250,170 L216,142 L182,116 L148,96 L112,80 L84,72 Z" fill="rgba(15,27,45,.05)" stroke="rgba(15,27,45,.18)" stroke-width="1.5"></path>
+              <path d="M62,66 L82,78 L100,110 L118,146 L132,176 L122,184 L104,158 L84,122 L64,88 L52,72 Z" fill="rgba(15,27,45,.05)" stroke="rgba(15,27,45,.18)" stroke-width="1.5"></path>
+              <circle cx="150" cy="118" r="6" fill="var(--accent)"><animate attributeName="r" values="5;9;5" dur="2.2s" repeatCount="indefinite"></animate></circle>
+              <circle cx="216" cy="168" r="6" fill="var(--accent)"><animate attributeName="r" values="5;9;5" dur="2.2s" begin=".5s" repeatCount="indefinite"></animate></circle>
+              <circle cx="252" cy="158" r="6" fill="var(--accent)"><animate attributeName="r" values="5;9;5" dur="2.2s" begin="1s" repeatCount="indefinite"></animate></circle>
+              <circle cx="240" cy="184" r="6" fill="var(--accent)"><animate attributeName="r" values="5;9;5" dur="2.2s" begin="1.5s" repeatCount="indefinite"></animate></circle>
+              <circle cx="268" cy="92" r="5" fill="rgba(15,27,45,.35)"></circle>
+            </svg>
+            <div style="font-size:12.5px;color:#5a6478;margin-top:6px;">Guanajuato · Sinaloa · Jalisco · Michoacán encendidos · NL en seguimiento</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;padding-left:4px;">LEADS CALIFICADOS POR EL AGENTE</div>
+          <div style="padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(15,27,45,.06);display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:14.5px;font-weight:800;color:#0f1b2d;">Agroservicios del Bajío</span><span style="padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:700;">Cotización enviada</span></div>
+            <div style="font-size:13px;color:#5a6478;line-height:1.5;">800 ha por temporada · fumigación terrestre · quiere migrar a dron esta temporada.</div>
+            <div style="font-size:12.5px;color:#0f1b2d;font-weight:600;">EA-J150 + kit completo · $— referencia</div>
+          </div>
+          <div style="padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(15,27,45,.06);display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:14.5px;font-weight:800;color:#0f1b2d;">Huerta San Mateo</span><span style="padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:700;">Demo agendada</span></div>
+            <div style="font-size:13px;color:#5a6478;line-height:1.5;">300 ha de aguacate en Michoacán · pendiente · sin piloto certificado.</div>
+            <div style="font-size:12.5px;color:#0f1b2d;font-weight:600;">EA-J70 + capacitación + AFAC · $— referencia</div>
+          </div>
+          <div style="padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(15,27,45,.06);display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:14.5px;font-weight:800;color:#0f1b2d;">VIN Seguridad Privada</span><span style="padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:700;">Asesor asignado</span></div>
+            <div style="font-size:13px;color:#5a6478;line-height:1.5;">3 parques industriales en NL · turnos nocturnos · reportes de drones intrusos.</div>
+            <div style="font-size:12.5px;color:#0f1b2d;font-weight:600;">EVO Max 4T + SkyShield · $— referencia</div>
+          </div>
+          <div style="padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(15,27,45,.06);display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:14.5px;font-weight:800;color:#0f1b2d;">Minera Cerro Alto</span><span style="padding:4px 12px;border-radius:999px;background:rgba(15,27,45,.08);color:#5a6478;font-size:11.5px;font-weight:700;">Nuevo lead</span></div>
+            <div style="font-size:13px;color:#5a6478;line-height:1.5;">Volumetrías mensuales de patios en Zacatecas · hoy con topografía tradicional.</div>
+            <div style="font-size:12.5px;color:#0f1b2d;font-weight:600;">EVO II Pro 6K RTK · $— referencia</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <div style="position:absolute;left:50%;bottom:20px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.7);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(15,27,45,.12);z-index:30;">
+    <button onClick="{{prev}}" style="width:34px;height:34px;border-radius:50%;border:none;background:rgba(15,27,45,.05);color:#0f1b2d;font-size:17px;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);color:var(--accent);">‹</button>
+    <div style="font-size:13px;font-weight:800;min-width:46px;text-align:center;font-family:Manrope,sans-serif;color:#0f1b2d;">{{screenNum}} / 5</div>
+    <button onClick="{{next}}" style="width:34px;height:34px;border-radius:50%;border:none;background:rgba(15,27,45,.05);color:#0f1b2d;font-size:17px;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);color:var(--accent);">›</button>
+    <div style="width:1px;height:18px;background:rgba(15,27,45,.14);margin:0 4px;"></div>
+    <button onClick="{{resetAll}}" style="padding:7px 14px;border-radius:999px;border:none;background:transparent;color:#5a6478;font-size:12.5px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;" style-hover="color:var(--accent);">Reset</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F43F5E&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#F43F5E&quot;,&quot;#D97706&quot;,&quot;#0EA5E9&quot;,&quot;#16A34A&quot;],&quot;section&quot;:&quot;Marca&quot;},&quot;demoGiro&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;agroservicio&quot;,&quot;options&quot;:[&quot;agroservicio&quot;,&quot;seguridad&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Demo&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 0, route: 'A', answers: [], kitOn: null, buyer: 'final', cover: 0, siteUrl: null, proyecto: null, extra: '' };
+
+  D = {
+    agroservicio: {
+      url: 'https://agroserviciosdelbajio.mx',
+      empresa: 'Agroservicios del Bajío',
+      clientB: 'Productor de aguacate · Michoacán',
+      proyecto: 'Fumigo 300 hectáreas de aguacate en Michoacán, terreno con pendiente. Hoy trabajamos con cuadrillas y aspersión terrestre.',
+      siteLines: ['Fumigación terrestre por hectárea', 'Fertilización y análisis de suelo', 'Maquila agrícola en el Bajío'],
+      chips: [['Giro', 'Agroservicio'], ['Cultivos', 'Maíz y hortaliza'], ['Zona', 'Bajío'], ['Servicios', 'Fumigación terrestre'], ['Flota', 'Aspersoras + 2 tractores']],
+      preguntas: [
+        { q: '¿Cuántas hectáreas atienden por temporada?', opts: ['Menos de 100', '100 a 500', 'Más de 500'], w: [-15, 5, 20] },
+        { q: '¿El terreno es plano o con pendiente?', opts: ['Plano', 'Con pendiente'], w: [15, -30] },
+        { q: 'Además de líquido, ¿esparcen sólido (fertilizante o semilla)?', opts: ['Sí, también sólido', 'Solo líquido'], w: [8, -3] }
+      ],
+      meter: ['EA-J70', 'EA-J150'], base: { A: 62, B: 42 },
+      drones: {
+        J70: { name: 'EAVision EA-J70', tag: 'tanque 35 L · ancho 10 m · visión binocular', min: 390000, max: 430000, reason: 'Por el terreno con pendiente y el huerto: la visión binocular del EA-J70 sigue el relieve del cerro sin exigir un piloto experto.' },
+        J150: { name: 'EAVision EA-J150', tag: '70 L líquido / 100 L esparcido · recarga 9 min', min: 640000, max: 720000, reason: 'Por tu volumen de hectáreas: más tanque, 40 L/min y 15 m de ancho significan más hectáreas cobradas por día.' }
+      },
+      compare: [
+        { spec: 'Tanque de líquido', a: '35 L', b: '70 L', ap: 50, bp: 100 },
+        { spec: 'Ancho de aplicación', a: '10 m', b: '15 m', ap: 66, bp: 100 },
+        { spec: 'Esparcidor de sólidos', a: '50 kg', b: '80 kg', ap: 62, bp: 100 },
+        { spec: 'Colinas y huertos', a: 'Excelente', b: 'Bueno', ap: 100, bp: 68 }
+      ],
+      kit: [
+        { id: 'bat', name: 'Baterías extra (par)', desc: 'vuelo continuo, sin esperas', min: 58000, max: 70000, on: true },
+        { id: 'gen', name: 'Generador-cargador 9–13 kW', desc: 'recarga en campo, lejos de la toma', min: 75000, max: 95000, on: true },
+        { id: 'esp', name: 'Esparcidor de sólidos', desc: 'fertiliza y siembra con el mismo dron', min: 45000, max: 60000, on: true },
+        { id: 'win', name: 'Winch de carga', desc: 'sube insumos al cerro sin cuadrilla', min: 30000, max: 38000, on: false },
+        { id: 'cap', name: 'Capacitación + registro AFAC + seguro RC', desc: 'vuelas legal y asegurado desde el día uno', min: 48000, max: 65000, on: true },
+        { id: 'man', name: 'Plan de mantenimiento anual', desc: 'centro de reparación autorizado', min: 28000, max: 36000, on: false }
+      ]
+    },
+    seguridad: {
+      url: 'https://vinseguridad.mx',
+      empresa: 'VIN Seguridad Privada',
+      clientB: 'Seguridad privada · Nuevo León',
+      proyecto: 'Cuidamos 3 parques industriales en Nuevo León, con turnos nocturnos, y nos reportaron drones sobrevolando las naves.',
+      siteLines: ['Guardias y monitoreo 24/7', 'Parques industriales y naves', 'CCTV y control de acceso'],
+      chips: [['Giro', 'Empresa de seguridad'], ['Sitios', 'Parques industriales'], ['Zona', 'Nuevo León'], ['Servicios', 'Vigilancia 24/7'], ['Riesgo', 'Drones intrusos reportados']],
+      preguntas: [
+        { q: '¿Cuántos sitios vigilan hoy?', opts: ['1 sitio', '2 a 5', 'Más de 5'], w: [-10, 10, 20] },
+        { q: '¿Patrullan de noche?', opts: ['Sí, turnos nocturnos', 'Solo de día'], w: [15, -10] },
+        { q: '¿Les preocupan drones intrusos?', opts: ['Sí, ya hubo incidentes', 'Por ahora no'], w: [25, -15] }
+      ],
+      meter: ['Solo patrullaje', 'Patrullaje + antidron'], base: { A: 45, B: 58 },
+      drones: {
+        MAX: { name: 'Autel EVO Max 4T', tag: 'térmico + zoom · 42 min · evasión 360°', min: 180000, max: 215000, reason: 'Patrulla de noche con térmico y zoom en una sola nave, y puede operar desde dock EVO Nest sin piloto en sitio.' },
+        D640: { name: 'Autel EVO II Dual 640T', tag: 'térmico 640 portátil, para brigadas a pie', min: 120000, max: 145000 }
+      },
+      compare: [
+        { spec: 'Cámara', a: 'Térmico + zoom', b: 'Térmico 640', ap: 100, bp: 75 },
+        { spec: 'Autonomía', a: '42 min', b: '38 min', ap: 100, bp: 88 },
+        { spec: 'Evasión de obstáculos', a: '360° todo clima', b: 'Frontal', ap: 100, bp: 55 },
+        { spec: 'Opera desde dock', a: 'Sí, EVO Nest', b: 'No', ap: 100, bp: 20 }
+      ],
+      kit: [
+        { id: 'sky', name: 'Skyfend SkyShield · detección antidron', desc: 'perímetro vigilado contra drones intrusos', min: 480000, max: 560000, on: true },
+        { id: 'nest', name: 'Dock EVO Nest', desc: 'despegue automático ante una alarma', min: 220000, max: 260000, on: false },
+        { id: 'bat', name: 'Baterías extra (par)', desc: 'rondines sin pausa', min: 24000, max: 30000, on: true },
+        { id: 'spo', name: 'Skyfend Spoofer · neutralización portátil', desc: 'respuesta activa en mano', min: 180000, max: 220000, on: false },
+        { id: 'cap', name: 'Capacitación + registro AFAC + seguro RC', desc: 'operación legal y asegurada', min: 48000, max: 65000, on: true },
+        { id: 'man', name: 'Plan de mantenimiento anual', desc: 'centro de reparación autorizado', min: 22000, max: 28000, on: false }
+      ]
+    }
+  };
+
+  componentDidMount() {
+    this.kd = (e) => {
+      const t = e.target && e.target.tagName;
+      if (t === 'INPUT' || t === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight') this.nav(1);
+      if (e.key === 'ArrowLeft') this.nav(-1);
+    };
+    window.addEventListener('keydown', this.kd);
+    this.tick = setInterval(() => { if (this.state.screen === 3) this.setState(s => ({ cover: (s.cover + 1) % 47 })); }, 320);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.kd); clearInterval(this.tick); }
+
+  nav(d) { this.setState(s => ({ screen: Math.max(0, Math.min(4, s.screen + d)) })); }
+  giro() { return this.props.demoGiro === 'seguridad' ? 'seguridad' : 'agroservicio'; }
+  d() { return this.D[this.giro()]; }
+  fmt(n) { return '$' + Math.round(n).toLocaleString('es-MX'); }
+  hexRgb(h) { h = (h || '#F43F5E').replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); const n = parseInt(h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+
+  meterPos() {
+    const d = this.d(); let m = d.base[this.state.route] || d.base.A;
+    this.state.answers.forEach((oi, qi) => { if (d.preguntas[qi]) m += d.preguntas[qi].w[oi]; });
+    return Math.max(8, Math.min(92, m));
+  }
+  winner() {
+    const d = this.d();
+    if (this.giro() === 'seguridad') return d.drones.MAX;
+    return this.meterPos() >= 50 ? d.drones.J150 : d.drones.J70;
+  }
+  winA() { if (this.giro() === 'seguridad') return true; return this.meterPos() < 50; }
+  answer(qi, oi) { if (qi !== this.state.answers.length) return; this.setState(s => ({ answers: [...s.answers, oi] })); }
+  kitState() { const def = Object.fromEntries(this.d().kit.map(k => [k.id, k.on])); return this.state.kitOn ? { ...def, ...this.state.kitOn } : def; }
+  toggleKit(id) { const cur = this.kitState(); this.setState({ kitOn: { ...cur, [id]: !cur[id] } }); }
+
+  diagram() {
+    const g = this.giro(), route = this.state.route, w = this.winner();
+    const SX = [130, 360, 590, 820, 1030];
+    let stages, equipos;
+    if (g === 'agroservicio') {
+      stages = route === 'B'
+        ? [['Plan de temporada', 'calendario de aplicación'], ['Aplicación', 'líquido por hectárea'], ['Fertilización', 'sólido y semilla'], ['Monitoreo', 'salud del huerto'], ['Cosecha', 'rendimiento por ha']]
+        : [['Contratos', 'cierras la temporada'], ['Aplicación', 'líquido por hectárea'], ['Fertilización', 'sólido y semilla'], ['Monitoreo', 'avance del cultivo'], ['Cobro por ha', 'tu entregable']];
+      equipos = [
+        { name: w.name.replace('EAVision ', ''), sub: 'dron agrícola EAVision', ben: route === 'B' ? 'entra al cerro y al huerto sin cuadrilla extra' : 'cobra más hectáreas por día con la misma cuadrilla', cx: 320, to: 1, lab: 'aplica' },
+        { name: 'Esparcidor de sólidos', sub: 'se monta en el mismo dron', ben: 'fertiliza sin una segunda máquina', cx: 590, to: 2, lab: 'fertiliza' },
+        { name: 'EVO II Pro 6K RTK', sub: 'fotogrametría Autel', ben: route === 'B' ? 'mapea la salud del huerto' : 'mapea avance y respalda tu cobro', cx: 850, to: 3, lab: 'mapea' }
+      ];
+    } else {
+      stages = [['Perímetro', 'cercas y accesos'], ['Patrullaje', 'rondines programados'], ['Respuesta', 'alarma → despegue'], ['Evidencia', 'video y térmico'], ['Reporte', 'entregable al cliente']];
+      equipos = [
+        { name: 'Skyfend SkyShield', sub: 'detección antidron', ben: 'detecta drones intrusos 24/7', cx: 180, to: 0, lab: 'protege' },
+        { name: 'EVO Max 4T', sub: 'térmico + zoom Autel', ben: 'una sola nave patrulla de noche', cx: 470, to: 1, lab: 'patrulla' },
+        { name: 'Dock EVO Nest', sub: 'base automática', ben: 'despega solo ante una alarma', cx: 730, to: 2, lab: 'responde' },
+        { name: 'EVO II Dual 640T', sub: 'térmico portátil', ben: 'video térmico como evidencia', cx: 990, to: 3, lab: 'documenta' }
+      ];
+    }
+    const st = stages.map((s, i) => ({ label: s[0], sub: s[1], left: SX[i] - 95, num: '0' + (i + 1), anim: equipos.some(e => e.to === i) ? 'glowPulse 3.6s ease-in-out infinite' : 'none' }));
+    const cons = equipos.map((e, i) => { const sx = SX[e.to]; return { d: `M${e.cx},396 C${e.cx},312 ${sx},246 ${sx},160`, label: e.lab, lx: (e.cx + sx) / 2 - 40, ly: 262, dur: (2.6 + i * 0.4) + 's', begin: (i * 0.7) + 's' }; });
+    const links = SX.slice(0, -1).map((x, i) => ({ d: `M${x + 97},108 L${SX[i + 1] - 97},108`, dur: (1.8 + i * 0.2) + 's', begin: (i * 0.45) + 's' }));
+    return { stages: st, equipos: equipos.map(e => ({ ...e, left: e.cx - 117 })), cons, links };
+  }
+
+  quote() {
+    const w = this.winner(), ks = this.kitState(), kit = this.d().kit;
+    const lines = [{ name: w.name, r: this.fmt(w.min) + ' – ' + this.fmt(w.max) }];
+    let min = w.min, max = w.max;
+    kit.forEach(k => { if (ks[k.id]) { lines.push({ name: k.name, r: this.fmt(k.min) + ' – ' + this.fmt(k.max) }); min += k.min; max += k.max; } });
+    const dist = this.state.buyer === 'dist';
+    const disc = dist ? { name: 'Descuento distribuidor (−12%)', r: '−' + this.fmt(min * 0.12) + ' / −' + this.fmt(max * 0.12) } : null;
+    if (dist) { min *= 0.88; max *= 0.88; }
+    return { lines, disc, total: this.fmt(min) + ' – ' + this.fmt(max) + ' MXN' };
+  }
+
+  reset() { this.setState({ screen: 0, route: 'A', answers: [], kitOn: null, buyer: 'final', cover: 0, siteUrl: null, proyecto: null, extra: '' }); }
+
+  renderVals() {
+    const g = this.giro(), d = this.d(), st = this.state, route = st.route;
+    const accent = this.props.accentColor ?? '#F43F5E';
+    const [r, gg, b] = this.hexRgb(accent);
+    const meter = this.meterPos(), w = this.winner(), winA = this.winA();
+    const dg = this.diagram(), q = this.quote(), ks = this.kitState();
+    const routeA = route === 'A', routeB = route === 'B';
+    const clientLabel = routeA ? d.empresa : d.clientB;
+    const answers = st.answers;
+    const askedQs = d.preguntas.slice(0, Math.min(answers.length + 1, 3)).map((p, qi) => ({
+      q: p.q, answered: qi < answers.length ? p.opts[answers[qi]] : '', open: qi >= answers.length,
+      opts: p.opts.map((o, oi) => ({ label: o, pick: () => this.answer(qi, oi) }))
+    }));
+    const cardA = g === 'seguridad' ? d.drones.MAX : d.drones.J70;
+    const cardB = g === 'seguridad' ? d.drones.D640 : d.drones.J150;
+    const aC = winA ? 'var(--accent)' : 'rgba(15,27,45,.28)', bC = winA ? 'rgba(15,27,45,.28)' : 'var(--accent)';
+    const isDist = st.buyer === 'dist';
+    const segBase = 'flex:1;padding:9px 8px;border-radius:10px;border:none;cursor:pointer;font-family:Inter,sans-serif;font-size:13px;font-weight:700;transition:all .25s;';
+    const meterLead = g === 'seguridad' ? (meter >= 50 ? 'sumar antidron Skyfend' : 'patrullaje con EVO Max 4T') : (meter >= 50 ? 'el EA-J150' : 'el EA-J70');
+    return {
+      accent, accentSoft: `rgba(${r},${gg},${b},0.13)`, accentGlow: `rgba(${r},${gg},${b},0.35)`,
+      screenNum: st.screen + 1,
+      s1: st.screen === 0, s2: st.screen === 1, s3: st.screen === 2, s4: st.screen === 3, s5: st.screen === 4,
+      prev: () => this.nav(-1), next: () => this.nav(1), resetAll: () => this.reset(),
+      siteUrl: st.siteUrl ?? d.url, onUrl: e => this.setState({ siteUrl: e.target.value }),
+      proyecto: st.proyecto ?? d.proyecto, onProyecto: e => this.setState({ proyecto: e.target.value }),
+      startA: () => this.setState({ route: 'A', screen: 1, answers: [] }),
+      startB: () => this.setState({ route: 'B', screen: 1, answers: [] }),
+      routeA, routeB,
+      extra: st.extra ?? '', onExtra: e => this.setState({ extra: e.target.value }), hasExtra: !!st.extra,
+      screen2Title: routeA ? 'El agente está leyendo tu sitio…' : 'El agente quiere entender tu proyecto',
+      empresa: d.empresa, siteUrlShown: (st.siteUrl ?? d.url).replace('https://', ''),
+      siteLine1: d.siteLines[0], siteLine2: d.siteLines[1], siteLine3: d.siteLines[2],
+      chips: d.chips.map((c, i) => ({ k: c[0], v: c[1], delay: (0.4 + i * 0.45) + 's' })),
+      proyectoShown: st.proyecto ?? d.proyecto,
+      askedQs, allAnswered: answers.length >= 3,
+      analysisSummary: `Listo. Para ${clientLabel}, el agente arma la configuración alrededor del ${w.name}.`,
+      goDiagram: () => this.setState({ screen: 2 }), goConfig: () => this.setState({ screen: 3 }),
+      meterPos: meter, meterL: d.meter[0], meterR: d.meter[1], meterLead,
+      clientLabel,
+      stages: dg.stages, equipos: dg.equipos, cons: dg.cons, links: dg.links,
+      cardAName: cardA.name, cardATag: cardA.tag, cardBName: cardB.name, cardBTag: cardB.tag,
+      nameAStyle: `font-family:Manrope,sans-serif;font-weight:800;font-size:16px;color:${winA ? '#0f1b2d' : '#8a93a6'}`,
+      nameBStyle: `font-family:Manrope,sans-serif;font-weight:800;font-size:16px;color:${winA ? '#8a93a6' : '#0f1b2d'}`,
+      compareRows: d.compare.map(rw => ({ spec: rw.spec, a: rw.a, b: rw.b, apw: rw.ap + '%', bpw: rw.bp + '%', aBar: aC, bBar: bC })),
+      winnerName: w.name, winnerReason: w.reason || '',
+      isAgro: g === 'agroservicio', isSeg: g === 'seguridad',
+      coverNum: st.cover, coverLabel: g === 'agroservicio' ? 'hectáreas cubiertas en esta demo' : 'minutos de rondín continuo',
+      coverNote: g === 'agroservicio' ? 'Un solo piloto cubre lo de tres cuadrillas.' : 'Sin cuadrilla nocturna extra.',
+      kitItems: d.kit.map(k => {
+        const on = !!ks[k.id];
+        return {
+          name: k.name, desc: k.desc, range: this.fmt(k.min) + ' – ' + this.fmt(k.max),
+          rowOp: on ? '1' : '0.55', toggle: () => this.toggleKit(k.id),
+          swStyle: `width:42px;height:24px;border-radius:99px;border:none;cursor:pointer;position:relative;flex:none;padding:0;transition:background .3s;background:${on ? accent : 'rgba(15,27,45,.18)'};display:block;`,
+          knobStyle: `position:absolute;top:3px;left:${on ? '21px' : '3px'};width:18px;height:18px;border-radius:50%;background:#fff;transition:left .3s;box-shadow:0 1px 3px rgba(0,0,0,.25);display:block;`
+        };
+      }),
+      quoteLines: q.lines, hasDisc: !!q.disc, discName: q.disc ? q.disc.name : '', discVal: q.disc ? q.disc.r : '',
+      totalText: q.total, quoteClient: clientLabel, folio: 'TD-2026-0713',
+      setFinal: () => this.setState({ buyer: 'final' }), setDist: () => this.setState({ buyer: 'dist' }),
+      finalStyle: segBase + (isDist ? 'background:transparent;color:#5a6478;' : 'background:#ffffff;color:#0f1b2d;box-shadow:0 2px 8px rgba(15,27,45,.12);'),
+      distStyle: segBase + (isDist ? 'background:#ffffff;color:#0f1b2d;box-shadow:0 2px 8px rgba(15,27,45,.12);' : 'background:transparent;color:#5a6478;')
+    };
+  }
+}
+</script>
+</body>
+</html>

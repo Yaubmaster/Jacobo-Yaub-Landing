@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#FAFBFC;}
+/* Paleta — ajustar a la paleta del cliente si el deck se personaliza */
+x-dc{--accent:#02C39A;--accent-2:#1E2761;--ink:#171C33;--muted:#5C6478;--accent-soft:rgba(2,195,154,.14);--accent-glow:rgba(2,195,154,.35);}
+a{color:#02C39A;} a:hover{color:#1E2761;}
+@keyframes orb{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(46px,-38px) scale(1.08);}}
+@keyframes glowPulse{0%,100%{box-shadow:0 12px 34px rgba(30,39,97,.08);}50%{box-shadow:0 0 34px 4px var(--accent-glow);}}
+@keyframes blink{0%,100%{opacity:.3;}50%{opacity:1;}}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; --accent-soft: {{accentSoft}}; --accent-glow: {{accentGlow}}; --accent-2: {{accent2}}; --ink:#171C33; --muted:#5C6478; position:fixed; inset:0; background:#FAFBFC;">
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+
+<section data-label="Portada" data-speaker-notes="El programa no es un curso: es un setup completo armado sobre tu día a día." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:36px;padding:120px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.2), rgba(255,255,255,0) 70%);top:-160px;right:6%;filter:blur(34px);animation:orb 15s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:720px;height:720px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.12), rgba(255,255,255,0) 70%);bottom:-240px;left:-8%;filter:blur(38px);animation:orb 20s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(2,195,154,.12), rgba(255,255,255,0) 70%);top:34%;left:20%;filter:blur(30px);animation:orb 17s ease-in-out infinite;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:34px;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:26px;letter-spacing:.3em;color:var(--accent);">YAUB</div>
+    <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:132px;line-height:1.02;margin:0;color:var(--ink);">IA <span style="background:linear-gradient(100deg, var(--accent), var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;">a tu medida</span></h1>
+    <p style="margin:0;max-width:1060px;font-size:29px;line-height:1.55;color:var(--muted);">El programa personalizado que arma tu setup de IA: skills hechos para tu día a día, Cowork configurado, capacitación en vivo y una comunidad que te acompaña para siempre.</p>
+    <div style="display:flex;gap:16px;">
+      <span style="padding:12px 30px;border-radius:999px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.7);box-shadow:0 14px 38px rgba(30,39,97,.08);font-size:25px;font-weight:600;">Personas</span>
+      <span style="padding:12px 30px;border-radius:999px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.7);box-shadow:0 14px 38px rgba(30,39,97,.08);font-size:25px;font-weight:600;">PyMEs</span>
+      <span style="padding:12px 30px;border-radius:999px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.7);box-shadow:0 14px 38px rgba(30,39,97,.08);font-size:25px;font-weight:600;">Equipos</span>
+    </div>
+  </div>
+</section>
+
+<section data-label="El problema" data-speaker-notes="Cuantificar el dolor: 6 a 10 horas por semana en tareas repetitivas." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:150px 110px 90px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.16), rgba(255,255,255,0) 70%);top:-140px;right:4%;filter:blur(32px);animation:orb 16s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.1), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(36px);animation:orb 21s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;flex-direction:column;flex:1;gap:40px;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.24em;color:var(--accent);">EL PROBLEMA</div>
+      <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:62px;line-height:1.1;margin:16px 0 0;color:var(--ink);max-width:1300px;">Tu semana se va en tareas que ya no deberías hacer a mano</h2>
+    </div>
+    <div style="display:flex;gap:60px;align-items:center;flex:1;">
+      <div style="display:flex;flex-direction:column;gap:18px;width:760px;">
+        <div style="display:flex;align-items:center;gap:20px;padding:22px 30px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"></rect><path d="M3.5 7 L12 13 L20.5 7"></path></svg>
+          <span style="font-size:27px;font-weight:600;">Correos y seguimiento</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px;padding:22px 30px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3 h7 l4 4 v14 h-11 z"></path><path d="M14 3 v4 h4"></path><path d="M9.5 12 h5 M9.5 15.5 h5"></path></svg>
+          <span style="font-size:27px;font-weight:600;">Reportes y minutas</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px;padding:22px 30px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="2"></rect><path d="M3.5 9.5 h17 M9.5 4 v16 M15 4 v16"></path></svg>
+          <span style="font-size:27px;font-weight:600;">Cotizaciones y Excel</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px;padding:22px 30px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"></rect><path d="M3.5 9.5 h17 M8 3 v4 M16 3 v4"></path><circle cx="12" cy="14.5" r="1.2" fill="var(--accent)" stroke="none"></circle></svg>
+          <span style="font-size:27px;font-weight:600;">Agenda y pendientes</span>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:10px;padding:50px 56px;border-radius:26px;background:rgba(255,255,255,.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.65);box-shadow:0 22px 60px rgba(30,39,97,.09);animation:glowPulse 4s ease-in-out infinite;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:150px;line-height:1;color:var(--accent);">{{hSem}}</div>
+        <div style="font-size:29px;line-height:1.5;color:var(--ink);font-weight:600;max-width:560px;">a la semana en tareas repetitivas que la IA ya puede hacer contigo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Qué es" data-speaker-notes="No es un curso genérico: brief primero, todo lo demás se arma sobre él." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:150px 110px 90px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.15), rgba(255,255,255,0) 70%);top:-150px;left:30%;filter:blur(32px);animation:orb 17s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.1), rgba(255,255,255,0) 70%);bottom:-200px;right:-6%;filter:blur(36px);animation:orb 20s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;flex-direction:column;flex:1;gap:38px;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.24em;color:var(--accent);">QUÉ ES</div>
+      <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:62px;line-height:1.1;margin:16px 0 0;color:var(--ink);">Un programa, tu setup completo</h2>
+      <p style="margin:14px 0 0;font-size:27px;color:var(--muted);max-width:1200px;">No es un curso genérico: primero entendemos tu día a día con un brief, y sobre eso armamos todo.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;flex:1;align-content:start;">
+      <div style="padding:30px 32px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:12px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="11" rx="3"></rect><path d="M12 7 V4 M12 4 h.01"></path><circle cx="9.5" cy="12" r="1" fill="var(--accent)" stroke="none"></circle><circle cx="14.5" cy="12" r="1" fill="var(--accent)" stroke="none"></circle><path d="M9.5 15.2 h5"></path></svg>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:28px;">Discovery con agente</div>
+        <div style="font-size:24px;line-height:1.45;color:var(--muted);">Un agente de IA te entrevista y arma tu brief.</div>
+      </div>
+      <div style="padding:30px 32px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:12px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 l1.7 4.3 L18 9 l-4.3 1.7 L12 15 l-1.7-4.3 L6 9 l4.3-1.7 z"></path><path d="M18.5 15 l.9 2.1 2.1.9 -2.1.9 -.9 2.1 -.9-2.1 -2.1-.9 2.1-.9 z"></path></svg>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:28px;">Skills a tu medida</div>
+        <div style="font-size:24px;line-height:1.45;color:var(--muted);">Herramientas hechas para tus tareas reales.</div>
+      </div>
+      <div style="padding:30px 32px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:12px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="12" rx="2"></rect><path d="M9 20 h6 M12 16.5 V20"></path><path d="M7 8 l2.5 2.5 L7 13 M12.5 13 h4"></path></svg>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:28px;">Cowork configurado</div>
+        <div style="font-size:24px;line-height:1.45;color:var(--muted);">Tu espacio de trabajo con IA, listo y conectado.</div>
+      </div>
+      <div style="padding:30px 32px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:12px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="11" rx="2"></rect><path d="M8 19 l4-4 4 4"></path><path d="M8 8 h8 M8 11 h5"></path></svg>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:28px;">Capacitación en vivo</div>
+        <div style="font-size:24px;line-height:1.45;color:var(--muted);">Sesiones prácticas sobre tu propio trabajo.</div>
+      </div>
+      <div style="padding:30px 32px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:12px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3.2"></circle><path d="M3.5 19.5 c0-3.2 2.4-5 5.5-5 s5.5 1.8 5.5 5"></path><circle cx="16.5" cy="8" r="2.6"></circle><path d="M15.5 14.6 c2.9.2 5 1.9 5 4.9"></path></svg>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:28px;">Comunidad de por vida</div>
+        <div style="font-size:24px;line-height:1.45;color:var(--muted);">Acompañamiento permanente, sin costo extra.</div>
+      </div>
+      <div style="padding:30px 32px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:12px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 7 a3 3 0 0 1 3-3 h9 a3 3 0 0 1 3 3 v6 a3 3 0 0 1 -3 3 h-6.5 l-3.5 3.5 v-3.5 a3 3 0 0 1 -2-3 z"></path><path d="M9 8.5 h6 M9 11.5 h4"></path></svg>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:28px;">Agentes en tu negocio</div>
+        <div style="font-size:24px;line-height:1.45;color:var(--muted);">WhatsApp y voz con Yaub, si tienes empresa.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Cómo funciona" data-speaker-notes="Cinco pasos, 4 a 6 semanas. El discovery arranca hoy mismo." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:150px 100px 80px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.15), rgba(255,255,255,0) 70%);top:-140px;right:20%;filter:blur(32px);animation:orb 16s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.09), rgba(255,255,255,0) 70%);bottom:-220px;left:-4%;filter:blur(36px);animation:orb 21s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;flex-direction:column;flex:1;gap:30px;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.24em;color:var(--accent);">CÓMO FUNCIONA</div>
+      <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:62px;line-height:1.1;margin:16px 0 0;color:var(--ink);">De un brief a tu setup andando</h2>
+    </div>
+    <div style="position:relative;flex:1;">
+      <svg viewBox="0 0 1720 440" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+        <defs><marker id="fw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".8"></path></marker></defs>
+        <path d="M280,210 L360,210" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#fw)"></path>
+        <path d="M640,210 L720,210" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#fw)"></path>
+        <path d="M1000,210 L1080,210" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#fw)"></path>
+        <path d="M1360,210 L1440,210" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#fw)"></path>
+        <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.8s" repeatCount="indefinite" path="M280,210 L360,210"></animateMotion></circle>
+        <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.8s" begin=".45s" repeatCount="indefinite" path="M640,210 L720,210"></animateMotion></circle>
+        <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.8s" begin=".9s" repeatCount="indefinite" path="M1000,210 L1080,210"></animateMotion></circle>
+        <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.8s" begin="1.35s" repeatCount="indefinite" path="M1360,210 L1440,210"></animateMotion></circle>
+      </svg>
+      <div style="position:absolute;left:0;top:60px;width:280px;padding:26px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);box-sizing:border-box;display:flex;flex-direction:column;gap:12px;">
+        <div style="width:46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;box-shadow:0 8px 20px var(--accent-glow);">1</div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Discovery</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">Te mando una liga; mi agente te entrevista 15 min y arma tu brief.</div>
+      </div>
+      <div style="position:absolute;left:360px;top:60px;width:280px;padding:26px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);box-sizing:border-box;display:flex;flex-direction:column;gap:12px;">
+        <div style="width:46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;box-shadow:0 8px 20px var(--accent-glow);">2</div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Propuesta</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">En 48 h recibes tu plan: temario, skills y paquete.</div>
+      </div>
+      <div style="position:absolute;left:720px;top:60px;width:280px;padding:26px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);box-sizing:border-box;display:flex;flex-direction:column;gap:12px;">
+        <div style="width:46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;box-shadow:0 8px 20px var(--accent-glow);">3</div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Construcción</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">Armo tus skills y configuro tu Cowork.</div>
+      </div>
+      <div style="position:absolute;left:1080px;top:60px;width:280px;padding:26px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);box-sizing:border-box;display:flex;flex-direction:column;gap:12px;">
+        <div style="width:46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;box-shadow:0 8px 20px var(--accent-glow);">4</div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Capacitación</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">Sesiones en vivo sobre tus tareas reales.</div>
+      </div>
+      <div style="position:absolute;left:1440px;top:60px;width:280px;padding:26px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid var(--accent);box-shadow:0 16px 44px rgba(30,39,97,.07);box-sizing:border-box;display:flex;flex-direction:column;gap:12px;animation:glowPulse 3.6s ease-in-out infinite;">
+        <div style="width:46px;height:46px;border-radius:50%;background:var(--accent-2);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;">5</div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Para siempre</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">Comunidad, soporte y mejoras continuas.</div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:26px;color:var(--muted);">Tiempo total: <strong style="color:var(--ink);">4 a 6 semanas</strong> según tu paquete · 1–2 sesiones por semana de 90 min</div>
+  </div>
+</section>
+
+<section data-label="Discovery con agente" data-speaker-notes="La primera experiencia con IA es hablar con mi agente. Gratis y sin compromiso: el brief es suyo." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:150px 110px 80px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.16), rgba(255,255,255,0) 70%);top:-120px;left:38%;filter:blur(32px);animation:orb 16s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.1), rgba(255,255,255,0) 70%);bottom:-200px;right:-6%;filter:blur(36px);animation:orb 20s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;gap:70px;flex:1;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div style="flex:1;display:flex;flex-direction:column;gap:26px;justify-content:center;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.24em;color:var(--accent);">EL DISCOVERY LO HACE UN AGENTE</div>
+      <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:54px;line-height:1.12;margin:0;color:var(--ink);">Tu primera experiencia con IA es hablar con la mía</h2>
+      <p style="margin:0;font-size:27px;color:var(--muted);">Sin llamadas de venta, sin formularios aburridos.</p>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;gap:16px;align-items:flex-start;"><span style="width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;flex:none;">1</span><span style="font-size:25px;line-height:1.45;color:var(--ink);">Recibes una liga por WhatsApp o web.</span></div>
+        <div style="display:flex;gap:16px;align-items:flex-start;"><span style="width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;flex:none;">2</span><span style="font-size:25px;line-height:1.45;color:var(--ink);">El agente te entrevista 10–15 min: tu rol, herramientas, tareas repetitivas, dolores.</span></div>
+        <div style="display:flex;gap:16px;align-items:flex-start;"><span style="width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;flex:none;">3</span><span style="font-size:25px;line-height:1.45;color:var(--ink);">Genera tu brief estructurado y me lo manda.</span></div>
+        <div style="display:flex;gap:16px;align-items:flex-start;"><span style="width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;flex:none;">4</span><span style="font-size:25px;line-height:1.45;color:var(--ink);">En 48 h te llega tu propuesta personalizada.</span></div>
+      </div>
+      <div style="font-size:25px;font-weight:700;color:var(--accent);">Gratis y sin compromiso — el brief es tuyo aunque no contrates.</div>
+    </div>
+    <div style="width:660px;display:flex;flex-direction:column;gap:16px;padding:34px 36px;border-radius:26px;background:rgba(255,255,255,.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.65);box-shadow:0 22px 60px rgba(30,39,97,.1);align-self:center;box-sizing:border-box;">
+      <div style="display:flex;align-items:center;gap:12px;padding-bottom:8px;border-bottom:1px solid rgba(30,39,97,.08);"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;"></span><span style="font-size:24px;color:var(--muted);font-weight:600;">Agente de discovery · en línea</span></div>
+      <div style="align-self:flex-start;max-width:480px;background:#ffffff;border:1px solid rgba(30,39,97,.08);padding:16px 22px;border-radius:4px 18px 18px 18px;font-size:25px;line-height:1.45;box-shadow:0 8px 22px rgba(30,39,97,.05);opacity:{{b1o}};transform:translateY({{b1y}});transition:opacity .5s ease, transform .5s ease;">¡Hola! Soy el agente de Jacobo. ¿Me cuentas a qué te dedicas?</div>
+      <div style="align-self:flex-end;max-width:460px;background:var(--accent);color:#ffffff;padding:16px 22px;border-radius:18px 18px 4px 18px;font-size:25px;line-height:1.45;font-weight:500;opacity:{{b2o}};transform:translateY({{b2y}});transition:opacity .5s ease, transform .5s ease;">Soy asistente de dirección en una constructora</div>
+      <div style="align-self:flex-start;max-width:480px;background:#ffffff;border:1px solid rgba(30,39,97,.08);padding:16px 22px;border-radius:4px 18px 18px 18px;font-size:25px;line-height:1.45;box-shadow:0 8px 22px rgba(30,39,97,.05);opacity:{{b3o}};transform:translateY({{b3y}});transition:opacity .5s ease, transform .5s ease;">¿Qué tarea te quita más tiempo cada semana?</div>
+      <div style="align-self:flex-end;max-width:460px;background:var(--accent);color:#ffffff;padding:16px 22px;border-radius:18px 18px 4px 18px;font-size:25px;line-height:1.45;font-weight:500;opacity:{{b4o}};transform:translateY({{b4y}});transition:opacity .5s ease, transform .5s ease;">Armar los reportes semanales y cuadrar la agenda…</div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Temario" data-speaker-notes="Temario base de 14 horas; el brief lo ajusta. M6 solo aplica a PyMEs y equipos." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:150px 110px 80px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.14), rgba(255,255,255,0) 70%);top:-150px;right:8%;filter:blur(32px);animation:orb 17s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.09), rgba(255,255,255,0) 70%);bottom:-220px;left:-4%;filter:blur(36px);animation:orb 21s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;flex-direction:column;flex:1;gap:32px;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.24em;color:var(--accent);">TEMARIO</div>
+      <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:60px;line-height:1.1;margin:16px 0 0;color:var(--ink);">Temario base — se ajusta con tu brief</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;flex:1;align-content:start;">
+      <div style="padding:28px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;color:var(--accent-2);">M1</span><span style="padding:4px 16px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:24px;font-weight:700;">2 h</span></div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Fundamentos prácticos</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">Cómo pensar con IA, prompts que sí funcionan, Claude como copiloto.</div>
+      </div>
+      <div style="padding:28px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;color:var(--accent-2);">M2</span><span style="padding:4px 16px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:24px;font-weight:700;">2 h</span></div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Mapa de tu día a día</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">Auditoría de tareas, qué automatizar primero, quick wins.</div>
+      </div>
+      <div style="padding:28px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid var(--accent);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;color:var(--accent-2);">M3</span><span style="padding:4px 16px;border-radius:999px;background:var(--accent);color:#fff;font-size:24px;font-weight:700;">3 h</span></div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Tus skills personalizados</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">Te entrego 3–5 skills hechos para tu trabajo.</div>
+      </div>
+      <div style="padding:28px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid var(--accent);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;color:var(--accent-2);">M4</span><span style="padding:4px 16px;border-radius:999px;background:var(--accent);color:#fff;font-size:24px;font-weight:700;">3 h</span></div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Cowork, tu oficina con IA</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">Correo, calendario, Drive y tareas programadas conectadas.</div>
+      </div>
+      <div style="padding:28px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;color:var(--accent-2);">M5</span><span style="padding:4px 16px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:24px;font-weight:700;">2 h</span></div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Flujos completos</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">De la idea al entregable: documentos, Excel, presentaciones.</div>
+      </div>
+      <div style="padding:28px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;color:var(--accent-2);">M6</span><span style="padding:4px 16px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:24px;font-weight:700;">2 h</span></div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:27px;">Agentes en tu negocio</div>
+        <div style="font-size:24px;line-height:1.4;color:var(--muted);">WhatsApp y voz con Yaub: cuándo, cómo, cuánto.</div>
+      </div>
+    </div>
+    <div style="font-size:24px;color:var(--muted);text-align:center;">El módulo 6 aplica a PyMEs y equipos; si tu brief no lo necesita, ese tiempo se invierte en tus flujos.</div>
+  </div>
+</section>
+
+<section data-label="Paquetes" data-speaker-notes="Precios de lanzamiento MXN. Todos incluyen comunidad de por vida. Mi Negocio es el más popular." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:140px 110px 70px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.16), rgba(255,255,255,0) 70%);top:-140px;left:34%;filter:blur(34px);animation:orb 16s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.09), rgba(255,255,255,0) 70%);bottom:-220px;right:-4%;filter:blur(36px);animation:orb 20s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;flex-direction:column;flex:1;gap:26px;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.24em;color:var(--accent);">PAQUETES · PRECIOS DE LANZAMIENTO · MXN</div>
+      <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:58px;line-height:1.1;margin:14px 0 0;color:var(--ink);">Tres formas de empezar</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1.06fr 1fr;gap:24px;flex:1;align-items:stretch;">
+      <div style="padding:34px 34px;border-radius:24px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.18em;color:var(--accent-2);">MI SETUP</div>
+        <div style="font-size:24px;color:var(--muted);">Para ti (1 persona)</div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:62px;color:var(--ink);">{{p1}}</div>
+        <div style="font-size:24px;color:var(--muted);margin-top:-8px;">por persona</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:8px;">
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> 4 semanas · 4 sesiones 1:1 de 90 min</div>
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> 3–5 skills a tu medida</div>
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> Cowork configurado</div>
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> Plan de 90 días + comunidad de por vida</div>
+        </div>
+      </div>
+      <div style="padding:34px 34px;border-radius:24px;background:rgba(255,255,255,.68);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1.5px solid var(--accent);box-shadow:0 0 44px 6px var(--accent-glow), 0 22px 60px rgba(30,39,97,.1);display:flex;flex-direction:column;gap:12px;position:relative;">
+        <div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);padding:6px 22px;border-radius:999px;background:var(--accent);color:#fff;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.12em;box-shadow:0 8px 22px var(--accent-glow);">MÁS POPULAR</div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.18em;color:var(--accent-2);">MI NEGOCIO</div>
+        <div style="font-size:24px;color:var(--muted);">Dueño de PyME + 2 personas</div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:62px;color:var(--ink);">{{p2}}</div>
+        <div style="font-size:24px;color:var(--muted);margin-top:-8px;">por empresa</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:8px;">
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> 6 semanas · 6 sesiones</div>
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> Diagnóstico + propuesta de automatización</div>
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> Skills por rol + Cowork para los 3</div>
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> 1 agente de WhatsApp Yaub (1er mes incluido)</div>
+        </div>
+      </div>
+      <div style="padding:34px 34px;border-radius:24px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.18em;color:var(--accent-2);">MI EQUIPO</div>
+        <div style="font-size:24px;color:var(--muted);">Equipos de 5 en adelante</div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:62px;color:var(--ink);">{{p3}}</div>
+        <div style="font-size:24px;color:var(--muted);margin-top:-8px;">por persona</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:8px;">
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> 6 semanas · 4 talleres grupales</div>
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> 1 sesión 1:1 por persona</div>
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> Skills por rol</div>
+          <div style="font-size:24px;color:var(--ink);"><span style="color:var(--accent);font-weight:800;">✓</span> Descuentos por volumen</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:24px;color:var(--muted);">Precios de lanzamiento para los primeros grupos — suben al consolidarse el programa. Todos incluyen comunidad de por vida.</div>
+  </div>
+</section>
+
+<section data-label="Tarifas y add-ons" data-speaker-notes="Tarifas por volumen y add-ons. La comunidad nunca es add-on: viene incluida." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:150px 110px 80px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.14), rgba(255,255,255,0) 70%);top:-140px;right:10%;filter:blur(32px);animation:orb 17s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.09), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(36px);animation:orb 21s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;flex-direction:column;flex:1;gap:32px;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.24em;color:var(--accent);">TARIFAS Y ADD-ONS</div>
+      <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:60px;line-height:1.1;margin:16px 0 0;color:var(--ink);">Grupos y extras</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:40px;flex:1;align-content:start;">
+      <div style="padding:32px 36px;border-radius:24px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.18em;color:var(--accent-2);margin-bottom:14px;">GRUPOS · MI EQUIPO</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 4px;border-top:1px solid rgba(30,39,97,.08);"><span style="font-size:27px;font-weight:600;">5–9 personas</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:30px;color:var(--ink);">{{g1}}</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 4px;border-top:1px solid rgba(30,39,97,.08);"><span style="font-size:27px;font-weight:600;">10–14 personas</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:30px;color:var(--ink);">{{g2}}</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 4px;border-top:1px solid rgba(30,39,97,.08);"><span style="font-size:27px;font-weight:600;">15+ personas</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:26px;color:var(--accent);">cotización</span></div>
+        <div style="font-size:24px;color:var(--muted);margin-top:10px;">El plan de 15+ incluye 1 agente Yaub.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:center;gap:20px;padding:22px 28px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 38px rgba(30,39,97,.06);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 7 a3 3 0 0 1 3-3 h9 a3 3 0 0 1 3 3 v6 a3 3 0 0 1 -3 3 h-6.5 l-3.5 3.5 v-3.5 a3 3 0 0 1 -2-3 z"></path></svg>
+          <span style="flex:1;font-size:26px;font-weight:600;">Agente de ventas WhatsApp</span><span style="font-size:25px;font-weight:700;color:var(--ink);white-space:nowrap;">desde $1,900/mes + setup</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px;padding:22px 28px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 38px rgba(30,39,97,.06);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5 h4 l1.5 4 -2.5 2 a12 12 0 0 0 5.5 5.5 l2-2.5 4 1.5 v4 a2 2 0 0 1 -2 2 A16.5 16.5 0 0 1 3 6.5 a2 2 0 0 1 2-2 z"></path></svg>
+          <span style="flex:1;font-size:26px;font-weight:600;">Agente de voz (llamadas)</span><span style="font-size:25px;font-weight:700;color:var(--ink);white-space:nowrap;">cotización según volumen</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px;padding:22px 28px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 38px rgba(30,39,97,.06);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12 a8 8 0 1 1 -2.5-5.8"></path><path d="M20 4 v4 h-4"></path></svg>
+          <span style="flex:1;font-size:26px;font-weight:600;">Acompañamiento Plus (2 sesiones/mes)</span><span style="font-size:25px;font-weight:700;color:var(--ink);white-space:nowrap;">$1,990/mes</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px;padding:22px 28px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 38px rgba(30,39,97,.06);">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5 V12 l3 2"></path></svg>
+          <span style="flex:1;font-size:26px;font-weight:600;">Consultoría puntual</span><span style="font-size:25px;font-weight:700;color:var(--ink);white-space:nowrap;">$890/h</span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:26px;font-weight:700;color:var(--accent);">La comunidad no es un add-on: viene incluida de por vida en cualquier paquete.</div>
+  </div>
+</section>
+
+<section data-label="ROI" data-speaker-notes="Ejemplo conservador: hora de $120, 6 h recuperadas → ~$3,100 al mes. Mi Setup se paga en el segundo mes." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:150px 110px 90px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.16), rgba(255,255,255,0) 70%);top:-150px;left:26%;filter:blur(34px);animation:orb 16s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.09), rgba(255,255,255,0) 70%);bottom:-200px;right:-6%;filter:blur(36px);animation:orb 20s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;flex-direction:column;flex:1;gap:36px;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.24em;color:var(--accent);">ROI</div>
+      <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:62px;line-height:1.1;margin:16px 0 0;color:var(--ink);">El programa se paga solo</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:26px;">
+      <div style="padding:38px 40px;border-radius:24px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:78px;line-height:1;color:var(--accent);">{{roiH}}</div>
+        <div style="font-size:26px;line-height:1.45;color:var(--ink);font-weight:600;">recuperadas por persona cada semana</div>
+      </div>
+      <div style="padding:38px 40px;border-radius:24px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:78px;line-height:1;color:var(--accent);">{{roiM}} meses</div>
+        <div style="font-size:26px;line-height:1.45;color:var(--ink);font-weight:600;">para recuperar tu inversión</div>
+      </div>
+      <div style="padding:38px 40px;border-radius:24px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:78px;line-height:1;color:var(--accent);">{{roi247}}</div>
+        <div style="font-size:26px;line-height:1.45;color:var(--ink);font-weight:600;">tu agente atiende clientes aunque tú estés dormido</div>
+      </div>
+    </div>
+    <div style="padding:34px 44px;border-radius:24px;background:linear-gradient(120deg, rgba(2,195,154,.1), rgba(255,255,255,.6));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.65);box-shadow:0 16px 44px rgba(30,39,97,.07);font-size:27px;line-height:1.6;color:var(--ink);">Ejemplo con números conservadores: si tu hora vale <strong>$120 MXN</strong> y recuperas <strong>6 h a la semana</strong>, liberas <strong style="color:var(--accent);">≈ $3,100 MXN</strong> de valor al mes. Mi Setup cuesta <strong>$4,990 una sola vez</strong>: en el segundo mes ya vas ganando — y el setup se queda contigo para siempre.</div>
+  </div>
+</section>
+
+<section data-label="Qué te llevas" data-speaker-notes="Todo esto se queda con la persona: setup, skills, playbook, comunidad." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:150px 110px 90px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.14), rgba(255,255,255,0) 70%);top:-140px;right:14%;filter:blur(32px);animation:orb 17s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.09), rgba(255,255,255,0) 70%);bottom:-220px;left:-4%;filter:blur(36px);animation:orb 21s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;flex-direction:column;flex:1;gap:44px;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.24em;color:var(--accent);">QUÉ TE LLEVAS</div>
+      <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:62px;line-height:1.1;margin:16px 0 0;color:var(--ink);">Todo se queda contigo</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 60px;align-content:start;">
+      <sc-for list="{{checks}}" as="c" hint-placeholder-count="4">
+        <div style="display:flex;gap:18px;align-items:flex-start;opacity:{{c.op}};transform:translateY({{c.ty}});transition:opacity .5s ease, transform .5s ease;">
+          <span style="width:36px;height:36px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 L10 18 L19.5 6.5"></path></svg></span>
+          <span style="font-size:27px;line-height:1.45;color:var(--ink);">{{c.t}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section data-label="Cierre" data-speaker-notes="CTA concreto: pedir la liga de discovery hoy. Cupos limitados por cohorte." style="background:#FAFBFC;color:var(--ink);font-family:Inter,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;padding:130px 110px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(2,195,154,.2), rgba(255,255,255,0) 70%);top:-160px;left:10%;filter:blur(34px);animation:orb 15s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(30,39,97,.11), rgba(255,255,255,0) 70%);bottom:-240px;right:-8%;filter:blur(38px);animation:orb 20s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;top:44px;left:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.28);color:rgba(30,39,97,.5);font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;">LOGO YAUB</div>
+  <div style="position:absolute;top:44px;right:70px;padding:10px 22px;border-radius:14px;border:1.5px dashed rgba(30,39,97,.13);color:rgba(30,39,97,.28);font-family:Manrope,sans-serif;font-weight:700;font-size:24px;letter-spacing:.08em;">LOGO CLIENTE</div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:38px;opacity:{{slideIn}};transform:translateY({{slideY}});transition:opacity .7s ease, transform .7s ease;">
+    <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;letter-spacing:.24em;color:var(--accent);">EMPIEZA HOY</div>
+    <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:70px;line-height:1.08;margin:0;color:var(--ink);text-align:center;max-width:1400px;">Empieza hoy: habla 15 minutos con mi agente</h2>
+    <div style="position:relative;width:1460px;height:210px;">
+      <svg viewBox="0 0 1460 210" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+        <defs><marker id="cw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".8"></path></marker></defs>
+        <path d="M440,105 L510,105" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#cw)"></path>
+        <path d="M950,105 L1020,105" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#cw)"></path>
+        <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.6s" repeatCount="indefinite" path="M440,105 L510,105"></animateMotion></circle>
+        <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.6s" begin=".8s" repeatCount="indefinite" path="M950,105 L1020,105"></animateMotion></circle>
+      </svg>
+      <div style="position:absolute;left:0;top:15px;width:440px;height:180px;padding:26px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);box-sizing:border-box;display:flex;flex-direction:column;gap:10px;">
+        <div style="width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;box-shadow:0 8px 20px var(--accent-glow);">1</div>
+        <div style="font-size:26px;font-weight:700;line-height:1.35;">Pide tu liga de discovery <span style="color:var(--muted);font-weight:500;">(WhatsApp o web)</span></div>
+      </div>
+      <div style="position:absolute;left:510px;top:15px;width:440px;height:180px;padding:26px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);box-sizing:border-box;display:flex;flex-direction:column;gap:10px;">
+        <div style="width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;box-shadow:0 8px 20px var(--accent-glow);">2</div>
+        <div style="font-size:26px;font-weight:700;line-height:1.35;">El agente arma tu brief <span style="color:var(--muted);font-weight:500;">en 15 minutos</span></div>
+      </div>
+      <div style="position:absolute;left:1020px;top:15px;width:440px;height:180px;padding:26px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid var(--accent);box-shadow:0 16px 44px rgba(30,39,97,.07);box-sizing:border-box;display:flex;flex-direction:column;gap:10px;animation:glowPulse 3.6s ease-in-out infinite;">
+        <div style="width:42px;height:42px;border-radius:50%;background:var(--accent-2);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;">3</div>
+        <div style="font-size:26px;font-weight:700;line-height:1.35;">En 48 h recibes tu propuesta <span style="color:var(--muted);font-weight:500;">sin compromiso</span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+      <div style="padding:20px 52px;border-radius:999px;background:var(--accent);color:#fff;font-family:Manrope,sans-serif;font-weight:800;font-size:29px;box-shadow:0 14px 36px var(--accent-glow);">Pide tu liga de discovery →</div>
+      <div style="font-size:25px;color:var(--muted);">Jacobo · Yaub &nbsp;|&nbsp; jjpb.18@gmail.com &nbsp;|&nbsp; Cupos limitados por cohorte: el setup es 1 a 1</div>
+    </div>
+  </div>
+</section>
+
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#02C39A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#02C39A&quot;,&quot;#1E2761&quot;,&quot;#0EA5E9&quot;,&quot;#D97706&quot;],&quot;section&quot;:&quot;Paleta&quot;},&quot;accent2Color&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#1E2761&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#1E2761&quot;,&quot;#171C33&quot;,&quot;#0F766E&quot;,&quot;#7C3AED&quot;],&quot;section&quot;:&quot;Paleta&quot;}}">
+class Component extends DCLogic {
+  state = { t: 1, step: 99 };
+
+  onSlide = () => {
+    if (this.ti) clearInterval(this.ti);
+    if (this.si) clearInterval(this.si);
+    this.setState({ t: 0, step: -1 });
+    this.t0 = Date.now();
+    this.ti = setInterval(() => {
+      const tt = Math.min(1, (Date.now() - this.t0) / 1900);
+      this.setState({ t: tt });
+      if (tt >= 1) { clearInterval(this.ti); this.ti = null; }
+    }, 40);
+    setTimeout(() => this.setState({ step: 0 }), 60);
+    this.si = setInterval(() => {
+      this.setState(s => {
+        const n = s.step + 1;
+        if (n >= 16 && this.si) clearInterval(this.si);
+        return { step: n };
+      });
+    }, 320);
+  };
+
+  componentDidMount() { document.addEventListener('slidechange', this.onSlide); }
+  componentWillUnmount() {
+    document.removeEventListener('slidechange', this.onSlide);
+    if (this.ti) clearInterval(this.ti);
+    if (this.si) clearInterval(this.si);
+  }
+
+  hexRgb(h) { h = (h || '#02C39A').replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); const n = parseInt(h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+
+  renderVals() {
+    const accent = this.props.accentColor ?? '#02C39A';
+    const accent2 = this.props.accent2Color ?? '#1E2761';
+    const [r, g, b] = this.hexRgb(accent);
+    const pe = 1 - Math.pow(1 - this.state.t, 3);
+    const step = this.state.step;
+    const fmt = n => Math.round(n).toLocaleString('es-MX');
+    const bub = i => step >= 2 + i * 2;
+    const checkTexts = [
+      'Tu Cowork funcionando, conectado a tu correo, calendario y archivos',
+      '3–5 skills personalizados que hacen tus tareas reales',
+      'Tu brief y tu playbook: cómo trabajar con IA en TU puesto',
+      'Plan de 90 días para seguir automatizando por tu cuenta',
+      'Acceso de por vida a la comunidad',
+      'Si tienes negocio: tu agente atendiendo clientes en WhatsApp',
+      'Prioridad y precio preferente en agentes y consultoría Yaub',
+      'Un contacto directo que ya conoce tu operación'
+    ];
+    return {
+      accent, accent2,
+      accentSoft: `rgba(${r},${g},${b},0.14)`, accentGlow: `rgba(${r},${g},${b},0.35)`,
+      slideIn: step >= 0 ? '1' : '0', slideY: step >= 0 ? '0px' : '26px',
+      hSem: `${Math.round(6 * pe)}–${Math.round(10 * pe)} h`,
+      p1: '$' + fmt(4990 * pe), p2: '$' + fmt(12900 * pe), p3: 'desde $' + fmt(2990 * pe),
+      g1: '$' + fmt(2990 * pe) + ' c/u', g2: '$' + fmt(2490 * pe) + ' c/u',
+      roiH: `${Math.round(6 * pe)}–${Math.round(10 * pe)} h`,
+      roiM: '< ' + Math.max(1, Math.round(2 * pe)),
+      roi247: `${Math.round(24 * pe)}/7`,
+      b1o: bub(0) ? '1' : '0', b1y: bub(0) ? '0px' : '12px',
+      b2o: bub(1) ? '1' : '0', b2y: bub(1) ? '0px' : '12px',
+      b3o: bub(2) ? '1' : '0', b3y: bub(2) ? '0px' : '12px',
+      b4o: bub(3) ? '1' : '0', b4y: bub(3) ? '0px' : '12px',
+      checks: checkTexts.map((t, i) => ({ t, op: step >= 1 + i ? '1' : '0', ty: step >= 1 + i ? '0px' : '14px' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

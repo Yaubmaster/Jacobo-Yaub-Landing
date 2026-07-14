@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#f7f3ea;}
+x-dc{--accent:#D97706;--accent-glow:rgba(217,119,6,.35);--accent-soft:rgba(217,119,6,.12);--accent-dark:#b45309;--accent-2:#F43F5E;}
+a{color:#D97706;} a:hover{color:#0f1b2d;}
+@keyframes nodePulse{0%,100%{box-shadow:0 0 0 0 rgba(0,0,0,0);}50%{box-shadow:0 0 36px 2px var(--accent-glow);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
+@keyframes sweep{to{transform:rotate(360deg);}}
+@keyframes blink{0%,100%{opacity:.3;}50%{opacity:1;}}
+@keyframes orbF{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(40px,-32px) scale(1.06);}}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; --accent-glow: {{glow}}; --accent-soft: {{soft}}; --accent-dark: {{dark}}; --accent-2: {{accent2}}; position:fixed; inset:0; background:#f7f3ea;">
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+
+<section data-label="Portada" data-speaker-notes="Abrimos con su negocio, no con el nuestro. Una sola idea: agentes que cotizan, venden y prospectan por ustedes." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:40px;padding:100px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.28em;color:var(--accent);">AGENTES DE IA PARA EL DISTRIBUIDOR DE LOS DISTRIBUIDORES</div>
+  <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:126px;line-height:1.04;margin:0;color:#0f1b2d;">TTQ + TecnoDron</h1>
+  <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:84px;line-height:1;color:var(--accent);">× Yaub</div>
+  <div style="display:flex;gap:18px;"><span style="display:flex;align-items:center;gap:12px;padding:14px 34px;border-radius:999px;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);box-shadow:0 12px 32px rgba(15,27,45,.07);font-family:Manrope,sans-serif;font-weight:800;font-size:26px;letter-spacing:.04em;color:#0f1b2d;"><span style="width:12px;height:12px;border-radius:4px;background:var(--accent);"></span>GRUPO TTQ</span><span style="display:flex;align-items:center;gap:12px;padding:14px 34px;border-radius:999px;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);box-shadow:0 12px 32px rgba(15,27,45,.07);font-family:Manrope,sans-serif;font-weight:800;font-size:26px;letter-spacing:.04em;color:#0f1b2d;"><span style="width:12px;height:12px;border-radius:4px;background:var(--accent-2);"></span>TECNODRON</span></div>
+  <svg width="560" height="22" viewBox="0 0 560 22" style="overflow:visible;">
+    <path d="M10,11 L550,11" stroke="rgba(15,27,45,.18)" stroke-width="2" fill="none"></path>
+    <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="3.2s" repeatCount="indefinite" path="M10,11 L550,11"></animateMotion></circle>
+  </svg>
+  <div style="display:flex;gap:22px;align-items:center;margin-top:16px;">
+    <span style="font-size:26px;color:rgba(15,27,45,.6);">Desde 1972 · Exclusivos Topcon en México</span>
+    <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);"></span>
+    <span style="font-size:26px;color:rgba(15,27,45,.6);">yaub.ai · Monterrey</span>
+  </div>
+</section>
+
+<section data-label="El negocio hoy" data-speaker-notes="Dos operaciones, un mismo modelo B2B: nada tiene precio publicado, todo se cotiza. Ese flujo es el que vamos a acelerar." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 60px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">02 · QUIÉNES SON</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:72px;line-height:1.06;margin:18px 0 0;color:#0f1b2d;">El negocio hoy</h2>
+  <div style="font-size:29px;color:rgba(15,27,45,.65);margin-top:14px;">Dos mundos, un mismo modelo: nada tiene precio publicado — todo es cotización.</div>
+  <div style="position:relative;flex:1;margin-top:36px;">
+    <svg viewBox="0 0 1720 620" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+      <defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".8"></path></marker></defs>
+      <path d="M510,190 C840,190 940,300 1210,300" stroke="rgba(15,27,45,.16)" stroke-width="2" fill="none" marker-end="url(#a2)"></path>
+      <path d="M510,530 C840,530 940,350 1210,340" stroke="rgba(15,27,45,.16)" stroke-width="2" fill="none" marker-end="url(#a2)"></path>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="3.4s" repeatCount="indefinite" path="M510,190 C840,190 940,300 1210,300"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="3.9s" begin="1.2s" repeatCount="indefinite" path="M510,530 C840,530 940,350 1210,340"></animateMotion></circle>
+    </svg>
+    <div style="position:absolute;left:0;top:30px;width:500px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:22px;padding:24px 32px;display:flex;flex-direction:column;gap:8px;box-sizing:border-box;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent);">TOPOGRAFÍA · CDMX · DESDE 1972</div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:42px;">Grupo TTQ</div>
+      <div style="font-size:26px;color:rgba(15,27,45,.85);">Exclusivos Topcon en México</div>
+      <div style="font-size:25px;color:rgba(15,27,45,.55);">Topcon · Nikon · Spectra · PIX4D</div>
+      <div style="font-size:25px;color:rgba(15,27,45,.55);">Venta · reparación · calibración · capacitación</div>
+    </div>
+    <div style="position:absolute;left:0;top:400px;width:500px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:22px;padding:24px 32px;display:flex;flex-direction:column;gap:8px;box-sizing:border-box;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent-2);">DRONES · MONTERREY · 2021</div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:42px;">TecnoDron</div>
+      <div style="font-size:26px;color:rgba(15,27,45,.85);">Inspección, agrícola y antidron</div>
+      <div style="font-size:25px;color:rgba(15,27,45,.55);">Autel · EAVision · Skyfend</div>
+      <div style="font-size:25px;color:rgba(15,27,45,.55);">Centro de reparación autorizado · capacitación</div>
+    </div>
+    <div style="position:absolute;left:860px;top:230px;transform:translateX(-50%);padding:8px 20px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid var(--accent-soft);font-size:24px;color:var(--accent);font-weight:600;">cotizaciones y calibración</div>
+    <div style="position:absolute;left:860px;top:452px;transform:translateX(-50%);padding:8px 20px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid var(--accent-soft);font-size:24px;color:var(--accent);font-weight:600;">equipos y demos de vuelo</div>
+    <div style="position:absolute;left:1220px;top:190px;width:500px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1.5px solid rgba(15,27,45,.3);border-radius:22px;padding:30px 36px;display:flex;flex-direction:column;gap:12px;box-sizing:border-box;animation:nodePulse 3.6s ease-in-out infinite;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent);">SU MERCADO</div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:38px;line-height:1.15;">Distribuidores y empresas en todo México</div>
+      <div style="font-size:25px;color:rgba(15,27,45,.55);">Filiales en Monterrey y Querétaro · venta B2B, siempre por cotización</div>
+    </div>
+  </div>
+</section>
+
+<section data-label="El problema" data-speaker-notes="Cuatro dolores reales del research. El hilo común: el conocimiento comercial vive en pocas personas y no escala." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 70px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">03 · LO QUE DUELE</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:72px;line-height:1.06;margin:18px 0 0;color:#0f1b2d;">El problema</h2>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin-top:64px;flex:1;align-content:start;">
+    <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:40px 32px;display:flex;flex-direction:column;gap:18px;animation:fadeUp .7s ease both;animation-delay:.1s;">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><path d="M22 6 L38 14 L22 22 L6 14 Z"></path><path d="M6 22 L22 30 L38 22"></path><path d="M6 30 L22 38 L38 30"></path></svg>
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent);">01</div>
+      <div style="font-size:31px;font-weight:700;line-height:1.25;">Cotizar es artesanal</div>
+      <div style="font-size:25px;line-height:1.5;color:rgba(15,27,45,.62);">Cada cotización lleva 6–8 componentes configurables. Hoy todo lo arma su gente a mano.</div>
+    </div>
+    <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:40px 32px;display:flex;flex-direction:column;gap:18px;animation:fadeUp .7s ease both;animation-delay:.25s;">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"><circle cx="22" cy="22" r="16"></circle><path d="M17 17 a5 5 0 1 1 7 4.6 c-1.6 .8 -2 1.8 -2 3.4"></path><circle cx="22" cy="31" r="1.4" fill="var(--accent)" stroke="none"></circle></svg>
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent);">02</div>
+      <div style="font-size:31px;font-weight:700;line-height:1.25;">El cliente no sabe qué necesita</div>
+      <div style="font-size:25px;line-height:1.5;color:rgba(15,27,45,.62);">Pide “una estación total” o “un dron para fumigar” sin precisión, hectáreas ni terreno. El discovery consume horas.</div>
+    </div>
+    <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:40px 32px;display:flex;flex-direction:column;gap:18px;animation:fadeUp .7s ease both;animation-delay:.4s;">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"><circle cx="22" cy="10" r="4"></circle><circle cx="10" cy="34" r="4"></circle><circle cx="34" cy="34" r="4"></circle><path d="M20 14 L12 30 M24 14 L32 30 M14 34 L30 34"></path></svg>
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent);">03</div>
+      <div style="font-size:31px;font-weight:700;line-height:1.25;">No hay canal de distribuidores</div>
+      <div style="font-size:25px;line-height:1.5;color:rgba(15,27,45,.62);">El reclutamiento es manual y sin programa — y otros canales de EAVision ya se mueven en México.</div>
+    </div>
+    <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:40px 32px;display:flex;flex-direction:column;gap:18px;animation:fadeUp .7s ease both;animation-delay:.55s;">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"><circle cx="22" cy="15" r="7"></circle><path d="M8 38 c0 -8 6 -12 14 -12 s14 4 14 12"></path></svg>
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent);">04</div>
+      <div style="font-size:31px;font-weight:700;line-height:1.25;">El conocimiento vive en su gente</div>
+      <div style="font-size:25px;line-height:1.5;color:rgba(15,27,45,.62);">Si el experto no está, la cotización espera. Nada queda escrito ni sistematizado.</div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Anatomía de una cotización" data-speaker-notes="Lo que el cliente dice en 5 palabras esconde 8 variables de precio. Por eso un formulario no lo resuelve: hay que preguntar como experto." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 56px;box-sizing:border-box;overflow:hidden;">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+    <div>
+      <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">04 · POR QUÉ TARDA</div>
+      <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:68px;line-height:1.06;margin:16px 0 0;color:#0f1b2d;">Anatomía de una cotización</h2>
+    </div>
+  </div>
+  <div style="position:relative;flex:1;margin-top:16px;">
+    <svg viewBox="0 0 1720 620" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+      <path d="M860,80 L860,310" stroke="rgba(15,27,45,.12)" stroke-width="2" fill="none"></path>
+      <path d="M1300,160 L860,310" stroke="rgba(15,27,45,.12)" stroke-width="2" fill="none"></path>
+      <path d="M1560,310 L860,310" stroke="rgba(15,27,45,.12)" stroke-width="2" fill="none"></path>
+      <path d="M1300,465 L860,310" stroke="rgba(15,27,45,.12)" stroke-width="2" fill="none"></path>
+      <path d="M860,545 L860,310" stroke="rgba(15,27,45,.12)" stroke-width="2" fill="none"></path>
+      <path d="M420,465 L860,310" stroke="rgba(15,27,45,.12)" stroke-width="2" fill="none"></path>
+      <path d="M160,310 L860,310" stroke="rgba(15,27,45,.12)" stroke-width="2" fill="none"></path>
+      <path d="M420,160 L860,310" stroke="rgba(15,27,45,.12)" stroke-width="2" fill="none"></path>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.6s" repeatCount="indefinite" path="M860,80 L860,310"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.9s" begin=".3s" repeatCount="indefinite" path="M1300,160 L860,310"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="3.2s" begin=".6s" repeatCount="indefinite" path="M1560,310 L860,310"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.7s" begin=".9s" repeatCount="indefinite" path="M1300,465 L860,310"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="3s" begin="1.2s" repeatCount="indefinite" path="M860,545 L860,310"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.8s" begin="1.5s" repeatCount="indefinite" path="M420,465 L860,310"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="3.3s" begin="1.8s" repeatCount="indefinite" path="M160,310 L860,310"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.9s" begin="2.1s" repeatCount="indefinite" path="M420,160 L860,310"></animateMotion></circle>
+    </svg>
+    <div style="position:absolute;left:860px;top:52px;transform:translate(-50%,-50%);padding:14px 28px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);font-size:26px;font-weight:600;white-space:nowrap;">Baterías extra</div>
+    <div style="position:absolute;left:1300px;top:140px;transform:translate(-50%,-50%);padding:14px 28px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);font-size:26px;font-weight:600;white-space:nowrap;">Generador-cargador</div>
+    <div style="position:absolute;left:1560px;top:310px;transform:translate(-50%,-50%);padding:14px 28px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);font-size:26px;font-weight:600;white-space:nowrap;">Esparcidor de sólidos</div>
+    <div style="position:absolute;left:1300px;top:482px;transform:translate(-50%,-50%);padding:14px 28px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);font-size:26px;font-weight:600;white-space:nowrap;">Capacitación de piloto</div>
+    <div style="position:absolute;left:860px;top:568px;transform:translate(-50%,-50%);padding:14px 28px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);font-size:26px;font-weight:600;white-space:nowrap;">Trámite AFAC</div>
+    <div style="position:absolute;left:420px;top:482px;transform:translate(-50%,-50%);padding:14px 28px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);font-size:26px;font-weight:600;white-space:nowrap;">Seguro RC</div>
+    <div style="position:absolute;left:160px;top:310px;transform:translate(-50%,-50%);padding:14px 28px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);font-size:26px;font-weight:600;white-space:nowrap;">Volumen de compra</div>
+    <div style="position:absolute;left:420px;top:140px;transform:translate(-50%,-50%);padding:14px 28px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);font-size:26px;font-weight:600;white-space:nowrap;">Tipo de cambio</div>
+    <div style="position:absolute;left:860px;top:310px;transform:translate(-50%,-50%);width:420px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1.5px solid var(--accent);border-radius:24px;padding:30px 36px;text-align:center;box-sizing:border-box;animation:nodePulse 3.4s ease-in-out infinite;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:42px;line-height:1.15;">“Un dron para fumigar”</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);margin-top:10px;">lo único que dice el cliente</div>
+    </div>
+  </div>
+  <div style="text-align:center;font-family:Manrope,sans-serif;font-weight:700;font-size:37px;color:rgba(15,27,45,.85);margin-top:8px;">Por eso cotizar toma días. Y por eso un formulario no lo resuelve.</div>
+</section>
+
+<section data-label="La solución" data-speaker-notes="Tres agentes sobre un mismo motor. Sin cambiar de sistema: se montan sobre el sitio actual y WhatsApp." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 60px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">05 · LA PROPUESTA</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:68px;line-height:1.06;margin:16px 0 0;color:#0f1b2d;">La solución: agentes Yaub</h2>
+  <div style="position:relative;flex:1;margin-top:20px;">
+    <svg viewBox="0 0 1720 600" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+      <path d="M300,300 a560,250 0 1,0 1120,0 a560,250 0 1,0 -1120,0" stroke="rgba(15,27,45,.14)" stroke-width="1.5" stroke-dasharray="3 10" fill="none"></path>
+      <circle r="4" fill="var(--accent)" opacity=".7"><animateMotion dur="16s" repeatCount="indefinite" path="M300,300 a560,250 0 1,0 1120,0 a560,250 0 1,0 -1120,0"></animateMotion></circle>
+      <path d="M860,300 L310,140" stroke="rgba(15,27,45,.14)" stroke-width="2" fill="none"></path>
+      <path d="M860,300 L1410,140" stroke="rgba(15,27,45,.14)" stroke-width="2" fill="none"></path>
+      <path d="M860,300 L860,520" stroke="rgba(15,27,45,.14)" stroke-width="2" fill="none"></path>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.4s" repeatCount="indefinite" path="M860,300 L310,140"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.4s" begin=".8s" repeatCount="indefinite" path="M860,300 L1410,140"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2s" begin="1.6s" repeatCount="indefinite" path="M860,300 L860,520"></animateMotion></circle>
+    </svg>
+    <div style="position:absolute;left:860px;top:300px;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 50% 38%, var(--accent-soft), rgba(255,255,255,0) 70%), rgba(255,255,255,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1.5px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;animation:nodePulse 3.2s ease-in-out infinite;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:44px;">Agentes Yaub</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.6);">piensan · resuelven · recuerdan</div>
+    </div>
+    <div style="position:absolute;left:310px;top:120px;transform:translate(-50%,-50%);width:420px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);border-radius:20px;padding:24px 30px;box-sizing:border-box;">
+      <div style="font-size:30px;font-weight:700;">Cotizador TTQ Topografía</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.6);margin-top:8px;">de “necesito una estación” a cotización lista</div>
+    </div>
+    <div style="position:absolute;left:1410px;top:120px;transform:translate(-50%,-50%);width:420px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);border-radius:20px;padding:24px 30px;box-sizing:border-box;">
+      <div style="font-size:30px;font-weight:700;">Vendedor de Drones en tu Ecommerce</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.6);margin-top:8px;">vende y califica 24/7 sobre tu tienda actual</div>
+    </div>
+    <div style="position:absolute;left:860px;top:545px;transform:translate(-50%,-50%);width:460px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);border-radius:20px;padding:24px 30px;box-sizing:border-box;">
+      <div style="font-size:30px;font-weight:700;">Vigilant · cazador de distribuidores</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.6);margin-top:8px;">llena el pipeline de candidatos por estado</div>
+    </div>
+  </div>
+  <div style="text-align:center;font-size:27px;color:rgba(15,27,45,.65);margin-top:10px;">Sin cambiar de sistema ni instalar apps nuevas: se montan sobre su sitio actual y WhatsApp.</div>
+</section>
+
+<sc-if value="{{topoFirst}}" hint-placeholder-val="{{ true }}">
+<section data-label="Agente 1 · Cotizador TTQ" data-speaker-notes="Demo en vivo después de esta slide: el agente pregunta lo que su experto preguntaría y arma la configuración completa." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 56px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">06 · AGENTE 1</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:64px;line-height:1.06;margin:14px 0 0;color:#0f1b2d;">Cotizador Inteligente TTQ</h2>
+  <div style="display:flex;gap:56px;margin-top:36px;flex:1;">
+    <div style="width:780px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:24px;padding:32px 36px;display:flex;flex-direction:column;gap:18px;box-sizing:border-box;">
+      <div style="display:flex;align-items:center;gap:12px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);animation:blink 2.2s infinite;"></span><span style="font-size:24px;color:rgba(15,27,45,.55);">ttq.mx · asistente en su sitio actual</span></div>
+      <div style="align-self:flex-end;max-width:540px;background:var(--accent);color:#ffffff;font-weight:600;padding:16px 22px;border-radius:18px 18px 4px 18px;font-size:26px;line-height:1.4;">Necesito equipo para una carretera de 40 km.</div>
+      <div style="align-self:flex-start;max-width:560px;background:rgba(15,27,45,.06);padding:16px 22px;border-radius:4px 18px 18px 18px;font-size:26px;line-height:1.4;">¿El control de obra lo harán ustedes o lo subcontratan?</div>
+      <div style="align-self:flex-end;background:var(--accent);color:#ffffff;font-weight:600;padding:14px 22px;border-radius:18px 18px 4px 18px;font-size:26px;">Nosotros.</div>
+      <div style="align-self:flex-start;max-width:560px;background:rgba(15,27,45,.06);padding:16px 22px;border-radius:4px 18px 18px 18px;font-size:26px;line-height:1.4;">¿Ya tienen base GNSS propia en la obra?</div>
+      <div style="display:flex;gap:14px;">
+        <span style="padding:12px 24px;border-radius:999px;border:1.5px solid rgba(15,27,45,.25);font-size:24px;color:rgba(15,27,45,.7);">Sí, tenemos base</span>
+        <span style="padding:12px 24px;border-radius:999px;background:var(--accent);color:#ffffff;font-weight:700;font-size:24px;">No, empezamos de cero ✓</span>
+      </div>
+      <div style="align-self:flex-start;max-width:620px;background:rgba(15,27,45,.06);padding:16px 22px;border-radius:4px 18px 18px 18px;font-size:26px;line-height:1.4;">Perfecto: les conviene Base + Rover. Ya armé su configuración →</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;">
+      <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:24px;padding:28px 34px;box-sizing:border-box;">
+        <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent);">CONFIGURACIÓN EN VIVO</div>
+        <div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid rgba(15,27,45,.08);margin-top:10px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></span><span style="font-size:27px;font-weight:600;flex:1;">GNSS Topcon Hiper HR</span><span style="font-size:24px;color:rgba(15,27,45,.5);">Base + Rover</span></div>
+        <div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid rgba(15,27,45,.08);"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></span><span style="font-size:27px;font-weight:600;flex:1;">Colectora FC-6000A</span><span style="font-size:24px;color:rgba(15,27,45,.5);">control en campo</span></div>
+        <div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid rgba(15,27,45,.08);"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></span><span style="font-size:27px;font-weight:600;flex:1;">Radio UHF</span><span style="font-size:24px;color:rgba(15,27,45,.5);">enlace base–rover</span></div>
+        <div style="display:flex;align-items:center;gap:16px;padding:16px 0;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></span><span style="font-size:27px;font-weight:600;flex:1;">Curso de operación</span><span style="font-size:24px;color:rgba(15,27,45,.5);">TTQ Capacitación</span></div>
+      </div>
+      <svg width="100%" height="60" viewBox="0 0 640 60" preserveAspectRatio="none" style="display:block;">
+        <path d="M320,0 L320,60" stroke="rgba(15,27,45,.2)" stroke-width="2" fill="none"></path>
+        <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.6s" repeatCount="indefinite" path="M320,0 L320,60"></animateMotion></circle>
+      </svg>
+      <div style="border:1.5px solid var(--accent);border-radius:22px;padding:24px 32px;display:flex;justify-content:space-between;align-items:center;animation:nodePulse 3.2s ease-in-out infinite;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);">
+        <div>
+          <div style="font-size:30px;font-weight:700;">Cotización lista</div>
+          <div style="font-size:24px;color:rgba(15,27,45,.55);margin-top:6px;">vigencia 7 días · tipo de cambio</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:46px;color:var(--accent);">$—</div>
+          <div style="font-size:24px;color:rgba(15,27,45,.55);">precio de referencia</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;font-family:Manrope,sans-serif;font-weight:700;font-size:31px;color:rgba(15,27,45,.8);margin-top:22px;">El agente pregunta lo que su experto preguntaría.</div>
+</section>
+<section data-label="Agente 2 · Vendedor de Drones" data-speaker-notes="El mismo motor vendiendo en el ecommerce de TecnoDron: entiende, recomienda J70 vs J150, arma el kit y cierra por WhatsApp." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 56px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">07 · AGENTE 2</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:64px;line-height:1.06;margin:14px 0 0;color:#0f1b2d;">Vendedor de Drones</h2>
+  <div style="position:relative;flex:1;margin-top:34px;">
+    <svg viewBox="0 0 1720 500" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+      <defs><marker id="a7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".8"></path></marker></defs>
+      <path d="M385,240 L445,240" stroke="rgba(15,27,45,.2)" stroke-width="2" fill="none" marker-end="url(#a7)"></path>
+      <path d="M830,240 L890,240" stroke="rgba(15,27,45,.2)" stroke-width="2" fill="none" marker-end="url(#a7)"></path>
+      <path d="M1275,240 L1335,240" stroke="rgba(15,27,45,.2)" stroke-width="2" fill="none" marker-end="url(#a7)"></path>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.4s" repeatCount="indefinite" path="M385,240 L445,240"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.4s" begin=".45s" repeatCount="indefinite" path="M830,240 L890,240"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.4s" begin=".9s" repeatCount="indefinite" path="M1275,240 L1335,240"></animateMotion></circle>
+    </svg>
+    <div style="position:absolute;left:0;top:20px;width:385px;height:440px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent-2);">ENTIENDE</div>
+      <div style="background:rgba(15,27,45,.06);border-radius:12px;padding:12px 18px;font-size:25px;">300 hectáreas de aguacate</div>
+      <div style="background:rgba(15,27,45,.06);border-radius:12px;padding:12px 18px;font-size:25px;">Michoacán · con pendiente</div>
+      <div style="background:rgba(15,27,45,.06);border-radius:12px;padding:12px 18px;font-size:25px;">Sin piloto certificado</div>
+      <div style="background:rgba(15,27,45,.06);border-radius:12px;padding:12px 18px;font-size:25px;">Hoy: aspersión terrestre</div>
+    </div>
+    <div style="position:absolute;left:445px;top:20px;width:385px;height:440px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent-2);">RECOMIENDA</div>
+      <div style="font-size:27px;font-weight:700;">EA-J70</div>
+      <div style="height:12px;border-radius:99px;background:rgba(15,27,45,.1);"><div style="width:100%;height:100%;border-radius:99px;background:var(--accent);"></div></div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);">visión binocular · colinas y huertos</div>
+      <div style="font-size:27px;font-weight:600;color:rgba(15,27,45,.6);margin-top:8px;">EA-J150</div>
+      <div style="height:12px;border-radius:99px;background:rgba(15,27,45,.1);"><div style="width:58%;height:100%;border-radius:99px;background:rgba(15,27,45,.35);"></div></div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);">70 L · extensivo en plano</div>
+      <div style="margin-top:auto;align-self:flex-start;padding:10px 22px;border-radius:999px;border:1.5px solid var(--accent-2);color:var(--accent-2);font-size:24px;font-weight:700;">Recomendado: EA-J70</div>
+    </div>
+    <div style="position:absolute;left:890px;top:20px;width:385px;height:440px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent-2);">ARMA EL KIT</div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;">
+        <span style="padding:10px 18px;border-radius:999px;background:rgba(15,27,45,.06);font-size:25px;">Baterías extra</span>
+        <span style="padding:10px 18px;border-radius:999px;background:rgba(15,27,45,.06);font-size:25px;">Generador 9–13 kW</span>
+        <span style="padding:10px 18px;border-radius:999px;background:rgba(15,27,45,.06);font-size:25px;">Esparcidor de sólidos</span>
+        <span style="padding:10px 18px;border-radius:999px;background:rgba(15,27,45,.06);font-size:25px;">Capacitación de piloto</span>
+        <span style="padding:10px 18px;border-radius:999px;background:rgba(15,27,45,.06);font-size:25px;">Trámite AFAC + seguro RC</span>
+      </div>
+      <div style="margin-top:auto;font-size:24px;color:rgba(15,27,45,.55);">El trámite y el seguro van como acompañamiento, no como letra chica.</div>
+    </div>
+    <div style="position:absolute;left:1335px;top:20px;width:385px;height:440px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent-2);">CIERRA</div>
+      <div style="background:rgba(15,27,45,.06);border-radius:14px;padding:14px 18px;font-size:25px;line-height:1.4;">Tu cotización: EA-J70 + kit completo · $— <span style="color:rgba(15,27,45,.5);">(referencia)</span></div>
+      <div style="background:rgba(15,27,45,.06);border-radius:14px;padding:14px 18px;font-size:25px;line-height:1.4;"><span style="color:var(--accent);font-weight:700;">✓</span> Demo de vuelo: jueves 10:00</div>
+      <div style="margin-top:auto;align-self:flex-start;padding:10px 22px;border-radius:999px;background:var(--accent-2);color:#ffffff;font-size:24px;font-weight:700;">enviado por WhatsApp</div>
+    </div>
+  </div>
+  <div style="text-align:center;font-size:27px;color:rgba(15,27,45,.65);margin-top:18px;">Vende 24/7 en su ecommerce, califica y agenda demos de vuelo.</div>
+</section>
+</sc-if>
+
+<sc-if value="{{dronesFirst}}" hint-placeholder-val="{{ false }}">
+<section data-label="Agente 1 · Vendedor de Drones" data-speaker-notes="Énfasis drones: abrimos con el vendedor del ecommerce de TecnoDron. Entiende, recomienda J70 vs J150, arma el kit y cierra por WhatsApp." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 56px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">06 · AGENTE 1</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:64px;line-height:1.06;margin:14px 0 0;color:#0f1b2d;">Vendedor de Drones</h2>
+  <div style="position:relative;flex:1;margin-top:34px;">
+    <svg viewBox="0 0 1720 500" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+      <defs><marker id="a7b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".8"></path></marker></defs>
+      <path d="M385,240 L445,240" stroke="rgba(15,27,45,.2)" stroke-width="2" fill="none" marker-end="url(#a7b)"></path>
+      <path d="M830,240 L890,240" stroke="rgba(15,27,45,.2)" stroke-width="2" fill="none" marker-end="url(#a7b)"></path>
+      <path d="M1275,240 L1335,240" stroke="rgba(15,27,45,.2)" stroke-width="2" fill="none" marker-end="url(#a7b)"></path>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.4s" repeatCount="indefinite" path="M385,240 L445,240"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.4s" begin=".45s" repeatCount="indefinite" path="M830,240 L890,240"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.4s" begin=".9s" repeatCount="indefinite" path="M1275,240 L1335,240"></animateMotion></circle>
+    </svg>
+    <div style="position:absolute;left:0;top:20px;width:385px;height:440px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent-2);">ENTIENDE</div>
+      <div style="background:rgba(15,27,45,.06);border-radius:12px;padding:12px 18px;font-size:25px;">300 hectáreas de aguacate</div>
+      <div style="background:rgba(15,27,45,.06);border-radius:12px;padding:12px 18px;font-size:25px;">Michoacán · con pendiente</div>
+      <div style="background:rgba(15,27,45,.06);border-radius:12px;padding:12px 18px;font-size:25px;">Sin piloto certificado</div>
+      <div style="background:rgba(15,27,45,.06);border-radius:12px;padding:12px 18px;font-size:25px;">Hoy: aspersión terrestre</div>
+    </div>
+    <div style="position:absolute;left:445px;top:20px;width:385px;height:440px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent-2);">RECOMIENDA</div>
+      <div style="font-size:27px;font-weight:700;">EA-J70</div>
+      <div style="height:12px;border-radius:99px;background:rgba(15,27,45,.1);"><div style="width:100%;height:100%;border-radius:99px;background:var(--accent);"></div></div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);">visión binocular · colinas y huertos</div>
+      <div style="font-size:27px;font-weight:600;color:rgba(15,27,45,.6);margin-top:8px;">EA-J150</div>
+      <div style="height:12px;border-radius:99px;background:rgba(15,27,45,.1);"><div style="width:58%;height:100%;border-radius:99px;background:rgba(15,27,45,.35);"></div></div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);">70 L · extensivo en plano</div>
+      <div style="margin-top:auto;align-self:flex-start;padding:10px 22px;border-radius:999px;border:1.5px solid var(--accent-2);color:var(--accent-2);font-size:24px;font-weight:700;">Recomendado: EA-J70</div>
+    </div>
+    <div style="position:absolute;left:890px;top:20px;width:385px;height:440px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent-2);">ARMA EL KIT</div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;">
+        <span style="padding:10px 18px;border-radius:999px;background:rgba(15,27,45,.06);font-size:25px;">Baterías extra</span>
+        <span style="padding:10px 18px;border-radius:999px;background:rgba(15,27,45,.06);font-size:25px;">Generador 9–13 kW</span>
+        <span style="padding:10px 18px;border-radius:999px;background:rgba(15,27,45,.06);font-size:25px;">Esparcidor de sólidos</span>
+        <span style="padding:10px 18px;border-radius:999px;background:rgba(15,27,45,.06);font-size:25px;">Capacitación de piloto</span>
+        <span style="padding:10px 18px;border-radius:999px;background:rgba(15,27,45,.06);font-size:25px;">Trámite AFAC + seguro RC</span>
+      </div>
+      <div style="margin-top:auto;font-size:24px;color:rgba(15,27,45,.55);">El trámite y el seguro van como acompañamiento, no como letra chica.</div>
+    </div>
+    <div style="position:absolute;left:1335px;top:20px;width:385px;height:440px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;">
+      <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent-2);">CIERRA</div>
+      <div style="background:rgba(15,27,45,.06);border-radius:14px;padding:14px 18px;font-size:25px;line-height:1.4;">Tu cotización: EA-J70 + kit completo · $— <span style="color:rgba(15,27,45,.5);">(referencia)</span></div>
+      <div style="background:rgba(15,27,45,.06);border-radius:14px;padding:14px 18px;font-size:25px;line-height:1.4;"><span style="color:var(--accent);font-weight:700;">✓</span> Demo de vuelo: jueves 10:00</div>
+      <div style="margin-top:auto;align-self:flex-start;padding:10px 22px;border-radius:999px;background:var(--accent-2);color:#ffffff;font-size:24px;font-weight:700;">enviado por WhatsApp</div>
+    </div>
+  </div>
+  <div style="text-align:center;font-size:27px;color:rgba(15,27,45,.65);margin-top:18px;">Vende 24/7 en su ecommerce, califica y agenda demos de vuelo.</div>
+</section>
+<section data-label="Agente 2 · Cotizador TTQ" data-speaker-notes="El mismo motor cotizando topografía: pregunta lo que su experto preguntaría y arma la configuración completa." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 56px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">07 · AGENTE 2</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:64px;line-height:1.06;margin:14px 0 0;color:#0f1b2d;">Cotizador Inteligente TTQ</h2>
+  <div style="display:flex;gap:56px;margin-top:36px;flex:1;">
+    <div style="width:780px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:24px;padding:32px 36px;display:flex;flex-direction:column;gap:18px;box-sizing:border-box;">
+      <div style="display:flex;align-items:center;gap:12px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);animation:blink 2.2s infinite;"></span><span style="font-size:24px;color:rgba(15,27,45,.55);">ttq.mx · asistente en su sitio actual</span></div>
+      <div style="align-self:flex-end;max-width:540px;background:var(--accent);color:#ffffff;font-weight:600;padding:16px 22px;border-radius:18px 18px 4px 18px;font-size:26px;line-height:1.4;">Necesito equipo para una carretera de 40 km.</div>
+      <div style="align-self:flex-start;max-width:560px;background:rgba(15,27,45,.06);padding:16px 22px;border-radius:4px 18px 18px 18px;font-size:26px;line-height:1.4;">¿El control de obra lo harán ustedes o lo subcontratan?</div>
+      <div style="align-self:flex-end;background:var(--accent);color:#ffffff;font-weight:600;padding:14px 22px;border-radius:18px 18px 4px 18px;font-size:26px;">Nosotros.</div>
+      <div style="align-self:flex-start;max-width:560px;background:rgba(15,27,45,.06);padding:16px 22px;border-radius:4px 18px 18px 18px;font-size:26px;line-height:1.4;">¿Ya tienen base GNSS propia en la obra?</div>
+      <div style="display:flex;gap:14px;">
+        <span style="padding:12px 24px;border-radius:999px;border:1.5px solid rgba(15,27,45,.25);font-size:24px;color:rgba(15,27,45,.7);">Sí, tenemos base</span>
+        <span style="padding:12px 24px;border-radius:999px;background:var(--accent);color:#ffffff;font-weight:700;font-size:24px;">No, empezamos de cero ✓</span>
+      </div>
+      <div style="align-self:flex-start;max-width:620px;background:rgba(15,27,45,.06);padding:16px 22px;border-radius:4px 18px 18px 18px;font-size:26px;line-height:1.4;">Perfecto: les conviene Base + Rover. Ya armé su configuración →</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;">
+      <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:24px;padding:28px 34px;box-sizing:border-box;">
+        <div style="font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--accent);">CONFIGURACIÓN EN VIVO</div>
+        <div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid rgba(15,27,45,.08);margin-top:10px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></span><span style="font-size:27px;font-weight:600;flex:1;">GNSS Topcon Hiper HR</span><span style="font-size:24px;color:rgba(15,27,45,.5);">Base + Rover</span></div>
+        <div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid rgba(15,27,45,.08);"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></span><span style="font-size:27px;font-weight:600;flex:1;">Colectora FC-6000A</span><span style="font-size:24px;color:rgba(15,27,45,.5);">control en campo</span></div>
+        <div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid rgba(15,27,45,.08);"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></span><span style="font-size:27px;font-weight:600;flex:1;">Radio UHF</span><span style="font-size:24px;color:rgba(15,27,45,.5);">enlace base–rover</span></div>
+        <div style="display:flex;align-items:center;gap:16px;padding:16px 0;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></span><span style="font-size:27px;font-weight:600;flex:1;">Curso de operación</span><span style="font-size:24px;color:rgba(15,27,45,.5);">TTQ Capacitación</span></div>
+      </div>
+      <svg width="100%" height="60" viewBox="0 0 640 60" preserveAspectRatio="none" style="display:block;">
+        <path d="M320,0 L320,60" stroke="rgba(15,27,45,.2)" stroke-width="2" fill="none"></path>
+        <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.6s" repeatCount="indefinite" path="M320,0 L320,60"></animateMotion></circle>
+      </svg>
+      <div style="border:1.5px solid var(--accent);border-radius:22px;padding:24px 32px;display:flex;justify-content:space-between;align-items:center;animation:nodePulse 3.2s ease-in-out infinite;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);">
+        <div>
+          <div style="font-size:30px;font-weight:700;">Cotización lista</div>
+          <div style="font-size:24px;color:rgba(15,27,45,.55);margin-top:6px;">vigencia 7 días · tipo de cambio</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:46px;color:var(--accent);">$—</div>
+          <div style="font-size:24px;color:rgba(15,27,45,.55);">precio de referencia</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;font-family:Manrope,sans-serif;font-weight:700;font-size:31px;color:rgba(15,27,45,.8);margin-top:22px;">El agente pregunta lo que su experto preguntaría.</div>
+</section>
+</sc-if>
+
+<section data-label="Agente 3 · Vigilant" data-speaker-notes="Vigilant trabaja solo: rastrea fuentes públicas, califica candidatos con score y su equipo solo aprueba. El primer contacto sale con su marca." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 56px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">08 · AGENTE 3</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:64px;line-height:1.06;margin:14px 0 0;color:#0f1b2d;">Vigilant: prospección de distribuidores</h2>
+  <div style="position:relative;flex:1;margin-top:26px;">
+    <svg viewBox="0 0 1720 640" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+      <defs><marker id="a8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".8"></path></marker></defs>
+      <path d="M400,59 C560,59 590,240 688,278" stroke="rgba(15,27,45,.14)" stroke-width="2" fill="none"></path>
+      <path d="M400,159 C560,159 590,260 684,290" stroke="rgba(15,27,45,.14)" stroke-width="2" fill="none"></path>
+      <path d="M400,259 C560,259 590,290 682,300" stroke="rgba(15,27,45,.14)" stroke-width="2" fill="none"></path>
+      <path d="M400,359 C560,359 590,330 684,314" stroke="rgba(15,27,45,.14)" stroke-width="2" fill="none"></path>
+      <path d="M1032,300 C1160,300 1180,130 1310,105" stroke="rgba(15,27,45,.16)" stroke-width="2" fill="none" marker-end="url(#a8)"></path>
+      <path d="M1520,170 L1520,248" stroke="rgba(15,27,45,.16)" stroke-width="2" fill="none" marker-end="url(#a8)"></path>
+      <path d="M1520,358 L1520,438" stroke="rgba(15,27,45,.16)" stroke-width="2" fill="none" marker-end="url(#a8)"></path>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.6s" repeatCount="indefinite" path="M400,59 C560,59 590,240 688,278"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.9s" begin=".5s" repeatCount="indefinite" path="M400,159 C560,159 590,260 684,290"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.7s" begin="1s" repeatCount="indefinite" path="M400,259 C560,259 590,290 682,300"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="3s" begin="1.5s" repeatCount="indefinite" path="M400,359 C560,359 590,330 684,314"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.4s" repeatCount="indefinite" path="M1032,300 C1160,300 1180,130 1310,105"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.6s" repeatCount="indefinite" path="M1520,170 L1520,248"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.6s" begin=".8s" repeatCount="indefinite" path="M1520,358 L1520,438"></animateMotion></circle>
+    </svg>
+    <div style="position:absolute;left:0;top:20px;width:400px;height:78px;display:flex;align-items:center;padding:0 26px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:16px;font-size:26px;box-sizing:border-box;">Expos y ferias agro</div>
+    <div style="position:absolute;left:0;top:120px;width:400px;height:78px;display:flex;align-items:center;padding:0 26px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:16px;font-size:26px;box-sizing:border-box;">Padrón de dealers</div>
+    <div style="position:absolute;left:0;top:220px;width:400px;height:78px;display:flex;align-items:center;padding:0 26px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:16px;font-size:26px;box-sizing:border-box;">Escuelas de pilotos RPAS</div>
+    <div style="position:absolute;left:0;top:320px;width:400px;height:78px;display:flex;align-items:center;padding:0 26px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:16px;font-size:26px;box-sizing:border-box;">Agroservicios por estado</div>
+    <div style="position:absolute;left:20px;top:428px;width:380px;">
+      <svg viewBox="0 0 540 280" style="width:360px;height:190px;">
+        <path d="M60,58 L118,40 L196,44 L236,26 L282,34 L306,72 L318,64 L340,70 L344,108 L332,140 L356,166 L398,180 L442,176 L452,160 L488,158 L508,170 L512,196 L488,214 L462,206 L446,222 L430,244 L398,240 L360,224 L318,204 L282,192 L250,170 L216,142 L182,116 L148,96 L112,80 L84,72 Z" fill="rgba(15,27,45,.05)" stroke="rgba(15,27,45,.22)" stroke-width="1.5"></path>
+        <path d="M62,66 L82,78 L100,110 L118,146 L132,176 L122,184 L104,158 L84,122 L64,88 L52,72 Z" fill="rgba(15,27,45,.05)" stroke="rgba(15,27,45,.22)" stroke-width="1.5"></path>
+        <circle cx="150" cy="118" r="5" fill="var(--accent)"><animate attributeName="r" values="4;8;4" dur="2.2s" repeatCount="indefinite"></animate></circle>
+        <circle cx="216" cy="168" r="5" fill="var(--accent)"><animate attributeName="r" values="4;8;4" dur="2.2s" begin=".5s" repeatCount="indefinite"></animate></circle>
+        <circle cx="252" cy="158" r="5" fill="var(--accent)"><animate attributeName="r" values="4;8;4" dur="2.2s" begin="1s" repeatCount="indefinite"></animate></circle>
+        <circle cx="240" cy="184" r="5" fill="var(--accent)"><animate attributeName="r" values="4;8;4" dur="2.2s" begin="1.5s" repeatCount="indefinite"></animate></circle>
+      </svg>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);">Gto · Sin · Jal · Mich — primeros estados objetivo</div>
+    </div>
+    <div style="position:absolute;left:860px;top:300px;transform:translate(-50%,-50%);width:344px;height:344px;border-radius:50%;border:1.5px solid rgba(15,27,45,.16);">
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:230px;height:230px;border-radius:50%;border:1px solid rgba(15,27,45,.12);"></div>
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:116px;height:116px;border-radius:50%;border:1px solid rgba(15,27,45,.1);"></div>
+      <div style="position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg, var(--accent-glow), rgba(255,255,255,0) 80deg);animation:sweep 3.4s linear infinite;"></div>
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px var(--accent);"></div>
+    </div>
+    <div style="position:absolute;left:860px;top:512px;transform:translateX(-50%);text-align:center;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:36px;">Vigilant</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);">rastreando candidatos, todos los días</div>
+    </div>
+    <div style="position:absolute;left:1320px;top:38px;width:400px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1.5px solid var(--accent);border-radius:18px;padding:22px 26px;box-sizing:border-box;animation:nodePulse 3.4s ease-in-out infinite;">
+      <div style="font-size:29px;font-weight:700;">Candidatos calificados</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);margin-top:6px;">con score y resumen del negocio</div>
+    </div>
+    <div style="position:absolute;left:1320px;top:258px;width:400px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);border-radius:18px;padding:22px 26px;box-sizing:border-box;">
+      <div style="font-size:29px;font-weight:700;">Su equipo aprueba</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);margin-top:6px;">un clic por candidato</div>
+    </div>
+    <div style="position:absolute;left:1320px;top:448px;width:400px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);border-radius:18px;padding:22px 26px;box-sizing:border-box;">
+      <div style="font-size:29px;font-weight:700;">Primer contacto</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);margin-top:6px;">WhatsApp o correo, con su marca</div>
+    </div>
+    <div style="position:absolute;left:545px;top:118px;transform:translate(-50%,-50%);padding:6px 18px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid var(--accent-soft);font-size:24px;color:var(--accent);font-weight:600;">busca y filtra</div>
+    <div style="position:absolute;left:1180px;top:180px;transform:translate(-50%,-50%);padding:6px 18px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid var(--accent-soft);font-size:24px;color:var(--accent);font-weight:600;">con score</div>
+  </div>
+</section>
+
+<section data-label="Cómo se ve por dentro" data-speaker-notes="Una sola puerta de entrada, cuatro tipos de consulta. Lo que se puede resolver, se resuelve; lo demás pasa a un humano con todo el contexto." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 56px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">09 · POR DENTRO</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:64px;line-height:1.06;margin:14px 0 0;color:#0f1b2d;">Cómo se ve por dentro</h2>
+  <div style="position:relative;flex:1;margin-top:24px;">
+    <svg viewBox="0 0 1720 560" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+      <defs><marker id="a9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".8"></path></marker></defs>
+      <path d="M330,280 C480,280 490,52 636,52" stroke="rgba(15,27,45,.13)" stroke-width="2" fill="none"></path>
+      <path d="M330,280 C480,280 490,192 636,192" stroke="rgba(15,27,45,.13)" stroke-width="2" fill="none"></path>
+      <path d="M330,280 C480,280 490,332 636,332" stroke="rgba(15,27,45,.13)" stroke-width="2" fill="none"></path>
+      <path d="M330,280 C480,280 490,472 636,472" stroke="rgba(15,27,45,.13)" stroke-width="2" fill="none"></path>
+      <path d="M1100,52 C1230,52 1240,140 1356,148" stroke="rgba(15,27,45,.13)" stroke-width="2" fill="none" marker-end="url(#a9)"></path>
+      <path d="M1100,192 C1230,192 1240,160 1352,156" stroke="rgba(15,27,45,.13)" stroke-width="2" fill="none"></path>
+      <path d="M1100,332 C1230,332 1240,180 1354,164" stroke="rgba(15,27,45,.13)" stroke-width="2" fill="none"></path>
+      <path d="M1100,472 C1230,472 1240,440 1356,436" stroke="rgba(15,27,45,.13)" stroke-width="2" fill="none" marker-end="url(#a9)"></path>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.4s" repeatCount="indefinite" path="M330,280 C480,280 490,52 636,52"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" opacity=".85"><animateMotion dur="2.7s" begin=".4s" repeatCount="indefinite" path="M330,280 C480,280 490,192 636,192"></animateMotion></circle>
+      <circle r="4.5" fill="#0f1b2d" opacity=".7"><animateMotion dur="2.9s" begin=".9s" repeatCount="indefinite" path="M330,280 C480,280 490,332 636,332"></animateMotion></circle>
+      <circle r="4.5" fill="#0f1b2d" opacity=".5"><animateMotion dur="3.1s" begin="1.3s" repeatCount="indefinite" path="M330,280 C480,280 490,472 636,472"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="2.2s" repeatCount="indefinite" path="M1100,52 C1230,52 1240,140 1356,148"></animateMotion></circle>
+      <circle r="4.5" fill="var(--accent)" opacity=".85"><animateMotion dur="2.5s" begin=".6s" repeatCount="indefinite" path="M1100,192 C1230,192 1240,160 1352,156"></animateMotion></circle>
+      <circle r="4.5" fill="#0f1b2d" opacity=".7"><animateMotion dur="2.7s" begin="1.1s" repeatCount="indefinite" path="M1100,332 C1230,332 1240,180 1354,164"></animateMotion></circle>
+      <circle r="4.5" fill="#0f1b2d" opacity=".5"><animateMotion dur="2.4s" begin=".3s" repeatCount="indefinite" path="M1100,472 C1230,472 1240,440 1356,436"></animateMotion></circle>
+    </svg>
+    <div style="position:absolute;left:0;top:200px;width:330px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1.5px solid rgba(15,27,45,.3);border-radius:20px;padding:24px 28px;box-sizing:border-box;animation:nodePulse 3.6s ease-in-out infinite;">
+      <div style="display:flex;align-items:center;gap:12px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent);animation:blink 1.8s infinite;"></span><span style="font-size:28px;font-weight:700;">Consultas entrando</span></div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);margin-top:8px;">Web · Ecommerce · WhatsApp</div>
+    </div>
+    <div style="position:absolute;left:636px;top:0px;width:464px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:18px;padding:18px 26px;display:flex;align-items:center;gap:20px;box-sizing:border-box;">
+      <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:38px;color:var(--accent);">38%</span>
+      <span><span style="font-size:27px;font-weight:600;display:block;">Cotización de topografía</span><span style="font-size:24px;color:rgba(15,27,45,.5);display:block;">estación, GNSS, accesorios</span></span>
+    </div>
+    <div style="position:absolute;left:636px;top:140px;width:464px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:18px;padding:18px 26px;display:flex;align-items:center;gap:20px;box-sizing:border-box;">
+      <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:38px;color:var(--accent);opacity:.8;">31%</span>
+      <span><span style="font-size:27px;font-weight:600;display:block;">Cotización de drones</span><span style="font-size:24px;color:rgba(15,27,45,.5);display:block;">agrícola, enterprise, antidron</span></span>
+    </div>
+    <div style="position:absolute;left:636px;top:280px;width:464px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:18px;padding:18px 26px;display:flex;align-items:center;gap:20px;box-sizing:border-box;">
+      <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:38px;color:rgba(15,27,45,.75);">19%</span>
+      <span><span style="font-size:27px;font-weight:600;display:block;">Dudas técnicas y regulatorias</span><span style="font-size:24px;color:rgba(15,27,45,.5);display:block;">AFAC, licencias, calibración</span></span>
+    </div>
+    <div style="position:absolute;left:636px;top:420px;width:464px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:18px;padding:18px 26px;display:flex;align-items:center;gap:20px;box-sizing:border-box;">
+      <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:38px;color:rgba(15,27,45,.55);">12%</span>
+      <span><span style="font-size:27px;font-weight:600;display:block;">Candidato a distribuidor</span><span style="font-size:24px;color:rgba(15,27,45,.5);display:block;">pasa a Vigilant</span></span>
+    </div>
+    <div style="position:absolute;left:1356px;top:76px;width:364px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1.5px solid var(--accent);border-radius:18px;padding:22px 26px;box-sizing:border-box;animation:nodePulse 3.2s ease-in-out infinite;">
+      <div style="font-size:28px;font-weight:700;"><span style="color:var(--accent);">✓&nbsp;</span>Resuelto por el agente</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);margin-top:6px;">cotización o respuesta en minutos</div>
+    </div>
+    <div style="position:absolute;left:1356px;top:364px;width:364px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.14);border-radius:18px;padding:22px 26px;box-sizing:border-box;">
+      <div style="font-size:28px;font-weight:700;">Pasa a un humano</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);margin-top:6px;">con todo el contexto ya recabado</div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(15,27,45,.1);padding-top:22px;margin-top:14px;">
+    <div style="display:flex;gap:30px;align-items:center;">
+      <span style="font-size:25px;font-weight:600;">Atiende 24/7</span>
+      <span style="font-size:25px;color:rgba(15,27,45,.55);">responde en segundos</span>
+      <span style="font-size:24px;color:rgba(15,27,45,.4);font-style:italic;">distribución ilustrativa</span>
+    </div>
+    <div style="font-size:24px;color:var(--accent);">Agentes que lo impulsan: Cotizador TTQ · Vendedor de Drones · Vigilant</div>
+  </div>
+</section>
+
+<section data-label="Resultados a 90 días" data-speaker-notes="Objetivos, no promesas: se acuerdan y se miden juntos en el arranque." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:84px 100px 70px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent);">10 · A 90 DÍAS</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:68px;line-height:1.06;margin:16px 0 0;color:#0f1b2d;">Resultados a 90 días</h2>
+  <div style="font-size:28px;color:rgba(15,27,45,.6);margin-top:12px;">Objetivos de arranque — se miden, no se prometen.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:44px;flex:1;">
+    <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:24px;padding:40px 46px;display:flex;flex-direction:column;justify-content:center;gap:14px;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:88px;line-height:1;color:var(--accent);">Minutos</div>
+      <div style="font-size:27px;color:rgba(15,27,45,.75);">por cotización — hoy son días</div>
+      <div style="align-self:flex-start;padding:6px 18px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);font-size:24px;font-weight:700;letter-spacing:.14em;">OBJETIVO</div>
+    </div>
+    <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:24px;padding:40px 46px;display:flex;flex-direction:column;justify-content:center;gap:14px;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:88px;line-height:1;color:var(--accent);">24/7</div>
+      <div style="font-size:27px;color:rgba(15,27,45,.75);">el ecommerce vende y califica solo</div>
+      <div style="align-self:flex-start;padding:6px 18px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);font-size:24px;font-weight:700;letter-spacing:.14em;">OBJETIVO</div>
+    </div>
+    <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:24px;padding:40px 46px;display:flex;flex-direction:column;justify-content:center;gap:14px;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:88px;line-height:1;color:var(--accent);">4 estados</div>
+      <div style="font-size:27px;color:rgba(15,27,45,.75);">pipeline de distribuidores: Gto · Sin · Jal · Mich</div>
+      <div style="align-self:flex-start;padding:6px 18px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);font-size:24px;font-weight:700;letter-spacing:.14em;">OBJETIVO</div>
+    </div>
+    <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.1);border-radius:24px;padding:40px 46px;display:flex;flex-direction:column;justify-content:center;gap:14px;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:88px;line-height:1;color:var(--accent);">0 PDFs</div>
+      <div style="font-size:27px;color:rgba(15,27,45,.75);">armados a mano — su equipo se dedica a cerrar</div>
+      <div style="align-self:flex-start;padding:6px 18px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);font-size:24px;font-weight:700;letter-spacing:.14em;">OBJETIVO</div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Inversión" data-speaker-notes="El mensaje clave: una interacción cuesta lo mismo venga de donde venga. El análisis de sitio web es la única herramienta con costo extra. Cifras se definen tras alcance." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;padding:80px 110px 52px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.26em;color:var(--accent-dark);">11 · INVERSIÓN</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:62px;line-height:1.08;margin:14px 0 0;color:#0f1b2d;max-width:1300px;">Un solo motor, un solo precio por interacción</h2>
+  <div style="position:relative;height:300px;margin-top:30px;">
+    <svg viewBox="0 0 1700 300" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+      <defs><marker id="a11" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent-dark)" opacity=".9"></path></marker></defs>
+      <path d="M300,55 C500,55 560,150 718,150" stroke="rgba(15,27,45,.18)" stroke-width="2" fill="none"></path>
+      <path d="M300,150 L718,150" stroke="rgba(15,27,45,.18)" stroke-width="2" fill="none"></path>
+      <path d="M300,245 C500,245 560,150 718,150" stroke="rgba(15,27,45,.18)" stroke-width="2" fill="none"></path>
+      <path d="M1080,150 L1290,150" stroke="rgba(15,27,45,.18)" stroke-width="2" fill="none" marker-end="url(#a11)"></path>
+      <circle r="5" fill="var(--accent-dark)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M300,55 C500,55 560,150 718,150"></animateMotion></circle>
+      <circle r="5" fill="var(--accent-dark)"><animateMotion dur="2.1s" begin=".5s" repeatCount="indefinite" path="M300,150 L718,150"></animateMotion></circle>
+      <circle r="5" fill="var(--accent-dark)"><animateMotion dur="2.6s" begin="1s" repeatCount="indefinite" path="M300,245 C500,245 560,150 718,150"></animateMotion></circle>
+      <circle r="5" fill="var(--accent-dark)"><animateMotion dur="1.8s" repeatCount="indefinite" path="M1080,150 L1290,150"></animateMotion></circle>
+    </svg>
+    <div style="position:absolute;left:0;top:20px;width:300px;height:70px;display:flex;align-items:center;gap:14px;padding:0 26px;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 28px rgba(15,27,45,.06);border-radius:16px;font-size:27px;font-weight:600;box-sizing:border-box;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-dark);"></span>Web</div>
+    <div style="position:absolute;left:0;top:115px;width:300px;height:70px;display:flex;align-items:center;gap:14px;padding:0 26px;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 28px rgba(15,27,45,.06);border-radius:16px;font-size:27px;font-weight:600;box-sizing:border-box;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-dark);"></span>Ecommerce</div>
+    <div style="position:absolute;left:0;top:210px;width:300px;height:70px;display:flex;align-items:center;gap:14px;padding:0 26px;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 28px rgba(15,27,45,.06);border-radius:16px;font-size:27px;font-weight:600;box-sizing:border-box;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-dark);"></span>WhatsApp</div>
+    <div style="position:absolute;left:718px;top:85px;width:362px;height:130px;background:rgba(255,255,255,.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#0f1b2d;border:1.5px solid var(--accent);border-radius:22px;box-shadow:0 16px 40px rgba(15,27,45,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-sizing:border-box;animation:nodePulse 3.4s ease-in-out infinite;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:36px;">Motor Yaub</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.6);">un solo cerebro, todos los canales</div>
+    </div>
+    <div style="position:absolute;left:1290px;top:96px;width:380px;height:108px;border-radius:999px;background:var(--accent);color:#ffffff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-sizing:border-box;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:36px;">$—</div>
+      <div style="font-size:25px;font-weight:700;">por interacción</div>
+    </div>
+    <div style="position:absolute;left:1185px;top:106px;transform:translate(-50%,-50%);padding:5px 16px;border-radius:999px;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 28px rgba(15,27,45,.06);font-size:24px;color:#5a6478;">venga de donde venga</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:20px;background:rgba(255,255,255,.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 28px rgba(15,27,45,.06);border-radius:18px;padding:20px 30px;margin-top:30px;">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent-dark)" stroke-width="1.8" stroke-linecap="round" style="flex:none;"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5 L21 21"></path></svg>
+    <span style="flex:1;font-size:26px;color:#5a6478;"><strong style="color:#0f1b2d;">Análisis de sitio web</strong> — el agente lee el sitio del prospecto y arma la propuesta solo, como en yaub.ai</span>
+    <span style="padding:8px 20px;border-radius:999px;border:1.5px solid var(--accent-dark);color:var(--accent-dark);font-size:24px;font-weight:700;white-space:nowrap;">herramienta adicional · +$— por uso</span>
+  </div>
+  <div style="margin-top:34px;">
+    <svg viewBox="0 0 1700 40" style="width:100%;height:40px;overflow:visible;">
+      <path d="M60,20 L1640,20" stroke="rgba(15,27,45,.15)" stroke-width="2" fill="none"></path>
+      <circle r="5" fill="var(--accent-dark)"><animateMotion dur="5s" repeatCount="indefinite" path="M60,20 L1640,20"></animateMotion></circle>
+      <circle cx="160" cy="20" r="10" fill="var(--accent)"></circle>
+      <circle cx="850" cy="20" r="8" fill="rgba(15,27,45,.25)"></circle>
+      <circle cx="1540" cy="20" r="8" fill="rgba(15,27,45,.25)"></circle>
+    </svg>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:10px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+        <span style="padding:5px 16px;border-radius:999px;background:var(--accent);color:#ffffff;font-size:24px;font-weight:800;letter-spacing:.1em;">EMPEZAMOS AQUÍ</span>
+        <span style="font-size:27px;font-weight:700;">F1 · Cotizadores</span>
+        <span style="font-size:25px;color:#5a6478;">$—</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;justify-content:flex-end;">
+        <span style="font-size:27px;font-weight:700;">F2 · Vendedor Ecommerce</span>
+        <span style="font-size:25px;color:#5a6478;">$—</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;justify-content:flex-end;">
+        <span style="font-size:27px;font-weight:700;">F3 · Vigilant Distribuidores</span>
+        <span style="font-size:25px;color:#5a6478;">$—</span>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;font-size:24px;font-style:italic;color:#5a6478;margin-top:22px;">Propuesta económica a la medida tras definir alcance.</div>
+</section>
+
+<section data-label="Cierre" data-speaker-notes="Cierre con compromiso concreto: demo hoy, listas de precios esta semana, producción en 90 días." style="background:linear-gradient(180deg,#f7f3ea,#fdfcf9);color:#0f1b2d;font-family:Inter,sans-serif;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:44px;padding:90px 100px;box-sizing:border-box;overflow:hidden;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 40% 40%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-140px;right:6%;filter:blur(14px);animation:orbF 16s ease-in-out infinite;pointer-events:none;"></div><div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle at 60% 50%, rgba(15,27,45,.06), rgba(255,255,255,0) 70%);bottom:-220px;left:-6%;filter:blur(16px);animation:orbF 20s ease-in-out infinite reverse;pointer-events:none;"></div><div style="position:absolute;bottom:22px;right:44px;font-size:24px;letter-spacing:.16em;color:rgba(15,27,45,.32);font-family:Manrope,sans-serif;font-weight:700;pointer-events:none;">POWERED BY YAUB</div><div style="font-size:25px;font-weight:700;letter-spacing:.28em;color:var(--accent);">12 · CIERRE</div>
+  <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:72px;line-height:1.06;margin:0;color:#0f1b2d;">Tres pasos para empezar</h2>
+  <div style="position:relative;width:1400px;height:220px;">
+    <svg viewBox="0 0 1400 220" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+      <defs><marker id="a12" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".8"></path></marker></defs>
+      <path d="M400,110 L500,110" stroke="rgba(15,27,45,.2)" stroke-width="2" fill="none" marker-end="url(#a12)"></path>
+      <path d="M900,110 L1000,110" stroke="rgba(15,27,45,.2)" stroke-width="2" fill="none" marker-end="url(#a12)"></path>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.5s" repeatCount="indefinite" path="M400,110 L500,110"></animateMotion></circle>
+      <circle r="5" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--accent));"><animateMotion dur="1.5s" begin=".75s" repeatCount="indefinite" path="M900,110 L1000,110"></animateMotion></circle>
+    </svg>
+    <div style="position:absolute;left:0;top:10px;width:400px;height:200px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:22px;padding:30px 34px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:40px;color:var(--accent);">1</div>
+      <div style="font-size:30px;font-weight:700;">Demo en vivo</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);">hoy mismo, en esta reunión</div>
+    </div>
+    <div style="position:absolute;left:500px;top:10px;width:400px;height:200px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:22px;padding:30px 34px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:40px;color:var(--accent);">2</div>
+      <div style="font-size:30px;font-weight:700;">Sus listas de precios</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);">esta semana, para calibrar al agente</div>
+    </div>
+    <div style="position:absolute;left:1000px;top:10px;width:400px;height:200px;background:rgba(255,255,255,.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(15,27,45,.07);border:1px solid rgba(15,27,45,.12);border-radius:22px;padding:30px 34px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:40px;color:var(--accent);">3</div>
+      <div style="font-size:30px;font-weight:700;">Agentes en producción</div>
+      <div style="font-size:24px;color:rgba(15,27,45,.55);">dentro de los primeros 90 días</div>
+    </div>
+  </div>
+  <div style="padding:22px 56px;border-radius:999px;background:var(--accent);color:#ffffff;font-size:32px;font-weight:800;">Vamos a cotizar el futuro →</div>
+  <div style="font-size:26px;color:rgba(15,27,45,.55);">yaub.ai · Monterrey</div>
+</section>
+
+</x-import>
+<button onClick="{{resetDeck}}" style="position:absolute;left:16px;bottom:14px;z-index:50;padding:8px 18px;border-radius:999px;border:1px solid rgba(15,27,45,.15);background:rgba(255,255,255,.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#5a6478;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" style-hover="color:#0f1b2d;border-color:rgba(15,27,45,.4);">Reset</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#D97706&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#D97706&quot;,&quot;#B45309&quot;,&quot;#1e5aa8&quot;,&quot;#0f1b2d&quot;],&quot;section&quot;:&quot;Marca TTQ&quot;},&quot;accent2Color&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F43F5E&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#F43F5E&quot;,&quot;#0EA5E9&quot;,&quot;#16A34A&quot;,&quot;#7C3AED&quot;],&quot;section&quot;:&quot;Marca TecnoDron&quot;},&quot;enfasis&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;topografia&quot;,&quot;options&quot;:[&quot;topografia&quot;,&quot;drones&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Presentación&quot;}}">
+class Component extends DCLogic {
+  hexRgb(h) {
+    h = (h || '#D97706').replace('#', '');
+    if (h.length === 3) h = h.split('').map(c => c + c).join('');
+    const n = parseInt(h, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  renderVals() {
+    const accent = this.props.accentColor ?? '#D97706';
+    const [r, g, b] = this.hexRgb(accent);
+    const enf = this.props.enfasis ?? 'topografia';
+    return {
+      accent,
+      accent2: this.props.accent2Color ?? '#F43F5E',
+      glow: `rgba(${r},${g},${b},0.4)`,
+      soft: `rgba(${r},${g},${b},0.16)`,
+      dark: `rgb(${Math.round(r * 0.62)}, ${Math.round(g * 0.62)}, ${Math.round(b * 0.62)})`,
+      topoFirst: enf !== 'drones',
+      dronesFirst: enf === 'drones',
+      resetDeck: () => { const d = document.querySelector('deck-stage'); if (d && d.goTo) d.goTo(0); }
+    };
+  }
+}
+</script>
+</body>
+</html>

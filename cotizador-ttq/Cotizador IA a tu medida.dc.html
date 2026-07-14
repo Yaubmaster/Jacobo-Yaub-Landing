@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#F6F8FB;}
+x-dc{--accent:#02C39A;--accent-soft:rgba(2,195,154,.13);--accent-glow:rgba(2,195,154,.35);--ink2:#1E2761;}
+a{color:#02C39A;} a:hover{color:#1E2761;}
+@keyframes orb{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(44px,-36px) scale(1.07);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+@keyframes chipIn{from{opacity:0;transform:translateY(10px) scale(.95);}to{opacity:1;transform:none;}}
+@keyframes scan{0%{top:6%;}50%{top:74%;}100%{top:6%;}}
+@keyframes glowPulse{0%,100%{box-shadow:0 10px 30px rgba(30,39,97,.06);}50%{box-shadow:0 0 30px 2px var(--accent-glow);}}
+@keyframes blink{0%,100%{opacity:.3;}50%{opacity:1;}}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; --accent-soft: {{accentSoft}}; --accent-glow: {{accentGlow}}; --ink2:#1E2761; position:fixed; inset:0; overflow:hidden; background:#F6F8FB; font-family:Inter,system-ui,sans-serif; color:#1E293B;">
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:#7EF0D4;opacity:.3;top:-160px;right:-120px;filter:blur(90px);animation:orb 15s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:440px;height:440px;border-radius:50%;background:#B9C6F2;opacity:.35;bottom:-140px;left:180px;filter:blur(90px);animation:orb 19s ease-in-out infinite reverse;"></div>
+
+  <div style="position:absolute;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 34px;z-index:20;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:18px;letter-spacing:.2em;color:var(--ink2);">YA<span style="color:var(--accent);">UB</span></div>
+      <div style="font-family:Manrope,sans-serif;font-weight:600;font-size:15px;color:#64748B;">· IA a tu medida</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px;padding:7px 15px;border-radius:999px;background:rgba(255,255,255,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.85);font-size:11px;font-weight:700;letter-spacing:.15em;color:#64748B;font-family:Manrope,sans-serif;">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 2.2s infinite;"></span>DISCOVERY CON AGENTE
+    </div>
+  </div>
+
+  <sc-if value="{{s1}}" hint-placeholder-val="{{ true }}">
+  <div data-screen-label="1 · Entrada" style="position:absolute;inset:0;overflow:auto;padding:110px 48px 110px;animation:fadeUp .5s ease both;">
+    <div style="max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:30px;align-items:center;">
+      <div style="text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">COTIZADOR AGÉNTICO · IA A TU MEDIDA</div>
+        <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:44px;line-height:1.1;margin:0;color:var(--ink2);text-wrap:balance;">¿Cuánto de tu semana puede hacer la IA contigo?</h1>
+        <p style="margin:0;font-size:17px;color:#64748B;max-width:620px;">Platícale al agente 15 minutos y recibe tu plan personalizado: skills, Cowork y precio. Gratis y sin compromiso.</p>
+      </div>
+      <div style="width:100%;display:flex;flex-direction:column;gap:16px;padding:32px 36px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.65);border-radius:24px;box-shadow:0 20px 54px rgba(30,39,97,.08);box-sizing:border-box;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <label style="font-size:12.5px;font-weight:700;color:var(--ink2);">Tu rol en la empresa</label>
+            <input value="{{rol}}" onChange="{{onRol}}" style="width:100%;box-sizing:border-box;padding:13px 16px;border-radius:13px;border:1px solid rgba(30,39,97,.12);background:rgba(255,255,255,.9);font-size:14.5px;font-family:Inter,sans-serif;color:#1E293B;outline:none;">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <label style="font-size:12.5px;font-weight:700;color:var(--ink2);">Sitio web de tu empresa <span style="color:#94A3B8;font-weight:500;">(o donde trabajas)</span></label>
+            <input value="{{sitio}}" onChange="{{onSitio}}" style="width:100%;box-sizing:border-box;padding:13px 16px;border-radius:13px;border:1px solid rgba(30,39,97,.12);background:rgba(255,255,255,.9);font-size:14.5px;font-family:Inter,sans-serif;color:#1E293B;outline:none;">
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <label style="font-size:12.5px;font-weight:700;color:var(--ink2);">Platícanos tu día a día <span style="color:#94A3B8;font-weight:500;">— sé concreto: qué haces, cada cuándo y con qué</span></label>
+          <textarea value="{{proyecto}}" onChange="{{onProyecto}}" rows="4" style="width:100%;box-sizing:border-box;padding:14px 16px;border-radius:13px;border:1px solid rgba(30,39,97,.12);background:rgba(255,255,255,.9);font-size:14.5px;font-family:Inter,sans-serif;color:#1E293B;outline:none;resize:none;line-height:1.55;"></textarea>
+        </div>
+        <button onClick="{{start}}" style="padding:15px 20px;border-radius:14px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);" style-hover="filter:brightness(1.06);">Empezar con el agente</button>
+      </div>
+      <div style="font-size:13px;color:#94A3B8;">Gratis y sin compromiso — el brief es tuyo aunque no contrates · Powered by Yaub</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s2}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="2 · Discovery con el agente" style="position:absolute;inset:0;overflow:auto;padding:100px 48px 110px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:22px;">
+      <div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">PASO 2 · EL AGENTE ENTIENDE TU SEMANA</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;margin:10px 0 0;color:var(--ink2);">El agente quiere entender tu semana</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:1.3fr .9fr;gap:26px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:12px;padding:26px 28px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.65);border-radius:24px;box-shadow:0 20px 54px rgba(30,39,97,.08);">
+          <div style="align-self:flex-end;max-width:540px;background:var(--ink2);color:#F6F8FB;padding:14px 18px;border-radius:18px 18px 4px 18px;font-size:14px;line-height:1.5;">{{introMsg}}</div>
+          <sc-for list="{{askedQs}}" as="qa" hint-placeholder-count="1">
+            <div style="display:flex;flex-direction:column;gap:10px;animation:fadeUp .4s ease both;">
+              <div style="align-self:flex-start;display:flex;gap:10px;align-items:flex-start;max-width:540px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></span></div>
+                <div style="background:rgba(255,255,255,.9);border:1px solid rgba(30,39,97,.06);padding:13px 17px;border-radius:4px 18px 18px 18px;font-size:14.5px;line-height:1.45;">{{qa.q}}</div>
+              </div>
+              <sc-if value="{{qa.answered}}" hint-placeholder-val="{{ false }}">
+                <div style="align-self:flex-end;background:var(--accent);color:#fff;padding:10px 17px;border-radius:18px 18px 4px 18px;font-size:14px;font-weight:600;">{{qa.answered}}</div>
+              </sc-if>
+              <sc-if value="{{qa.open}}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;padding-left:38px;">
+                  <sc-for list="{{qa.opts}}" as="o" hint-placeholder-count="2">
+                    <button onClick="{{o.pick}}" style="padding:10px 19px;border-radius:999px;border:1.5px solid var(--accent);background:rgba(255,255,255,.8);color:var(--ink2);font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);">{{o.label}}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{askDocs}}" hint-placeholder-val="{{ false }}">
+            <div style="align-self:flex-start;display:flex;gap:10px;align-items:flex-start;max-width:560px;animation:fadeUp .4s ease both;">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></span></div>
+              <div style="background:rgba(255,255,255,.9);border:1px solid rgba(30,39,97,.06);padding:13px 17px;border-radius:4px 18px 18px 18px;font-size:14.5px;line-height:1.45;">Ya casi. Adjunta un documento o dashboard con el que trabajes (tu reporte, tu formato de cotización…) — con eso tu plan sale mucho más fino.</div>
+            </div>
+            <div style="margin-left:38px;display:flex;flex-direction:column;gap:12px;padding:16px 18px;border:1.5px dashed rgba(30,39,97,.22);border-radius:16px;background:rgba(255,255,255,.6);animation:fadeUp .4s ease both;">
+              <div style="display:flex;align-items:center;gap:10px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><path d="M12 4 v12 M6 10 l6-6 6 6"></path><path d="M4 20 h16"></path></svg><span style="font-size:13px;color:#64748B;">Arrastra tus archivos aquí (demo precargada)</span></div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <span style="display:flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.95);border:1px solid rgba(30,39,97,.1);font-size:12.5px;font-weight:600;color:var(--ink2);"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent);"></span>{{file1}}</span>
+                <span style="display:flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.95);border:1px solid rgba(30,39,97,.1);font-size:12.5px;font-weight:600;color:var(--ink2);"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent);"></span>{{file2}}</span>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <button onClick="{{attachDocs}}" style="padding:11px 22px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 8px 20px var(--accent-glow);" style-hover="filter:brightness(1.06);">Adjuntar y continuar</button>
+                <button onClick="{{skipDocs}}" style="padding:11px 22px;border-radius:999px;border:1.5px solid rgba(30,39,97,.18);background:transparent;color:#64748B;font-size:13.5px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;" style-hover="color:var(--ink2);">Ahora no</button>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{docsAttached}}" hint-placeholder-val="{{ false }}">
+            <div style="align-self:flex-end;display:flex;gap:8px;animation:fadeUp .4s ease both;">
+              <span style="padding:8px 15px;border-radius:999px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;">{{file1}} ✓</span>
+              <span style="padding:8px 15px;border-radius:999px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;">{{file2}} ✓</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{askExtra}}" hint-placeholder-val="{{ false }}">
+            <div style="align-self:flex-start;display:flex;gap:10px;align-items:flex-start;max-width:560px;animation:fadeUp .4s ease both;">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></span></div>
+              <div style="background:rgba(255,255,255,.9);border:1px solid rgba(30,39,97,.06);padding:13px 17px;border-radius:4px 18px 18px 18px;font-size:14.5px;line-height:1.45;">Última pregunta:</div>
+            </div>
+            <input value="{{extra}}" onChange="{{onExtra}}" placeholder="Dime algo más que deba saber antes de generarte tu propuesta en segundos…" style="width:100%;box-sizing:border-box;padding:14px 18px;border-radius:14px;border:1.5px solid rgba(30,39,97,.16);background:rgba(255,255,255,.95);font-size:14.5px;font-family:Inter,sans-serif;color:#1E293B;outline:none;animation:fadeUp .4s ease both;">
+            <button onClick="{{goDiagram}}" style="align-self:center;margin-top:6px;padding:15px 34px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);animation:fadeUp .4s ease both;" style-hover="filter:brightness(1.06);">Generar mi propuesta en segundos →</button>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="padding:20px 24px;display:flex;flex-direction:column;gap:12px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.65);border-radius:22px;box-shadow:0 16px 40px rgba(30,39,97,.07);">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#64748B;">PLAN EN VIVO</div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink2);"><span>MI SETUP</span><span>MI NEGOCIO</span><span>MI EQUIPO</span></div>
+            <div style="position:relative;height:10px;border-radius:999px;background:linear-gradient(90deg, rgba(30,39,97,.1), var(--accent-soft));">
+              <div style="position:absolute;top:50%;left:{{meterPos}}%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(255,255,255,.9), 0 0 18px var(--accent-glow);transition:left .6s cubic-bezier(.4,0,.2,1);"></div>
+            </div>
+            <div style="font-size:13.5px;color:#64748B;">El agente se inclina por <strong style="color:var(--ink2);">{{meterLead}}</strong></div>
+          </div>
+          <sc-if value="{{docsAttached}}" hint-placeholder-val="{{ false }}">
+          <div style="position:relative;overflow:hidden;border-radius:20px;border:1px solid rgba(30,39,97,.08);background:#ffffff;box-shadow:0 18px 44px rgba(30,39,97,.08);padding:18px 20px;">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#64748B;margin-bottom:10px;">EL AGENTE LEE TUS DOCUMENTOS</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="height:10px;border-radius:5px;background:rgba(30,39,97,.12);width:70%;"></div>
+              <div style="height:8px;border-radius:4px;background:rgba(30,39,97,.07);width:95%;"></div>
+              <div style="height:8px;border-radius:4px;background:rgba(30,39,97,.07);width:88%;"></div>
+              <div style="height:8px;border-radius:4px;background:rgba(30,39,97,.07);width:92%;"></div>
+              <div style="height:8px;border-radius:4px;background:rgba(30,39,97,.07);width:60%;"></div>
+            </div>
+            <div style="position:absolute;left:0;right:0;height:38px;top:14%;background:linear-gradient(180deg, rgba(255,255,255,0), var(--accent-soft) 50%, rgba(255,255,255,0));border-top:1.5px solid var(--accent);animation:scan 3s ease-in-out infinite;pointer-events:none;"></div>
+          </div>
+          </sc-if>
+          <sc-if value="{{qsDone}}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;gap:9px;">
+            <sc-for list="{{chips}}" as="c" hint-placeholder-count="3">
+              <div style="display:flex;gap:7px;align-items:center;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.85);border:1px solid rgba(30,39,97,.08);animation:chipIn .5s ease both;animation-delay:{{c.delay}};font-size:13px;box-shadow:0 6px 16px rgba(30,39,97,.05);">
+                <span style="color:#94A3B8;">{{c.k}}</span><span style="font-weight:700;color:var(--ink2);">{{c.v}}</span>
+              </div>
+            </sc-for>
+          </div>
+          </sc-if>
+          <div style="padding:18px 22px;border-radius:20px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.7);font-size:13px;color:#64748B;line-height:1.55;">El agente pregunta lo que Jacobo preguntaría: tareas, horas, herramientas, equipo y tus documentos reales. Con eso arma skills, Cowork, temario y precio.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s3}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="3 · Dónde cabe en tu semana" style="position:absolute;inset:0;overflow:auto;padding:96px 40px 104px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:10px;align-items:center;">
+      <div style="text-align:center;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">PASO 3 · TU SEMANA, NO UN CURSO GENÉRICO</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:33px;margin:10px 0 4px;color:var(--ink2);">Dónde cabe en la semana de {{nombre}}</h2>
+        <div style="font-size:15px;color:#64748B;">Así se ve tu operación con tu stack de IA trabajando en cada etapa.</div>
+      </div>
+      <div style="position:relative;width:1160px;height:540px;flex:none;">
+        <svg viewBox="0 0 1160 540" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+          <defs><marker id="arrY" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".7"></path></marker></defs>
+          <sc-for list="{{links}}" as="ln" hint-placeholder-count="2">
+            <path d="{{ln.d}}" stroke="rgba(30,39,97,.22)" stroke-width="1.5" stroke-dasharray="2 6" fill="none"></path>
+            <circle r="3" fill="#1E2761" opacity=".5"><animateMotion dur="{{ln.dur}}" begin="{{ln.begin}}" repeatCount="indefinite" path="{{ln.d}}"></animateMotion></circle>
+          </sc-for>
+          <sc-for list="{{cons}}" as="cn" hint-placeholder-count="2">
+            <path d="{{cn.d}}" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 7" fill="none" opacity=".5" marker-end="url(#arrY)"></path>
+            <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="{{cn.dur}}" begin="{{cn.begin}}" repeatCount="indefinite" path="{{cn.d}}"></animateMotion></circle>
+          </sc-for>
+        </svg>
+        <sc-for list="{{stages}}" as="st" hint-placeholder-count="3">
+          <div style="position:absolute;top:60px;left:{{st.left}}px;width:190px;box-sizing:border-box;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.85);animation:{{st.anim}};">
+            <div style="font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--accent);font-family:Manrope,sans-serif;">{{st.num}}</div>
+            <div style="font-size:15.5px;font-weight:700;color:var(--ink2);margin-top:4px;">{{st.label}}</div>
+            <div style="font-size:12px;color:#94A3B8;margin-top:3px;">{{st.sub}}</div>
+          </div>
+        </sc-for>
+        <sc-for list="{{cons}}" as="cl" hint-placeholder-count="2">
+          <div style="position:absolute;left:{{cl.lx}}px;top:{{cl.ly}}px;padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.92);border:1px solid var(--accent-soft);font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;font-family:Manrope,sans-serif;">{{cl.label}}</div>
+        </sc-for>
+        <sc-for list="{{equipos}}" as="eq" hint-placeholder-count="3">
+          <div style="position:absolute;top:396px;left:{{eq.left}}px;width:234px;box-sizing:border-box;padding:16px 18px;border-radius:20px;background:rgba(255,255,255,.75);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.9);box-shadow:0 14px 36px rgba(30,39,97,.08);display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;flex:none;"></span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:15.5px;color:var(--ink2);">{{eq.name}}</span></div>
+            <div style="font-size:12px;color:#94A3B8;">{{eq.sub}}</div>
+            <div style="font-size:12.5px;color:var(--ink2);background:var(--accent-soft);padding:7px 10px;border-radius:10px;font-weight:600;line-height:1.4;">{{eq.ben}}</div>
+          </div>
+        </sc-for>
+      </div>
+      <button onClick="{{goConfig}}" style="padding:15px 32px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);" style-hover="filter:brightness(1.06);">Ver mi plan y mi precio →</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s4}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="4 · Tu plan personalizado" style="position:absolute;inset:0;overflow:auto;padding:96px 44px 104px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:start;">
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div style="padding:26px 30px;border-radius:24px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.65);box-shadow:0 20px 54px rgba(30,39,97,.08);display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#64748B;">TU STACK PERSONALIZADO</div>
+            <div style="font-size:12.5px;color:#94A3B8;">cambia de paquete — el plan se actualiza en vivo</div>
+          </div>
+          <div style="display:flex;background:rgba(30,39,97,.06);border-radius:13px;padding:4px;gap:4px;margin-top:6px;">
+            <button onClick="{{setPkg0}}" style="{{pkg0Style}}">MI SETUP</button>
+            <button onClick="{{setPkg1}}" style="{{pkg1Style}}">MI NEGOCIO</button>
+            <button onClick="{{setPkg2}}" style="{{pkg2Style}}">MI EQUIPO</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 4px;border-bottom:1px solid rgba(30,39,97,.06);margin-top:6px;">
+            <span style="width:10px;height:10px;border-radius:50%;background:var(--accent);flex:none;box-shadow:0 0 10px var(--accent-glow);"></span>
+            <div style="flex:1;"><div style="font-size:14.5px;font-weight:800;color:var(--ink2);">Cowork configurado</div><div style="font-size:12.5px;color:#94A3B8;">{{coworkDesc}}</div></div>
+            <span style="padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:700;">incluido</span>
+          </div>
+          <sc-for list="{{skillRows}}" as="sk" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:14px;padding:12px 4px;border-bottom:1px solid rgba(30,39,97,.06);">
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--accent);flex:none;"></span>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:700;color:var(--ink2);">{{sk.name}}</div><div style="font-size:12.5px;color:#94A3B8;">{{sk.desc}}</div></div>
+              <span style="padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:700;">incluido</span>
+            </div>
+          </sc-for>
+          <div style="display:flex;align-items:center;gap:14px;padding:12px 4px;border-bottom:1px solid rgba(30,39,97,.06);">
+            <span style="width:10px;height:10px;border-radius:50%;background:var(--accent);flex:none;"></span>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:700;color:var(--ink2);">Capacitación en vivo + comunidad de por vida</div><div style="font-size:12.5px;color:#94A3B8;">{{pkgWeeks}}</div></div>
+            <span style="padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:700;">incluido</span>
+          </div>
+          <sc-for list="{{addonRows}}" as="ad" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:14px;padding:12px 4px;border-bottom:1px solid rgba(30,39,97,.06);opacity:{{ad.rowOp}};transition:opacity .3s;">
+              <button onClick="{{ad.toggle}}" style="{{ad.swStyle}}"><span style="{{ad.knobStyle}}"></span></button>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:700;color:var(--ink2);">{{ad.name}}</div><div style="font-size:12.5px;color:#94A3B8;">{{ad.desc}}</div></div>
+              <div style="font-size:13px;font-weight:600;white-space:nowrap;color:var(--ink2);">{{ad.price}}</div>
+            </div>
+          </sc-for>
+          <svg width="100%" height="44" viewBox="0 0 600 44" preserveAspectRatio="none" style="display:block;">
+            <path d="M300,0 L300,44" stroke="rgba(30,39,97,.18)" stroke-width="2" fill="none"></path>
+            <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="1.5s" repeatCount="indefinite" path="M300,0 L300,44"></animateMotion></circle>
+          </svg>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-radius:16px;border:1.5px solid var(--accent);background:rgba(255,255,255,.75);animation:glowPulse 3.4s ease-in-out infinite;">
+            <span style="font-size:14px;font-weight:700;color:var(--ink2);">Tu inversión</span>
+            <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:19px;color:var(--ink2);text-align:right;">{{totalText}}</span>
+          </div>
+        </div>
+        <div style="padding:24px 30px;border-radius:24px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.65);box-shadow:0 20px 54px rgba(30,39,97,.08);">
+          <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#64748B;margin-bottom:8px;">TEMARIO PERSONALIZADO</div>
+          <sc-for list="{{temario}}" as="tm" hint-placeholder-count="4">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 2px;border-bottom:1px dashed rgba(30,39,97,.1);">
+              <span style="font-size:13.5px;color:var(--ink2);"><strong>{{tm.m}}</strong> <span style="color:#64748B;">{{tm.t}}</span></span>
+              <span style="padding:3px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700;white-space:nowrap;">{{tm.h}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.94);border:1px solid rgba(30,39,97,.08);border-radius:24px;box-shadow:0 26px 66px rgba(30,39,97,.13);padding:28px 30px;display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:38px;height:38px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:15px;">Y</div>
+          <div>
+            <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16px;color:var(--ink2);">Tu plan personalizado</div>
+            <div style="font-size:12px;color:#94A3B8;">Folio YB-2026-0713 · generado por el agente en segundos</div>
+          </div>
+        </div>
+        <svg width="100%" height="14" viewBox="0 0 360 14" preserveAspectRatio="none" style="display:block;">
+          <path d="M0,7 L360,7" stroke="var(--accent-soft)" stroke-width="2"></path>
+          <circle r="3.5" fill="var(--accent)"><animateMotion dur="2.2s" repeatCount="indefinite" path="M0,7 L360,7"></animateMotion></circle>
+        </svg>
+        <div style="font-size:13px;color:#64748B;">Para: <strong style="color:var(--ink2);">{{nombre}}</strong> · {{rol}} · {{empresa}}</div>
+        <sc-if value="{{hasExtra}}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:12.5px;color:#64748B;background:rgba(30,39,97,.04);border-radius:10px;padding:9px 13px;">Tu nota para el agente: <em style="color:var(--ink2);">“{{extra}}”</em></div>
+        </sc-if>
+        <div style="padding:18px 22px;border-radius:16px;background:linear-gradient(135deg, var(--accent-soft), rgba(255,255,255,.7));border:1px solid rgba(2,195,154,.3);">
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.16em;color:var(--ink2);">{{pkgName}} · {{pkgAud}}</div>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:34px;color:var(--ink2);margin-top:4px;">{{pkgPrice}} <span style="font-size:14px;color:#64748B;font-weight:600;">{{pkgPer}}</span></div>
+          <div style="font-size:12.5px;color:#64748B;margin-top:6px;">{{pkgWeeks}} · precio de lanzamiento · válido 14 días</div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;text-align:center;background:rgba(255,255,255,.85);border:1px solid rgba(30,39,97,.06);border-radius:14px;padding:12px 6px;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:20px;color:var(--accent);">{{roi1a}}</div><div style="font-size:11px;color:#94A3B8;">{{roi1b}}</div></div>
+          <div style="flex:1;text-align:center;background:rgba(255,255,255,.85);border:1px solid rgba(30,39,97,.06);border-radius:14px;padding:12px 6px;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:20px;color:var(--accent);">{{roi2a}}</div><div style="font-size:11px;color:#94A3B8;">{{roi2b}}</div></div>
+          <div style="flex:1;text-align:center;background:rgba(255,255,255,.85);border:1px solid rgba(30,39,97,.06);border-radius:14px;padding:12px 6px;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:20px;color:var(--accent);">{{roi3a}}</div><div style="font-size:11px;color:#94A3B8;">{{roi3b}}</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;">
+          <sc-for list="{{planLines}}" as="pl" hint-placeholder-count="3">
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid rgba(30,39,97,.05);">
+              <span style="font-size:13.5px;color:var(--ink2);flex:1;">{{pl.name}}</span>
+              <span style="font-size:13px;font-weight:600;color:var(--ink2);white-space:nowrap;">{{pl.r}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size:11.5px;color:#94A3B8;line-height:1.5;">Todos los paquetes incluyen comunidad de por vida · el brief es tuyo aunque no contrates</div>
+        <button style="padding:14px;border-radius:14px;border:none;background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);" style-hover="filter:brightness(1.06);">Recibir mi plan por WhatsApp</button>
+        <button style="padding:13px;border-radius:14px;border:1.5px solid rgba(30,39,97,.16);background:transparent;color:var(--ink2);font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="border-color:var(--accent);color:var(--accent);">Agendar 15 min con Jacobo</button>
+        <div style="text-align:center;font-size:11px;color:#94A3B8;letter-spacing:.1em;">EL AGENTE PREPARÓ ESTE PLAN · POWERED BY YAUB</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s5}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="5 · Panel Yaub (vista interna)" style="position:absolute;inset:0;overflow:auto;padding:96px 44px 104px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:20px;">
+      <div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">VISTA INTERNA · PANEL YAUB · DISCOVERY</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;margin:10px 0 2px;color:var(--ink2);">Lo que te entrega el agente</h2>
+        <div style="font-size:14.5px;color:#64748B;">Brief completo, diagnóstico, plan y mensaje listos — tú nada más apruebas.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;">
+        <div style="padding:18px 22px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 32px rgba(30,39,97,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:28px;color:var(--ink2);">12</div><div style="font-size:12.5px;color:#64748B;">leads este mes</div><div style="font-size:11.5px;color:var(--accent);font-weight:700;margin-top:3px;">▲ 4 esta semana</div></div>
+        <div style="padding:18px 22px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 32px rgba(30,39,97,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:28px;color:var(--ink2);">3</div><div style="font-size:12.5px;color:#64748B;">planes por aprobar</div><div style="font-size:11.5px;color:var(--accent);font-weight:700;margin-top:3px;">acción requerida</div></div>
+        <div style="padding:18px 22px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 32px rgba(30,39,97,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:28px;color:var(--ink2);">5</div><div style="font-size:12.5px;color:#64748B;">planes enviados</div><div style="font-size:11.5px;color:#94A3B8;margin-top:3px;">2 abiertos hoy</div></div>
+        <div style="padding:18px 22px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 32px rgba(30,39,97,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:28px;color:var(--ink2);">$27,870</div><div style="font-size:12.5px;color:#64748B;">pipeline (MXN)</div><div style="font-size:11.5px;color:var(--accent);font-weight:700;margin-top:3px;">▲ $12,900 vs sem. pasada</div></div>
+      </div>
+      <div style="padding:20px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 32px rgba(30,39,97,.06);">
+        <svg viewBox="0 0 1100 100" style="width:100%;height:auto;overflow:visible;">
+          <path d="M60,38 L1040,38" stroke="rgba(30,39,97,.14)" stroke-width="2" fill="none"></path>
+          <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="4s" repeatCount="indefinite" path="M60,38 L1040,38"></animateMotion></circle>
+          <circle cx="60" cy="38" r="13" fill="var(--accent)"></circle><text x="60" y="80" text-anchor="middle" font-size="15" fill="#64748B" font-family="Inter,sans-serif">Discovery · 14 min</text>
+          <circle cx="305" cy="38" r="13" fill="var(--accent)"></circle><text x="305" y="80" text-anchor="middle" font-size="15" fill="#64748B" font-family="Inter,sans-serif">Brief completo</text>
+          <circle cx="550" cy="38" r="13" fill="var(--accent)"></circle><text x="550" y="80" text-anchor="middle" font-size="15" fill="#64748B" font-family="Inter,sans-serif">Plan generado</text>
+          <circle cx="795" cy="38" r="13" fill="#ffffff" stroke="var(--accent)" stroke-width="2"></circle><text x="795" y="80" text-anchor="middle" font-size="15" fill="#64748B" font-family="Inter,sans-serif">Tu aprobación</text>
+          <circle cx="1040" cy="38" r="13" fill="#ffffff" stroke="rgba(30,39,97,.3)" stroke-width="2"></circle><text x="1040" y="80" text-anchor="middle" font-size="15" fill="#64748B" font-family="Inter,sans-serif">Enviado por WhatsApp</text>
+        </svg>
+      </div>
+      <div style="display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="padding:22px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 32px rgba(30,39,97,.06);display:flex;flex-direction:column;gap:8px;">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:var(--accent);">BRIEF COMPLETO — TODOS LOS DATOS</div>
+            <div style="font-size:13px;"><strong style="color:var(--ink2);">Cliente:</strong> <span style="color:#64748B;">{{nombre}} · {{rol}} · {{empresa}}</span></div>
+            <div style="font-size:13px;"><strong style="color:var(--ink2);">Sitio web:</strong> <span style="color:#64748B;">{{sitioShown}}</span></div>
+            <div style="font-size:13px;"><strong style="color:var(--ink2);">Dolor #1:</strong> <span style="color:#64748B;">{{dolor}}</span></div>
+            <div style="font-size:13px;"><strong style="color:var(--ink2);">Tarea principal:</strong> <span style="color:#64748B;">{{briefTarea}}</span></div>
+            <div style="font-size:13px;"><strong style="color:var(--ink2);">Horas/semana:</strong> <span style="color:#64748B;">{{briefHoras}}</span></div>
+            <div style="font-size:13px;"><strong style="color:var(--ink2);">Herramientas:</strong> <span style="color:#64748B;">{{briefHerr}}</span></div>
+            <div style="font-size:13px;"><strong style="color:var(--ink2);">Equipo:</strong> <span style="color:#64748B;">{{briefEquipo}}</span></div>
+            <div style="font-size:13px;"><strong style="color:var(--ink2);">Documentos:</strong> <span style="color:#64748B;">{{briefDocs}}</span></div>
+            <div style="font-size:13px;"><strong style="color:var(--ink2);">Algo más del cliente:</strong> <span style="color:#64748B;">{{extraShown}}</span></div>
+          </div>
+          <div style="padding:22px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 32px rgba(30,39,97,.06);">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:var(--accent);margin-bottom:8px;">DIAGNÓSTICO DEL AGENTE</div>
+            <div style="font-size:13.5px;color:#1E293B;line-height:1.6;">{{diag}}</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="padding:20px 24px;border-radius:20px;background:#E9FBF4;border:1px solid #BFEEDD;">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#037a63;margin-bottom:8px;">MENSAJE LISTO PARA WHATSAPP</div>
+            <div style="font-size:13px;line-height:1.6;color:#1E293B;">{{waMsg}}</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;padding:12px;border-radius:12px;border:none;background:var(--accent);color:#fff;font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 8px 20px var(--accent-glow);">✓ Aprobar y enviar</button>
+            <button style="padding:12px 18px;border-radius:12px;border:1px solid rgba(30,39,97,.15);background:rgba(255,255,255,.8);color:var(--ink2);font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;">Editar</button>
+          </div>
+          <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#64748B;padding-left:4px;margin-top:4px;">PIPELINE — EL AGENTE LO ALIMENTA SOLO</div>
+          <div style="padding:13px 17px;border-radius:16px;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);box-shadow:0 8px 22px rgba(30,39,97,.05);display:flex;justify-content:space-between;align-items:center;gap:10px;"><div><div style="font-size:13.5px;font-weight:800;color:var(--ink2);">{{nombre}}</div><div style="font-size:11.5px;color:#94A3B8;">{{rol}} · {{empresa}}</div></div><span style="padding:4px 12px;border-radius:999px;background:#FFF4D6;color:#8a6a00;font-size:11px;font-weight:700;white-space:nowrap;">Por aprobar</span></div>
+          <div style="padding:13px 17px;border-radius:16px;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);box-shadow:0 8px 22px rgba(30,39,97,.05);display:flex;justify-content:space-between;align-items:center;gap:10px;"><div><div style="font-size:13.5px;font-weight:800;color:var(--ink2);">Laura Domínguez</div><div style="font-size:11.5px;color:#94A3B8;">Dueña · Estética (6 pers.)</div></div><span style="padding:4px 12px;border-radius:999px;background:#FFF4D6;color:#8a6a00;font-size:11px;font-weight:700;white-space:nowrap;">Por aprobar</span></div>
+          <div style="padding:13px 17px;border-radius:16px;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);box-shadow:0 8px 22px rgba(30,39,97,.05);display:flex;justify-content:space-between;align-items:center;gap:10px;"><div><div style="font-size:13.5px;font-weight:800;color:var(--ink2);">Karla Peña + equipo (8)</div><div style="font-size:11.5px;color:#94A3B8;">Gerente admin. · Despacho contable</div></div><span style="padding:4px 12px;border-radius:999px;background:#E1F7F0;color:#037a63;font-size:11px;font-weight:700;white-space:nowrap;">Enviado</span></div>
+          <div style="padding:13px 17px;border-radius:16px;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);box-shadow:0 8px 22px rgba(30,39,97,.05);display:flex;justify-content:space-between;align-items:center;gap:10px;"><div><div style="font-size:13.5px;font-weight:800;color:var(--ink2);">Diego Ferrer</div><div style="font-size:11.5px;color:#94A3B8;">Freelance · Marketing</div></div><span style="padding:4px 12px;border-radius:999px;background:#DFF7E4;color:#166534;font-size:11px;font-weight:700;white-space:nowrap;">Cliente ✓</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <div style="position:absolute;left:50%;bottom:20px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(30,39,97,.12);z-index:30;">
+    <button onClick="{{prev}}" style="width:34px;height:34px;border-radius:50%;border:none;background:rgba(30,39,97,.05);color:var(--ink2);font-size:17px;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);color:var(--accent);">‹</button>
+    <div style="font-size:13px;font-weight:800;min-width:46px;text-align:center;font-family:Manrope,sans-serif;color:var(--ink2);">{{screenNum}} / 5</div>
+    <button onClick="{{next}}" style="width:34px;height:34px;border-radius:50%;border:none;background:rgba(30,39,97,.05);color:var(--ink2);font-size:17px;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);color:var(--accent);">›</button>
+    <div style="width:1px;height:18px;background:rgba(30,39,97,.14);margin:0 4px;"></div>
+    <button onClick="{{resetAll}}" style="padding:7px 14px;border-radius:999px;border:none;background:transparent;color:#64748B;font-size:12.5px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;" style-hover="color:var(--accent);">Reset</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#02C39A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#02C39A&quot;,&quot;#1E2761&quot;,&quot;#0EA5E9&quot;,&quot;#7C3AED&quot;],&quot;section&quot;:&quot;Marca&quot;},&quot;demoPerfil&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;asistente&quot;,&quot;options&quot;:[&quot;asistente&quot;,&quot;dueno&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Demo&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 0, answers: [], docs: null, extra: '', pkg: null, addOn: null, rol: null, sitio: null, proyecto: null };
+
+  P = {
+    asistente: {
+      nombre: 'María González', rolDef: 'Asistente de dirección', empresa: 'Constructora Río Bravo',
+      sitioDef: 'https://constructora-riobravo.mx',
+      proyectoDef: 'Cada viernes armo el reporte semanal de dirección juntando 4 fuentes (obra, compras, finanzas y avance), tomo minutas de 2 juntas y cuadro la agenda del director. Todo a mano, en Excel y correo.',
+      dolor: '“El reporte de los viernes me toma toda la mañana.”',
+      files: ['Reporte_semanal.xlsx', 'Minuta_junta_lunes.docx'],
+      chips: [['Sitio', 'Constructora · obra pública'], ['Reporte', 'se arma de 4 fuentes'], ['Frecuencia', 'cada viernes'], ['Proceso', '100% manual'], ['Minutas', '2 juntas por semana']],
+      base: 16, pkgDef: 0,
+      cowork: 'correo, calendario y Drive conectados',
+      skills: [
+        { name: 'Skill Reporte Semanal', desc: 'junta las 4 fuentes y arma el reporte en minutos' },
+        { name: 'Skill Minutas Express', desc: 'del audio de la junta a minuta con acuerdos' },
+        { name: 'Skill Agenda Blindada', desc: 'cuadra la agenda del director y manda recordatorios' }
+      ],
+      stages: [['Correos', 'primera hora del día'], ['Reportes', 'lo que más pesa'], ['Cotizaciones y Excel', 'números de la semana'], ['Agenda y juntas', 'coordinar a todos'], ['Cierre de semana', 'entregar a dirección']],
+      equipos: [
+        { name: 'Cowork Yaub', sub: 'correo · calendario · Drive', ben: 'tu correo se contesta y archiva solo', cx: 180, to: 0, lab: 'organiza' },
+        { name: 'Skill Reporte Semanal', sub: 'hecho para tu formato', ben: 'junta 4 fuentes y arma el reporte en minutos', cx: 470, to: 1, lab: 'redacta' },
+        { name: 'Skill Minutas Express', sub: 'de audio a acuerdos', ben: 'la minuta sale sola de la junta', cx: 730, to: 3, lab: 'coordina' },
+        { name: 'Plan de 90 días', sub: 'con la comunidad', ben: 'sigues automatizando por tu cuenta', cx: 990, to: 4, lab: 'mejora' }
+      ],
+      temario: [
+        { m: 'M1', t: 'Fundamentos — con tus reportes reales', h: '2 h' },
+        { m: 'M2', t: 'Mapa de tu semana — dirección y juntas', h: '2 h' },
+        { m: 'M3', t: 'Skills — reporte, minutas y agenda', h: '3 h' },
+        { m: 'M4', t: 'Cowork — correo, calendario y Drive', h: '3 h' },
+        { m: 'M5', t: 'Flujos — del correo al entregable', h: '2 h' },
+        { m: 'M6', t: 'Flujos avanzados — este tiempo se invierte en ti', h: '2 h' }
+      ],
+      roi: [['7 h', 'recuperadas/sem'], ['$3,400', 'valor/mes est.'], ['< 2 m', 'payback']],
+      diag: 'María pierde la mañana del viernes en un reporte que se arma de 4 fuentes conocidas — eso lo hace un skill, no un curso. Su plan: 3 skills (reporte, minutas, agenda) + Cowork conectado a correo y calendario. El dolor #1 se resuelve en el módulo 3.',
+      wa: '¡Hola María! Aquí está tu plan personalizado. Tu dolor #1 —el reporte de los viernes— lo resuelve el Skill Reporte Semanal: junta las 4 fuentes y te lo entrega en minutos. Con Mi Setup ($4,990 MXN, 4 semanas) también van minutas, agenda y tu Cowork conectado. Recuperas ~7 h a la semana: se paga solo en menos de 2 meses.'
+    },
+    dueno: {
+      nombre: 'Roberto Salas', rolDef: 'Dueño', empresa: 'Refaccionaria “El Piñón”',
+      sitioDef: 'https://refaccionaria-elpinon.mx',
+      proyectoDef: 'Tengo una refaccionaria. Cotizo a talleres por WhatsApp (unas 6 horas a la semana), armo pedidos comparando 3 listas de proveedores y llevo el inventario en Excel. Se me van clientes cuando nadie contesta el WhatsApp.',
+      dolor: '“Se me van clientes porque nadie contesta el WhatsApp.”',
+      files: ['Formato_cotizacion.xlsx', 'Listas_proveedores.pdf'],
+      chips: [['Sitio', 'Refaccionaria · mostrador'], ['Cotizaciones', '6 h por semana'], ['Formato', 'se llena a mano'], ['Proveedores', '3 listas distintas'], ['Canal', 'todo por WhatsApp']],
+      base: 50, pkgDef: 1,
+      cowork: 'WhatsApp, Excel de inventario y facturador conectados',
+      skills: [
+        { name: 'Skill Cotizador Express', desc: 'del audio del taller a cotización formal lista' },
+        { name: 'Skill Pedido Inteligente', desc: 'arma el pedido comparando las 3 listas' },
+        { name: 'Skill Inventario al Día', desc: 'actualiza el Excel y avisa qué se acaba' }
+      ],
+      stages: [['Mostrador', 'clientes en tienda'], ['WhatsApp', 'cotizaciones entrantes'], ['Pedidos', 'proveedores y precios'], ['Inventario', 'el Excel de siempre'], ['Cobro y factura', 'cierre del día']],
+      equipos: [
+        { name: 'Agente de ventas', sub: 'WhatsApp Yaub', ben: 'cotiza y contesta 24/7 — ni una venta perdida', cx: 180, to: 1, lab: 'vende' },
+        { name: 'Skill Pedido Inteligente', sub: 'compara 3 listas', ben: 'el pedido se arma solo, al mejor precio', cx: 470, to: 2, lab: 'compra' },
+        { name: 'Skill Inventario al Día', sub: 'tu mismo Excel', ben: 'avisa qué se está acabando', cx: 730, to: 3, lab: 'controla' },
+        { name: 'Cowork Yaub', sub: 'WhatsApp → factura', ben: 'del pedido a la factura sin recapturar', cx: 990, to: 4, lab: 'factura' }
+      ],
+      temario: [
+        { m: 'M1', t: 'Fundamentos — con ejemplos de refacciones', h: '2 h' },
+        { m: 'M2', t: 'Mapa de su operación — mostrador vs trastienda', h: '2 h' },
+        { m: 'M3', t: 'Skills — cotizador y pedidos', h: '3 h' },
+        { m: 'M4', t: 'Cowork — Excel de inventario conectado', h: '2 h' },
+        { m: 'M5', t: 'Flujos — del WhatsApp a la factura', h: '2 h' },
+        { m: 'M6', t: 'Su agente de ventas WhatsApp', h: '3 h' }
+      ],
+      roi: [['7.8 h', 'recuperadas/sem'], ['$8,385', 'valor/mes est.'], ['1.5 m', 'payback']],
+      diag: 'Roberto pierde ventas todos los días por respuesta lenta en WhatsApp — su dolor #1 lo resuelve un agente, no un curso. El programa le arma el agente Y le quita las ~13 h/semana de cotizaciones, pedidos e inventario manual con 3 skills hechos para El Piñón.',
+      wa: '¡Hola Roberto! Aquí está tu plan personalizado. Tu dolor #1 —clientes que se van porque nadie contesta el WhatsApp— lo resolvemos con tu propio agente de ventas que cotiza y contesta 24/7, incluido en MI NEGOCIO ($12,900 MXN, 6 semanas). Además te quitamos ~7.8 h/semana con 3 skills hechos para El Piñón: se paga solo en mes y medio.'
+    }
+  };
+
+  QS = [
+    { q: '¿Qué te come más tiempo a la semana?', opts: ['Reportes y minutas', 'Cotizaciones y Excel', 'Correos y seguimiento', 'Agenda y pendientes'] },
+    { q: '¿Cuántas horas se te van en eso?', opts: ['Menos de 4 h', '4 a 8 h', 'Más de 8 h'], w: [-4, 3, 7] },
+    { q: '¿Con qué herramientas trabajas?', opts: ['Correo + Excel', 'WhatsApp + Excel', 'Google Workspace'] },
+    { q: '¿Solo tú o con equipo?', opts: ['Solo yo', 'Somos 2 o 3', 'Somos 5 o más'] }
+  ];
+
+  PKGS = [
+    { name: 'MI SETUP', aud: 'para ti (1 persona)', price: '$4,990', per: 'MXN · por persona', weeks: '4 semanas · 4 sesiones 1:1 de 90 min' },
+    { name: 'MI NEGOCIO', aud: 'dueño + 2 personas', price: '$12,900', per: 'MXN · por empresa', weeks: '6 semanas · 6 sesiones' },
+    { name: 'MI EQUIPO', aud: 'equipos de 5+', price: 'desde $2,990', per: 'MXN · por persona', weeks: '6 semanas · 4 talleres + 1:1 por persona' }
+  ];
+
+  componentDidMount() {
+    this.kd = (e) => {
+      const t = e.target && e.target.tagName;
+      if (t === 'INPUT' || t === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight') this.nav(1);
+      if (e.key === 'ArrowLeft') this.nav(-1);
+    };
+    window.addEventListener('keydown', this.kd);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.kd); }
+
+  nav(d) { this.setState(s => ({ screen: Math.max(0, Math.min(4, s.screen + d)) })); }
+  perfil() { return this.props.demoPerfil === 'dueno' ? 'dueno' : 'asistente'; }
+  p() { return this.P[this.perfil()]; }
+  hexRgb(h) { h = (h || '#02C39A').replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); const n = parseInt(h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+  answer(qi, oi) { if (qi !== this.state.answers.length) return; this.setState(s => ({ answers: [...s.answers, oi] })); }
+  pkgIdx() {
+    if (this.state.pkg !== null) return this.state.pkg;
+    if (this.state.answers.length > 3) return this.state.answers[3];
+    return this.p().pkgDef;
+  }
+  meterPos() {
+    const a = this.state.answers;
+    let m = a.length > 3 ? [15, 50, 85][a[3]] : this.p().base;
+    if (a.length > 1) m += this.QS[1].w[a[1]];
+    return Math.max(8, Math.min(92, m));
+  }
+  addOnState() {
+    const pk = this.pkgIdx();
+    const def = { agente: pk === 1, plus: false };
+    return this.state.addOn ? { ...def, ...this.state.addOn } : def;
+  }
+  toggleAddOn(id) { const cur = this.addOnState(); this.setState({ addOn: { ...cur, [id]: !cur[id] } }); }
+  reset() { this.setState({ screen: 0, answers: [], docs: null, extra: '', pkg: null, addOn: null, rol: null, sitio: null, proyecto: null }); }
+
+  renderVals() {
+    const p = this.p(), st = this.state;
+    const accent = this.props.accentColor ?? '#02C39A';
+    const [r, g, b] = this.hexRgb(accent);
+    const pk = this.pkgIdx(), pkg = this.PKGS[pk];
+    const ao = this.addOnState();
+    const answers = st.answers;
+    const qsDone = answers.length >= 4;
+    const askedQs = this.QS.slice(0, Math.min(answers.length + 1, 4)).map((q, qi) => ({
+      q: q.q, answered: qi < answers.length ? q.opts[answers[qi]] : '', open: qi >= answers.length,
+      opts: q.opts.map((o, oi) => ({ label: o, pick: () => this.answer(qi, oi) }))
+    }));
+    const meter = this.meterPos();
+    const meterLead = meter < 35 ? 'MI SETUP — para ti' : meter < 68 ? 'MI NEGOCIO — tú + 2 personas' : 'MI EQUIPO — talleres por rol';
+    const SX = [130, 360, 590, 820, 1030];
+    const stages = p.stages.map((s, i) => ({ label: s[0], sub: s[1], left: SX[i] - 95, num: '0' + (i + 1), anim: p.equipos.some(e => e.to === i) ? 'glowPulse 3.6s ease-in-out infinite' : 'none' }));
+    const cons = p.equipos.map((e, i) => { const sx = SX[e.to]; return { d: `M${e.cx},396 C${e.cx},312 ${sx},246 ${sx},160`, label: e.lab, lx: (e.cx + sx) / 2 - 40, ly: 262, dur: (2.6 + i * 0.4) + 's', begin: (i * 0.7) + 's' }; });
+    const links = SX.slice(0, -1).map((x, i) => ({ d: `M${x + 97},108 L${SX[i + 1] - 97},108`, dur: (1.8 + i * 0.2) + 's', begin: (i * 0.45) + 's' }));
+    const segBase = 'flex:1;padding:9px 6px;border-radius:10px;border:none;cursor:pointer;font-family:Manrope,sans-serif;font-size:12px;font-weight:800;letter-spacing:.06em;transition:all .25s;';
+    const segStyle = i => segBase + (pk === i ? 'background:#ffffff;color:#1E2761;box-shadow:0 2px 8px rgba(30,39,97,.14);' : 'background:transparent;color:#64748B;');
+    const sw = on => `width:42px;height:24px;border-radius:99px;border:none;cursor:pointer;position:relative;flex:none;padding:0;transition:background .3s;background:${on ? accent : 'rgba(30,39,97,.18)'};display:block;`;
+    const knob = on => `position:absolute;top:3px;left:${on ? '21px' : '3px'};width:18px;height:18px;border-radius:50%;background:#fff;transition:left .3s;box-shadow:0 1px 3px rgba(0,0,0,.25);display:block;`;
+    const addonRows = [
+      { id: 'agente', name: 'Agente de ventas WhatsApp', desc: pk === 1 ? '1er mes incluido en MI NEGOCIO' : 'cotiza y contesta 24/7 en tu WhatsApp', price: pk === 1 ? 'incluido 1er mes' : 'desde $1,900/mes', on: ao.agente },
+      { id: 'plus', name: 'Acompañamiento Plus', desc: '2 sesiones al mes después del programa', price: '$1,990/mes', on: ao.plus }
+    ].map(a => ({ ...a, rowOp: a.on ? '1' : '.55', toggle: () => this.toggleAddOn(a.id), swStyle: sw(a.on), knobStyle: knob(a.on) }));
+    let monthly = 0;
+    if (ao.agente && pk !== 1) monthly += 1900;
+    if (ao.plus) monthly += 1990;
+    const totalText = pkg.price + ' MXN' + (monthly ? ' + $' + monthly.toLocaleString('es-MX') + '/mes' : '');
+    const planLines = [
+      { name: 'Paquete ' + pkg.name + ' · ' + pkg.weeks, r: pkg.price },
+      { name: '3 skills a tu medida + Cowork + capacitación', r: 'incluido' },
+      { name: 'Comunidad de por vida', r: 'incluida' }
+    ];
+    if (ao.agente) planLines.push({ name: 'Agente de ventas WhatsApp', r: pk === 1 ? '1er mes incluido' : 'desde $1,900/mes' });
+    if (ao.plus) planLines.push({ name: 'Acompañamiento Plus', r: '$1,990/mes' });
+    const opts = i => this.QS[i].opts;
+    return {
+      accent, accentSoft: `rgba(${r},${g},${b},0.13)`, accentGlow: `rgba(${r},${g},${b},0.35)`,
+      screenNum: st.screen + 1,
+      s1: st.screen === 0, s2: st.screen === 1, s3: st.screen === 2, s4: st.screen === 3, s5: st.screen === 4,
+      prev: () => this.nav(-1), next: () => this.nav(1), resetAll: () => this.reset(),
+      rol: st.rol ?? p.rolDef, onRol: e => this.setState({ rol: e.target.value }),
+      sitio: st.sitio ?? p.sitioDef, onSitio: e => this.setState({ sitio: e.target.value }),
+      sitioShown: (st.sitio ?? p.sitioDef).replace('https://', ''),
+      proyecto: st.proyecto ?? p.proyectoDef, onProyecto: e => this.setState({ proyecto: e.target.value }),
+      start: () => this.setState({ screen: 1, answers: [], docs: null, extra: '' }),
+      introMsg: (st.rol ?? p.rolDef) + ' · ' + (st.sitio ?? p.sitioDef).replace('https://', '') + ' — “' + (st.proyecto ?? p.proyectoDef) + '”',
+      askedQs, qsDone,
+      askDocs: qsDone && st.docs === null,
+      docsAttached: st.docs === true,
+      askExtra: qsDone && st.docs !== null,
+      attachDocs: () => this.setState({ docs: true }),
+      skipDocs: () => this.setState({ docs: false }),
+      extra: st.extra, onExtra: e => this.setState({ extra: e.target.value }), hasExtra: !!st.extra,
+      extraShown: st.extra || '— (no agregó nada)',
+      file1: p.files[0], file2: p.files[1],
+      chips: p.chips.map((c, i) => ({ k: c[0], v: c[1], delay: (0.3 + i * 0.4) + 's' })),
+      meterPos: meter, meterLead,
+      goDiagram: () => this.setState({ screen: 2 }), goConfig: () => this.setState({ screen: 3 }),
+      nombre: p.nombre, empresa: p.empresa, dolor: p.dolor,
+      stages, cons, links, equipos: p.equipos.map(e => ({ ...e, left: e.cx - 117 })),
+      setPkg0: () => this.setState({ pkg: 0, addOn: null }), setPkg1: () => this.setState({ pkg: 1, addOn: null }), setPkg2: () => this.setState({ pkg: 2, addOn: null }),
+      pkg0Style: segStyle(0), pkg1Style: segStyle(1), pkg2Style: segStyle(2),
+      pkgName: pkg.name, pkgAud: pkg.aud, pkgPrice: pkg.price, pkgPer: pkg.per, pkgWeeks: pkg.weeks,
+      coworkDesc: p.cowork,
+      skillRows: p.skills, addonRows, totalText, planLines, temario: p.temario,
+      roi1a: p.roi[0][0], roi1b: p.roi[0][1], roi2a: p.roi[1][0], roi2b: p.roi[1][1], roi3a: p.roi[2][0], roi3b: p.roi[2][1],
+      briefTarea: answers.length > 0 ? opts(0)[answers[0]] : (this.perfil() === 'dueno' ? 'Cotizaciones y Excel' : 'Reportes y minutas'),
+      briefHoras: answers.length > 1 ? opts(1)[answers[1]] : '4 a 8 h',
+      briefHerr: answers.length > 2 ? opts(2)[answers[2]] : 'Correo + Excel',
+      briefEquipo: answers.length > 3 ? opts(3)[answers[3]] : (this.perfil() === 'dueno' ? 'Somos 2 o 3' : 'Solo yo'),
+      briefDocs: st.docs === true ? p.files.join(' · ') : 'no adjuntó (se piden en la sesión 1)',
+      diag: p.diag, waMsg: p.wa
+    };
+  }
+}
+</script>
+</body>
+</html>

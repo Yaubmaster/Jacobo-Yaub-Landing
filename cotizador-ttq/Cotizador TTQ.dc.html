@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#f7f3ea;}
+x-dc{--accent:#D97706;--accent-soft:rgba(217,119,6,.13);--accent-glow:rgba(217,119,6,.35);}
+a{color:#D97706;} a:hover{color:#0f1b2d;}
+@keyframes orb{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(44px,-36px) scale(1.07);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+@keyframes chipIn{from{opacity:0;transform:translateY(10px) scale(.95);}to{opacity:1;transform:none;}}
+@keyframes scan{0%{top:4%;}50%{top:86%;}100%{top:4%;}}
+@keyframes glowPulse{0%,100%{box-shadow:0 10px 30px rgba(15,27,45,.06);}50%{box-shadow:0 0 30px 2px var(--accent-glow);}}
+@keyframes barGrow{from{width:0;}}
+@keyframes blink{0%,100%{opacity:.3;}50%{opacity:1;}}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; --accent-soft: {{accentSoft}}; --accent-glow: {{accentGlow}}; position:fixed; inset:0; overflow:hidden; background:#f7f3ea; font-family:Inter,system-ui,sans-serif; color:#0f1b2d;">
+  <div style="position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle at 35% 35%, var(--accent-soft), rgba(255,255,255,0) 70%);top:-160px;left:-140px;filter:blur(14px);animation:orb 15s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:680px;height:680px;border-radius:50%;background:radial-gradient(circle at 60% 40%, rgba(15,27,45,.07), rgba(255,255,255,0) 70%);bottom:-240px;right:-180px;filter:blur(16px);animation:orb 19s ease-in-out infinite reverse;"></div>
+  <div style="position:absolute;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.95), rgba(255,255,255,0) 70%);top:32%;left:46%;filter:blur(10px);animation:orb 17s ease-in-out infinite;"></div>
+
+  <div style="position:absolute;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 34px;z-index:20;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:36px;height:36px;border-radius:11px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:12px;box-shadow:0 8px 20px var(--accent-glow);">TTQ</div>
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16px;color:#0f1b2d;">TTQ <span style="color:#5a6478;font-weight:600;">· Cotizador Inteligente</span></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px;padding:7px 15px;border-radius:999px;background:rgba(255,255,255,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.9);font-size:11px;font-weight:700;letter-spacing:.15em;color:#5a6478;font-family:Manrope,sans-serif;">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 2.2s infinite;"></span>POWERED BY YAUB
+    </div>
+  </div>
+
+  <sc-if value="{{s1}}" hint-placeholder-val="{{ true }}">
+  <div data-screen-label="1 · Entrada dual" style="position:absolute;inset:0;overflow:auto;padding:116px 48px 110px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:38px;align-items:center;">
+      <div style="text-align:center;display:flex;flex-direction:column;gap:14px;max-width:820px;align-items:center;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">COTIZADOR AGÉNTICO · GRUPO TTQ · DESDE 1972</div>
+        <h1 style="font-family:Manrope,sans-serif;font-weight:800;font-size:47px;line-height:1.08;margin:0;color:#0f1b2d;text-wrap:balance;">¿Qué equipo necesita tu operación?</h1>
+        <p style="margin:0;font-size:18px;color:#5a6478;">Deja que el agente lo descubra. Sin catálogos, sin formularios.</p>
+      </div>
+      <div style="display:flex;gap:26px;width:100%;justify-content:center;flex-wrap:wrap;">
+        <div style="flex:1;min-width:390px;max-width:480px;display:flex;flex-direction:column;gap:16px;padding:30px 32px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border:1px solid rgba(255,255,255,.9);border-radius:26px;box-shadow:0 24px 60px rgba(15,27,45,.08), inset 0 1px 0 rgba(255,255,255,.95);">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:46px;height:46px;border-radius:15px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14 L14 10"></path><path d="M9.5 13 l-3.2 3.2 a3.9 3.9 0 0 0 5.5 5.5 L15 18.5"></path><path d="M14.5 11 l3.2-3.2 a3.9 3.9 0 0 0 -5.5-5.5 L9 5.5"></path></svg>
+            </div>
+            <div>
+              <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:19px;">Pega tu sitio web</div>
+              <div style="font-size:13.5px;color:#5a6478;">El agente lee tu negocio y encuentra dónde cabe el equipo.</div>
+            </div>
+          </div>
+          <input value="{{siteUrl}}" onChange="{{onUrl}}" style="width:100%;box-sizing:border-box;padding:14px 18px;border-radius:14px;border:1px solid rgba(15,27,45,.12);background:rgba(255,255,255,.85);font-size:15px;font-family:Inter,sans-serif;color:#0f1b2d;outline:none;">
+          <button onClick="{{startA}}" style="padding:14px 20px;border-radius:14px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);" style-hover="filter:brightness(1.06);">Analizar mi negocio</button>
+        </div>
+        <div style="flex:1;min-width:390px;max-width:480px;display:flex;flex-direction:column;gap:16px;padding:30px 32px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border:1px solid rgba(255,255,255,.9);border-radius:26px;box-shadow:0 24px 60px rgba(15,27,45,.08), inset 0 1px 0 rgba(255,255,255,.95);">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:46px;height:46px;border-radius:15px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7 a3 3 0 0 1 3-3 h10 a3 3 0 0 1 3 3 v6 a3 3 0 0 1 -3 3 h-7 l-4 4 v-4 a3 3 0 0 1 -2-3 z"></path><path d="M8.5 9.5 h7"></path><path d="M8.5 12.5 h4.5"></path></svg>
+            </div>
+            <div>
+              <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:19px;">Platícanos tu proyecto</div>
+              <div style="font-size:13.5px;color:#5a6478;">Cuéntale al agente y él pregunta lo mínimo.</div>
+            </div>
+          </div>
+          <textarea value="{{proyecto}}" onChange="{{onProyecto}}" rows="3" style="width:100%;box-sizing:border-box;padding:14px 18px;border-radius:14px;border:1px solid rgba(15,27,45,.12);background:rgba(255,255,255,.85);font-size:15px;font-family:Inter,sans-serif;color:#0f1b2d;outline:none;resize:none;line-height:1.5;"></textarea>
+          <button onClick="{{startB}}" style="padding:14px 20px;border-radius:14px;border:1.5px solid var(--accent);background:rgba(255,255,255,.7);color:var(--accent);font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="background:var(--accent-soft);">Armar mi configuración</button>
+        </div>
+      </div>
+      <div style="font-size:13px;color:#8a93a6;">El agente conoce el catálogo completo: Topcon · Nikon · PIX4D · DJI · laboratorio de calibración y cursos</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s2}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="2 · Análisis del agente" style="position:absolute;inset:0;overflow:auto;padding:100px 48px 110px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:24px;">
+      <div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">PASO 2 · EL AGENTE ENTIENDE TU NEGOCIO</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;margin:10px 0 0;color:#0f1b2d;">{{screen2Title}}</h2>
+      </div>
+      <sc-if value="{{routeA}}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:26px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:18px;">
+          <div style="position:relative;overflow:hidden;border-radius:22px;border:1px solid rgba(15,27,45,.08);background:#ffffff;box-shadow:0 22px 54px rgba(15,27,45,.09);">
+            <div style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(15,27,45,.06);">
+              <span style="width:9px;height:9px;border-radius:50%;background:#e6e0d2;"></span><span style="width:9px;height:9px;border-radius:50%;background:#e6e0d2;"></span><span style="width:9px;height:9px;border-radius:50%;background:#e6e0d2;"></span>
+              <span style="flex:1;text-align:center;font-size:12px;color:#8a93a6;background:rgba(15,27,45,.04);border-radius:8px;padding:4px 12px;">{{siteUrlShown}}</span>
+            </div>
+            <div style="padding:22px 26px;display:flex;flex-direction:column;gap:14px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div style="width:88px;height:14px;border-radius:6px;background:rgba(15,27,45,.14);"></div>
+                <div style="display:flex;gap:8px;"><span style="width:38px;height:8px;border-radius:4px;background:rgba(15,27,45,.08);"></span><span style="width:38px;height:8px;border-radius:4px;background:rgba(15,27,45,.08);"></span><span style="width:38px;height:8px;border-radius:4px;background:rgba(15,27,45,.08);"></span></div>
+              </div>
+              <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:21px;color:#0f1b2d;">{{empresa}}</div>
+              <div style="font-size:13px;color:#5a6478;">{{siteLine1}}</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+                <div style="height:64px;border-radius:12px;background:rgba(15,27,45,.06);"></div>
+                <div style="height:64px;border-radius:12px;background:rgba(15,27,45,.06);"></div>
+                <div style="height:64px;border-radius:12px;background:rgba(15,27,45,.06);"></div>
+              </div>
+              <div style="font-size:13px;color:#8a93a6;">{{siteLine2}} · {{siteLine3}}</div>
+            </div>
+            <div style="position:absolute;left:0;right:0;height:52px;top:8%;background:linear-gradient(180deg, rgba(255,255,255,0), var(--accent-soft) 50%, rgba(255,255,255,0));border-top:1.5px solid var(--accent);animation:scan 3.4s ease-in-out infinite;pointer-events:none;"></div>
+          </div>
+          <div style="padding:20px 24px;display:flex;flex-direction:column;gap:11px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.45));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.9);border-radius:22px;box-shadow:0 18px 44px rgba(15,27,45,.07);">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">CONFIGURACIÓN EN VIVO</div>
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none;"></span><span style="font-size:14px;font-weight:700;color:#0f1b2d;">{{mainName}}</span></div>
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:rgba(15,27,45,.25);flex:none;"></span><span style="font-size:13.5px;color:#5a6478;">Colectora FC-6000A · accesorios · curso · calibración</span></div>
+            <div style="font-size:12.5px;color:#8a93a6;">Cada respuesta reconfigura el equipo en vivo.</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 1.6s infinite;"></span><span style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">HALLAZGOS DEL AGENTE</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <sc-for list="{{chips}}" as="c" hint-placeholder-count="4">
+              <div style="display:flex;gap:7px;align-items:center;padding:9px 15px;border-radius:999px;background:rgba(255,255,255,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(15,27,45,.08);animation:chipIn .5s ease both;animation-delay:{{c.delay}};font-size:13.5px;box-shadow:0 6px 16px rgba(15,27,45,.05);">
+                <span style="color:#8a93a6;">{{c.k}}</span><span style="font-weight:700;color:#0f1b2d;">{{c.v}}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:6px;">
+            <sc-for list="{{askedQs}}" as="qa" hint-placeholder-count="1">
+              <div style="display:flex;flex-direction:column;gap:10px;animation:fadeUp .4s ease both;">
+                <div style="align-self:flex-start;display:flex;gap:10px;align-items:flex-start;max-width:540px;">
+                  <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></span></div>
+                  <div style="background:rgba(255,255,255,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.95);padding:13px 17px;border-radius:4px 18px 18px 18px;font-size:14.5px;line-height:1.45;box-shadow:0 8px 22px rgba(15,27,45,.05);">{{qa.q}}</div>
+                </div>
+                <sc-if value="{{qa.answered}}" hint-placeholder-val="{{ false }}">
+                  <div style="align-self:flex-end;background:var(--accent);color:#fff;padding:10px 17px;border-radius:18px 18px 4px 18px;font-size:14px;font-weight:600;">{{qa.answered}}</div>
+                </sc-if>
+                <sc-if value="{{qa.open}}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;padding-left:38px;">
+                    <sc-for list="{{qa.opts}}" as="o" hint-placeholder-count="2">
+                      <button onClick="{{o.pick}}" style="padding:10px 19px;border-radius:999px;border:1.5px solid var(--accent);background:rgba(255,255,255,.75);color:#0f1b2d;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);">{{o.label}}</button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+            <sc-if value="{{allAnswered}}" hint-placeholder-val="{{ false }}">
+              <div style="align-self:flex-start;display:flex;gap:10px;align-items:flex-start;max-width:560px;animation:fadeUp .4s ease both;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></span></div>
+                <div style="background:rgba(255,255,255,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.95);padding:13px 17px;border-radius:4px 18px 18px 18px;font-size:14.5px;line-height:1.45;box-shadow:0 8px 22px rgba(15,27,45,.05);">{{analysisSummary}}</div>
+              </div>
+              <input value="{{extra}}" onChange="{{onExtra}}" placeholder="Dime algo más que deba saber antes de generarte tu propuesta en segundos…" style="width:100%;box-sizing:border-box;padding:13px 17px;border-radius:14px;border:1.5px solid rgba(15,27,45,.16);background:rgba(255,255,255,.92);font-size:14px;font-family:Inter,sans-serif;color:#0f1b2d;outline:none;animation:fadeUp .4s ease both;">
+            <button onClick="{{goDiagram}}" style="align-self:center;margin-top:8px;padding:15px 30px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);animation:fadeUp .4s ease both;" style-hover="filter:brightness(1.06);">Ver dónde cabe en mi negocio →</button>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{routeB}}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:1.35fr .85fr;gap:26px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:12px;padding:26px 28px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border:1px solid rgba(255,255,255,.9);border-radius:26px;box-shadow:0 24px 60px rgba(15,27,45,.08);">
+          <div style="align-self:flex-end;max-width:520px;background:#0f1b2d;color:#f7f3ea;padding:14px 18px;border-radius:18px 18px 4px 18px;font-size:14.5px;line-height:1.5;">{{proyectoShown}}</div>
+          <sc-for list="{{askedQs}}" as="qb" hint-placeholder-count="1">
+            <div style="display:flex;flex-direction:column;gap:10px;animation:fadeUp .4s ease both;">
+              <div style="align-self:flex-start;display:flex;gap:10px;align-items:flex-start;max-width:540px;">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></span></div>
+                <div style="background:rgba(255,255,255,.85);border:1px solid rgba(15,27,45,.06);padding:13px 17px;border-radius:4px 18px 18px 18px;font-size:14.5px;line-height:1.45;">{{qb.q}}</div>
+              </div>
+              <sc-if value="{{qb.answered}}" hint-placeholder-val="{{ false }}">
+                <div style="align-self:flex-end;background:var(--accent);color:#fff;padding:10px 17px;border-radius:18px 18px 4px 18px;font-size:14px;font-weight:600;">{{qb.answered}}</div>
+              </sc-if>
+              <sc-if value="{{qb.open}}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;padding-left:38px;">
+                  <sc-for list="{{qb.opts}}" as="ob" hint-placeholder-count="2">
+                    <button onClick="{{ob.pick}}" style="padding:10px 19px;border-radius:999px;border:1.5px solid var(--accent);background:rgba(255,255,255,.75);color:#0f1b2d;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);">{{ob.label}}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{allAnswered}}" hint-placeholder-val="{{ false }}">
+            <div style="align-self:flex-start;padding-left:38px;font-size:14.5px;color:#5a6478;animation:fadeUp .4s ease both;">{{analysisSummary}}</div>
+            <input value="{{extra}}" onChange="{{onExtra}}" placeholder="Dime algo más que deba saber antes de generarte tu propuesta en segundos…" style="width:100%;box-sizing:border-box;padding:13px 17px;border-radius:14px;border:1.5px solid rgba(15,27,45,.16);background:rgba(255,255,255,.92);font-size:14px;font-family:Inter,sans-serif;color:#0f1b2d;outline:none;animation:fadeUp .4s ease both;">
+            <button onClick="{{goDiagram}}" style="align-self:center;margin-top:8px;padding:15px 30px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);animation:fadeUp .4s ease both;" style-hover="filter:brightness(1.06);">Ver dónde cabe en mi negocio →</button>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="padding:20px 24px;display:flex;flex-direction:column;gap:11px;background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,.45));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.9);border-radius:22px;box-shadow:0 18px 44px rgba(15,27,45,.07);">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">CONFIGURACIÓN EN VIVO</div>
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none;"></span><span style="font-size:14px;font-weight:700;color:#0f1b2d;">{{mainName}}</span></div>
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:rgba(15,27,45,.25);flex:none;"></span><span style="font-size:13.5px;color:#5a6478;">Colectora FC-6000A · accesorios · curso · calibración</span></div>
+            <div style="font-size:12.5px;color:#8a93a6;">Cada respuesta reconfigura el equipo en vivo.</div>
+          </div>
+          <div style="padding:18px 22px;border-radius:20px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.85);font-size:13px;color:#5a6478;line-height:1.55;">El agente pregunta lo que tu asesor TTQ preguntaría: control de obra, base GNSS, volumetrías. Nada de fichas técnicas — eso lo resuelve él.</div>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s3}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="3 · Dónde cabe en tu negocio" style="position:absolute;inset:0;overflow:auto;padding:96px 40px 104px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:10px;align-items:center;">
+      <div style="text-align:center;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">PASO 3 · TU OPERACIÓN, NO UN CATÁLOGO</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:33px;margin:10px 0 4px;color:#0f1b2d;">Dónde cabe en {{clientLabel}}</h2>
+        <div style="font-size:15px;color:#5a6478;">Así se ve tu operación con equipo TTQ trabajando en cada etapa.</div>
+      </div>
+      <div style="position:relative;width:1160px;height:540px;flex:none;">
+        <svg viewBox="0 0 1160 540" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+          <defs><marker id="arrT" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".7"></path></marker></defs>
+          <sc-for list="{{links}}" as="ln" hint-placeholder-count="2">
+            <path d="{{ln.d}}" stroke="rgba(15,27,45,.22)" stroke-width="1.5" stroke-dasharray="2 6" fill="none"></path>
+            <circle r="3" fill="#0f1b2d" opacity=".5"><animateMotion dur="{{ln.dur}}" begin="{{ln.begin}}" repeatCount="indefinite" path="{{ln.d}}"></animateMotion></circle>
+          </sc-for>
+          <sc-for list="{{cons}}" as="cn" hint-placeholder-count="2">
+            <path d="{{cn.d}}" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 7" fill="none" opacity=".5" marker-end="url(#arrT)"></path>
+            <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="{{cn.dur}}" begin="{{cn.begin}}" repeatCount="indefinite" path="{{cn.d}}"></animateMotion></circle>
+          </sc-for>
+        </svg>
+        <sc-for list="{{stages}}" as="st" hint-placeholder-count="3">
+          <div style="position:absolute;top:60px;left:{{st.left}}px;width:190px;box-sizing:border-box;padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);animation:{{st.anim}};">
+            <div style="font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--accent);font-family:Manrope,sans-serif;">{{st.num}}</div>
+            <div style="font-size:15.5px;font-weight:700;color:#0f1b2d;margin-top:4px;">{{st.label}}</div>
+            <div style="font-size:12px;color:#8a93a6;margin-top:3px;">{{st.sub}}</div>
+          </div>
+        </sc-for>
+        <sc-for list="{{cons}}" as="cl" hint-placeholder-count="2">
+          <div style="position:absolute;left:{{cl.lx}}px;top:{{cl.ly}}px;padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid var(--accent-soft);font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;font-family:Manrope,sans-serif;">{{cl.label}}</div>
+        </sc-for>
+        <sc-for list="{{equipos}}" as="eq" hint-placeholder-count="3">
+          <div style="position:absolute;top:396px;left:{{eq.left}}px;width:234px;box-sizing:border-box;padding:16px 18px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border:1px solid rgba(255,255,255,.95);box-shadow:0 16px 40px rgba(15,27,45,.08);display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;flex:none;"></span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:15.5px;color:#0f1b2d;">{{eq.name}}</span></div>
+            <div style="font-size:12px;color:#8a93a6;">{{eq.sub}}</div>
+            <div style="font-size:12.5px;color:#0f1b2d;background:var(--accent-soft);padding:7px 10px;border-radius:10px;font-weight:600;line-height:1.4;">{{eq.ben}}</div>
+          </div>
+        </sc-for>
+      </div>
+      <button onClick="{{goConfig}}" style="padding:15px 32px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);" style-hover="filter:brightness(1.06);">Armar mi configuración y cotizar →</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s4}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="4 · Configuración y cotización" style="position:absolute;inset:0;overflow:auto;padding:96px 44px 104px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.08fr .92fr;gap:26px;align-items:start;">
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div style="padding:26px 30px;border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);border:1px solid rgba(255,255,255,.95);box-shadow:0 22px 54px rgba(15,27,45,.08);display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">CONFIGURACIÓN RECOMENDADA</div>
+            <div style="font-size:12.5px;color:#8a93a6;">se arma pieza por pieza — la cotización se actualiza en vivo</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;background:var(--accent-soft);border:1px solid rgba(255,255,255,.7);margin-top:10px;">
+            <button onClick="{{toggleBase}}" style="{{baseSwStyle}}"><span style="{{baseKnobStyle}}"></span></button>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:700;color:#0f1b2d;">¿Ya tienes base GNSS propia?</div>
+              <div style="font-size:12.5px;color:#5a6478;">{{baseNote}}</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 4px;border-bottom:1px solid rgba(15,27,45,.06);margin-top:6px;">
+            <span style="width:10px;height:10px;border-radius:50%;background:var(--accent);flex:none;box-shadow:0 0 10px var(--accent-glow);"></span>
+            <div style="flex:1;"><div style="font-size:14.5px;font-weight:800;color:#0f1b2d;">{{mainName}}</div><div style="font-size:12.5px;color:#8a93a6;">{{mainDesc}}</div></div>
+            <div style="font-size:13px;font-weight:700;white-space:nowrap;color:#0f1b2d;">{{mainRange}}</div>
+          </div>
+          <sc-for list="{{kitItems}}" as="k" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:14px;padding:11px 4px;border-bottom:1px solid rgba(15,27,45,.06);opacity:{{k.rowOp}};transition:opacity .3s;">
+              <button onClick="{{k.toggle}}" style="{{k.swStyle}}"><span style="{{k.knobStyle}}"></span></button>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:700;color:#0f1b2d;">{{k.name}}</div><div style="font-size:12.5px;color:#8a93a6;">{{k.desc}}</div></div>
+              <div style="font-size:13px;font-weight:600;white-space:nowrap;color:#0f1b2d;">{{k.range}}</div>
+            </div>
+          </sc-for>
+          <svg width="100%" height="46" viewBox="0 0 600 46" preserveAspectRatio="none" style="display:block;">
+            <path d="M300,0 L300,46" stroke="rgba(15,27,45,.18)" stroke-width="2" fill="none"></path>
+            <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="1.5s" repeatCount="indefinite" path="M300,0 L300,46"></animateMotion></circle>
+          </svg>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-radius:16px;border:1.5px solid var(--accent);background:rgba(255,255,255,.7);animation:glowPulse 3.4s ease-in-out infinite;">
+            <span style="font-size:14px;font-weight:700;color:#0f1b2d;">Total de la configuración</span>
+            <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:19px;color:#0f1b2d;">{{totalText}}</span>
+          </div>
+        </div>
+        <div style="padding:18px 24px;border-radius:20px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.85);font-size:13px;color:#5a6478;line-height:1.55;">Todo el equipo pasa por el laboratorio de calibración TTQ antes de entregarse, y el curso lo imparte el mismo equipo que te va a dar soporte.</div>
+      </div>
+      <div style="background:rgba(255,255,255,.94);border:1px solid rgba(15,27,45,.08);border-radius:24px;box-shadow:0 28px 70px rgba(15,27,45,.13);padding:28px 30px;display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:38px;height:38px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:11px;">TTQ</div>
+          <div>
+            <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16px;color:#0f1b2d;">Cotización de referencia</div>
+            <div style="font-size:12px;color:#8a93a6;">Folio {{folio}} · 13 de julio de 2026</div>
+          </div>
+        </div>
+        <svg width="100%" height="14" viewBox="0 0 360 14" preserveAspectRatio="none" style="display:block;">
+          <path d="M0,7 L360,7" stroke="var(--accent-soft)" stroke-width="2"></path>
+          <circle r="3.5" fill="var(--accent)"><animateMotion dur="2.2s" repeatCount="indefinite" path="M0,7 L360,7"></animateMotion></circle>
+        </svg>
+        <div style="font-size:13px;color:#5a6478;">Cliente: <strong style="color:#0f1b2d;">{{quoteClient}}</strong></div>
+        <sc-if value="{{hasExtra}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;color:#5a6478;background:rgba(15,27,45,.04);border-radius:10px;padding:9px 13px;">Nota del cliente: <em style="color:#0f1b2d;">“{{extra}}”</em></div></sc-if>
+        <div style="display:flex;background:rgba(15,27,45,.06);border-radius:13px;padding:4px;gap:4px;">
+          <button onClick="{{setFinal}}" style="{{finalStyle}}">Cliente final</button>
+          <button onClick="{{setDist}}" style="{{distStyle}}">Distribuidor −12%</button>
+        </div>
+        <div style="display:flex;flex-direction:column;">
+          <sc-for list="{{quoteLines}}" as="ql" hint-placeholder-count="4">
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid rgba(15,27,45,.05);">
+              <span style="font-size:13.5px;color:#0f1b2d;flex:1;">{{ql.name}}</span>
+              <span style="font-size:13px;font-weight:600;color:#0f1b2d;white-space:nowrap;">{{ql.r}}</span>
+            </div>
+          </sc-for>
+          <sc-if value="{{hasDisc}}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid rgba(15,27,45,.05);">
+              <span style="font-size:13.5px;color:var(--accent);font-weight:600;">{{discName}}</span>
+              <span style="font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap;">{{discVal}}</span>
+            </div>
+          </sc-if>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:4px;">
+          <span style="font-size:13.5px;color:#5a6478;">Total estimado</span>
+          <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:21px;color:#0f1b2d;text-align:right;">{{totalText}}</span>
+        </div>
+        <div style="font-size:11.5px;color:#8a93a6;line-height:1.5;">Precio de referencia · sujeto a configuración y tipo de cambio · Vigencia: 7 días</div>
+        <button style="padding:14px;border-radius:14px;border:none;background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);" style-hover="filter:brightness(1.06);">Recibir por WhatsApp</button>
+        <button style="padding:13px;border-radius:14px;border:1.5px solid rgba(15,27,45,.16);background:transparent;color:#0f1b2d;font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="border-color:var(--accent);color:var(--accent);">Hablar con un asesor TTQ</button>
+        <div style="text-align:center;font-size:11px;color:#8a93a6;letter-spacing:.1em;">EL AGENTE PREPARÓ ESTA COTIZACIÓN · POWERED BY YAUB</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{s5}}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="5 · Panel TTQ" style="position:absolute;inset:0;overflow:auto;padding:96px 44px 104px;animation:fadeUp .5s ease both;">
+    <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:20px;">
+      <div>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">VISTA INTERNA · SOLO EQUIPO TTQ</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;margin:10px 0 2px;color:#0f1b2d;">Panel TTQ</h2>
+        <div style="font-size:14.5px;color:#5a6478;">Lo que el agente trabajó hoy, mientras el equipo vendía.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;">
+        <div style="padding:20px 24px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:#0f1b2d;">11</div><div style="font-size:13px;color:#5a6478;">cotizaciones hoy</div><div style="font-size:12px;color:var(--accent);font-weight:700;margin-top:4px;">+4 vs ayer</div></div>
+        <div style="padding:20px 24px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:#0f1b2d;">$6.8 M</div><div style="font-size:13px;color:#5a6478;">pipeline MXN</div><div style="font-size:12px;color:#8a93a6;margin-top:4px;">precio de referencia</div></div>
+        <div style="padding:20px 24px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:#0f1b2d;">24</div><div style="font-size:13px;color:#5a6478;">sitios analizados</div><div style="font-size:12px;color:#8a93a6;margin-top:4px;">análisis de sitio web</div></div>
+        <div style="padding:20px 24px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:var(--accent);">82%</div><div style="font-size:13px;color:#5a6478;">armado por el agente</div><div style="font-size:12px;color:#8a93a6;margin-top:4px;">18% pasó a un asesor</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:20px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div style="padding:22px 26px;border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);display:flex;flex-direction:column;gap:14px;">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">COTIZACIONES POR LÍNEA</div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="font-weight:700;">GNSS y receptores</span><span style="color:#5a6478;">44% · $3.0 M</span></div><div style="height:9px;border-radius:99px;background:rgba(15,27,45,.07);"><div style="width:44%;height:100%;border-radius:99px;background:var(--accent);animation:barGrow 1s ease both;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="font-weight:700;">Estaciones y robóticas</span><span style="color:#5a6478;">33% · $2.2 M</span></div><div style="height:9px;border-radius:99px;background:rgba(15,27,45,.07);"><div style="width:33%;height:100%;border-radius:99px;background:rgba(15,27,45,.4);animation:barGrow 1s ease both;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="font-weight:700;">Drones y escáneres</span><span style="color:#5a6478;">23% · $1.6 M</span></div><div style="height:9px;border-radius:99px;background:rgba(15,27,45,.07);"><div style="width:23%;height:100%;border-radius:99px;background:rgba(15,27,45,.2);animation:barGrow 1s ease both;"></div></div></div>
+          </div>
+          <div style="padding:22px 26px;border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 36px rgba(15,27,45,.06);">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;">LEADS POR ESTADO</div>
+            <svg viewBox="0 0 540 280" style="width:100%;height:auto;margin-top:8px;">
+              <path d="M60,58 L118,40 L196,44 L236,26 L282,34 L306,72 L318,64 L340,70 L344,108 L332,140 L356,166 L398,180 L442,176 L452,160 L488,158 L508,170 L512,196 L488,214 L462,206 L446,222 L430,244 L398,240 L360,224 L318,204 L282,192 L250,170 L216,142 L182,116 L148,96 L112,80 L84,72 Z" fill="rgba(15,27,45,.05)" stroke="rgba(15,27,45,.18)" stroke-width="1.5"></path>
+              <path d="M62,66 L82,78 L100,110 L118,146 L132,176 L122,184 L104,158 L84,122 L64,88 L52,72 Z" fill="rgba(15,27,45,.05)" stroke="rgba(15,27,45,.18)" stroke-width="1.5"></path>
+              <circle cx="262" cy="170" r="6" fill="var(--accent)"><animate attributeName="r" values="5;9;5" dur="2.2s" repeatCount="indefinite"></animate></circle>
+              <circle cx="252" cy="155" r="6" fill="var(--accent)"><animate attributeName="r" values="5;9;5" dur="2.2s" begin=".5s" repeatCount="indefinite"></animate></circle>
+              <circle cx="268" cy="92" r="6" fill="var(--accent)"><animate attributeName="r" values="5;9;5" dur="2.2s" begin="1s" repeatCount="indefinite"></animate></circle>
+              <circle cx="302" cy="212" r="6" fill="var(--accent)"><animate attributeName="r" values="5;9;5" dur="2.2s" begin="1.5s" repeatCount="indefinite"></animate></circle>
+              <circle cx="225" cy="128" r="5" fill="rgba(15,27,45,.35)"></circle>
+            </svg>
+            <div style="font-size:12.5px;color:#5a6478;margin-top:6px;">CDMX · Querétaro · Monterrey (filiales) y Oaxaca encendidos · Zacatecas en seguimiento</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:#5a6478;padding-left:4px;">LEADS CALIFICADOS POR EL AGENTE</div>
+          <div style="padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(15,27,45,.06);display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:14.5px;font-weight:800;color:#0f1b2d;">Constructora Río Bravo</span><span style="padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:700;">Cotización enviada</span></div>
+            <div style="font-size:13px;color:#5a6478;line-height:1.5;">Libramiento de 40 km en Oaxaca · control de obra propio · sin base GNSS.</div>
+            <div style="font-size:12.5px;color:#0f1b2d;font-weight:600;">Hiper HR Base + Rover + FC-6000A + curso · $— referencia</div>
+          </div>
+          <div style="padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(15,27,45,.06);display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:14.5px;font-weight:800;color:#0f1b2d;">CIMSA Pavimentos</span><span style="padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:700;">Demo agendada</span></div>
+            <div style="font-size:13px;color:#5a6478;line-height:1.5;">Control de obra con cuadrilla propia · quiere operar con una sola persona.</div>
+            <div style="font-size:12.5px;color:#0f1b2d;font-weight:600;">Robótica GT-1501 + prisma 360 · $— referencia</div>
+          </div>
+          <div style="padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(15,27,45,.06);display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:14.5px;font-weight:800;color:#0f1b2d;">Minera Cerro Alto</span><span style="padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11.5px;font-weight:700;">Asesor asignado</span></div>
+            <div style="font-size:13px;color:#5a6478;line-height:1.5;">Volumetrías mensuales de patios en Zacatecas · taludes críticos.</div>
+            <div style="font-size:12.5px;color:#0f1b2d;font-weight:600;">Matrice 350 RTK + PIX4D Mapper · $— referencia</div>
+          </div>
+          <div style="padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(15,27,45,.06);display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:14.5px;font-weight:800;color:#0f1b2d;">Despacho Geodésico Sur</span><span style="padding:4px 12px;border-radius:999px;background:rgba(15,27,45,.08);color:#5a6478;font-size:11.5px;font-weight:700;">Nuevo lead</span></div>
+            <div style="font-size:13px;color:#5a6478;line-height:1.5;">Levantamientos catastrales · busca renovar estación y calibrar la actual.</div>
+            <div style="font-size:12.5px;color:#0f1b2d;font-weight:600;">Estación OS-200 + calibración anual · $— referencia</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <div style="position:absolute;left:50%;bottom:20px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.7);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(15,27,45,.12);z-index:30;">
+    <button onClick="{{prev}}" style="width:34px;height:34px;border-radius:50%;border:none;background:rgba(15,27,45,.05);color:#0f1b2d;font-size:17px;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);color:var(--accent);">‹</button>
+    <div style="font-size:13px;font-weight:800;min-width:46px;text-align:center;font-family:Manrope,sans-serif;color:#0f1b2d;">{{screenNum}} / 5</div>
+    <button onClick="{{next}}" style="width:34px;height:34px;border-radius:50%;border:none;background:rgba(15,27,45,.05);color:#0f1b2d;font-size:17px;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);color:var(--accent);">›</button>
+    <div style="width:1px;height:18px;background:rgba(15,27,45,.14);margin:0 4px;"></div>
+    <button onClick="{{resetAll}}" style="padding:7px 14px;border-radius:999px;border:none;background:transparent;color:#5a6478;font-size:12.5px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;" style-hover="color:var(--accent);">Reset</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#D97706&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#D97706&quot;,&quot;#B45309&quot;,&quot;#0EA5E9&quot;,&quot;#16A34A&quot;],&quot;section&quot;:&quot;Marca&quot;},&quot;demoGiro&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;constructora&quot;,&quot;options&quot;:[&quot;constructora&quot;,&quot;minera&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Demo&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 0, route: 'A', answers: [], kitOn: null, buyer: 'final', hasBase: null, siteUrl: null, proyecto: null, extra: '' };
+
+  D = {
+    constructora: {
+      url: 'https://constructora-riobravo.mx',
+      empresa: 'Constructora Río Bravo',
+      clientB: 'Libramiento 40 km · Oaxaca',
+      proyecto: 'Vamos a arrancar un libramiento de 40 km en Oaxaca, terreno cerril. El control de obra lo haremos nosotros.',
+      siteLines: ['Carreteras y puentes', 'Urbanización y plataformas', 'Obra pública y privada'],
+      chips: [['Giro', 'Constructora'], ['Obras', 'Carreteras y puentes'], ['Tamaño', 'Mediana'], ['Ya usa', 'Nivel y estación vieja'], ['Zona', 'Bajío–Norte']],
+      preguntas: [
+        { q: '¿El control de obra lo hacen ustedes o lo subcontratan?', opts: ['Nosotros', 'Subcontratamos'] },
+        { q: '¿Ya tienen base GNSS propia?', opts: ['Sí, tenemos base', 'No, empezamos de cero'] },
+        { q: '¿Necesitan volumetrías y avance de obra con dron?', opts: ['Sí, cada mes', 'Por ahora no'] }
+      ],
+      mainFull: { name: 'GNSS Topcon Hiper HR · Base + Rover', desc: '452 canales · TILT 15° · IP67', min: 580000, max: 650000 },
+      mainRover: { name: 'Hiper HR Rover + suscripción NTRIP', desc: 'usa tu base actual · corrección por red', min: 310000, max: 360000 },
+      stages: [['Proyecto', 'planos y arranque'], ['Trazo y nivelación', 'ejes y rasantes'], ['Control de obra', 'topografía diaria'], ['Volumetrías', 'cortes y terraplenes'], ['As-built', 'el entregable final']],
+      equipos: [
+        { name: 'Hiper HR Base + Rover', sub: 'GNSS Topcon', ben: 'amarra todo el trazo a un solo control', cx: 180, to: 1, lab: 'traza' },
+        { name: 'Robótica GT-1501', sub: 'estación robótica Topcon', ben: 'una sola persona opera la robótica', cx: 470, to: 2, lab: 'controla' },
+        { name: 'Matrice 350 RTK + PIX4D', sub: 'dron DJI + fotogrametría', ben: 'volúmenes en horas, no semanas', cx: 730, to: 3, lab: 'mide' },
+        { name: 'Escáner CRP1', sub: 'escáner Topcon', ben: 'el as-built en 3D, sin re-visitas', cx: 990, to: 4, lab: 'documenta' }
+      ],
+      kit: [
+        { id: 'fc', name: 'Colectora FC-6000A', desc: 'control en campo', min: 85000, max: 105000, on: true },
+        { id: 'radio', name: 'Radio UHF', desc: 'enlace base–rover', min: 28000, max: 36000, on: true, noBase: true },
+        { id: 'acc', name: 'Prisma 360 + bastón fibra de carbono', desc: 'accesorios de precisión', min: 32000, max: 42000, on: true },
+        { id: 'dron', name: 'Matrice 350 RTK + PIX4D Mapper', desc: 'volumetrías y avance de obra', min: 580000, max: 680000, on: false, qOn: 2 },
+        { id: 'curso', name: 'Curso de operación', desc: 'TTQ Capacitación', min: 18000, max: 25000, on: true },
+        { id: 'cal', name: 'Calibración certificada', desc: 'laboratorio TTQ', min: 9000, max: 14000, on: true },
+        { id: 'gar', name: 'Garantía extendida', desc: 'un año adicional', min: 22000, max: 30000, on: false }
+      ]
+    },
+    minera: {
+      url: 'https://minera-cerroalto.mx',
+      empresa: 'Minera Cerro Alto',
+      clientB: 'Operación minera · Zacatecas',
+      proyecto: 'Operamos un tajo en Zacatecas; necesitamos volumetrías mensuales de patios y monitoreo de taludes.',
+      siteLines: ['Extracción a cielo abierto', 'Patios y bancos de material', 'Seguridad y monitoreo'],
+      chips: [['Giro', 'Minera'], ['Operación', 'Tajo abierto'], ['Necesidad', 'Volumetrías mensuales'], ['Riesgo', 'Taludes'], ['Hoy', 'Topografía tradicional']],
+      preguntas: [
+        { q: '¿Las volumetrías las hacen ustedes o un tercero?', opts: ['Nosotros', 'Un tercero'] },
+        { q: '¿Ya tienen base GNSS en el sitio?', opts: ['Sí, tenemos base', 'No, empezamos de cero'] },
+        { q: '¿Les preocupa el movimiento de taludes?', opts: ['Sí, es crítico', 'Por ahora no'] }
+      ],
+      mainFull: { name: 'GNSS Topcon Hiper HR · Base + Rover', desc: 'control geodésico del tajo · IP67', min: 580000, max: 650000 },
+      mainRover: { name: 'Hiper HR Rover + suscripción NTRIP', desc: 'usa tu base actual · corrección por red', min: 310000, max: 360000 },
+      stages: [['Exploración', 'bancos y reservas'], ['Rezaga y bancos', 'avance del tajo'], ['Volumetrías', 'patios y acopios'], ['Taludes', 'estabilidad'], ['Reporte', 'entregable mensual']],
+      equipos: [
+        { name: 'Hiper HR Base + Rover', sub: 'GNSS Topcon', ben: 'amarra el tajo a un solo control', cx: 180, to: 0, lab: 'amarra' },
+        { name: 'Matrice 350 RTK + PIX4D', sub: 'dron DJI + fotogrametría', ben: 'volúmenes en horas, no semanas', cx: 470, to: 2, lab: 'mide' },
+        { name: 'MS05 AXII', sub: 'estación de monitoreo Topcon', ben: 'vigila el talud al milímetro', cx: 730, to: 3, lab: 'vigila' },
+        { name: 'Escáner CRP1 M', sub: 'escáner Topcon', ben: 'el tajo en 3D para tu reporte', cx: 990, to: 4, lab: 'documenta' }
+      ],
+      kit: [
+        { id: 'dron', name: 'Matrice 350 RTK + PIX4D Mapper', desc: 'volumetrías mensuales de patios', min: 580000, max: 680000, on: true },
+        { id: 'fc', name: 'Colectora FC-6000A', desc: 'control en campo', min: 85000, max: 105000, on: true },
+        { id: 'crp', name: 'Escáner CRP1 M', desc: 'taludes y frentes sin exponer gente', min: 720000, max: 830000, on: false, qOn: 2 },
+        { id: 'acc', name: 'Prisma 360 + trípode + tribrach', desc: 'accesorios de precisión', min: 30000, max: 40000, on: true },
+        { id: 'curso', name: 'Curso de operación y fotogrametría', desc: 'TTQ Capacitación', min: 24000, max: 32000, on: true },
+        { id: 'cal', name: 'Calibración certificada', desc: 'laboratorio TTQ', min: 9000, max: 14000, on: true },
+        { id: 'gar', name: 'Garantía extendida', desc: 'un año adicional', min: 26000, max: 34000, on: false }
+      ]
+    }
+  };
+
+  componentDidMount() {
+    this.kd = (e) => {
+      const t = e.target && e.target.tagName;
+      if (t === 'INPUT' || t === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight') this.nav(1);
+      if (e.key === 'ArrowLeft') this.nav(-1);
+    };
+    window.addEventListener('keydown', this.kd);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.kd); }
+
+  nav(d) { this.setState(s => ({ screen: Math.max(0, Math.min(4, s.screen + d)) })); }
+  giro() { return this.props.demoGiro === 'minera' ? 'minera' : 'constructora'; }
+  d() { return this.D[this.giro()]; }
+  fmt(n) { return '$' + Math.round(n).toLocaleString('es-MX'); }
+  hexRgb(h) { h = (h || '#D97706').replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); const n = parseInt(h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+
+  hasBase() {
+    if (this.state.hasBase !== null) return this.state.hasBase;
+    if (this.state.answers.length > 1) return this.state.answers[1] === 0;
+    return false;
+  }
+  main() { return this.hasBase() ? this.d().mainRover : this.d().mainFull; }
+  answer(qi, oi) { if (qi !== this.state.answers.length) return; this.setState(s => ({ answers: [...s.answers, oi] })); }
+  kitState() {
+    const hb = this.hasBase();
+    const def = Object.fromEntries(this.d().kit.map(k => {
+      let on = k.on;
+      if (k.noBase && hb) on = false;
+      if (k.qOn !== undefined && this.state.answers.length > k.qOn) on = this.state.answers[k.qOn] === 0;
+      return [k.id, on];
+    }));
+    return this.state.kitOn ? { ...def, ...this.state.kitOn } : def;
+  }
+  toggleKit(id) { const cur = this.kitState(); this.setState({ kitOn: { ...cur, [id]: !cur[id] } }); }
+
+  diagram() {
+    const d = this.d();
+    const SX = [130, 360, 590, 820, 1030];
+    const stages = d.stages.map((s, i) => ({ label: s[0], sub: s[1], left: SX[i] - 95, num: '0' + (i + 1), anim: d.equipos.some(e => e.to === i) ? 'glowPulse 3.6s ease-in-out infinite' : 'none' }));
+    const cons = d.equipos.map((e, i) => { const sx = SX[e.to]; return { d: `M${e.cx},396 C${e.cx},312 ${sx},246 ${sx},160`, label: e.lab, lx: (e.cx + sx) / 2 - 40, ly: 262, dur: (2.6 + i * 0.4) + 's', begin: (i * 0.7) + 's' }; });
+    const links = SX.slice(0, -1).map((x, i) => ({ d: `M${x + 97},108 L${SX[i + 1] - 97},108`, dur: (1.8 + i * 0.2) + 's', begin: (i * 0.45) + 's' }));
+    return { stages, equipos: d.equipos.map(e => ({ ...e, left: e.cx - 117 })), cons, links };
+  }
+
+  quote() {
+    const m = this.main(), ks = this.kitState(), kit = this.d().kit;
+    const lines = [{ name: m.name, r: this.fmt(m.min) + ' – ' + this.fmt(m.max) }];
+    let min = m.min, max = m.max;
+    kit.forEach(k => { if (ks[k.id]) { lines.push({ name: k.name, r: this.fmt(k.min) + ' – ' + this.fmt(k.max) }); min += k.min; max += k.max; } });
+    const dist = this.state.buyer === 'dist';
+    const disc = dist ? { name: 'Descuento distribuidor (−12%)', r: '−' + this.fmt(min * 0.12) + ' / −' + this.fmt(max * 0.12) } : null;
+    if (dist) { min *= 0.88; max *= 0.88; }
+    return { lines, disc, total: this.fmt(min) + ' – ' + this.fmt(max) + ' MXN' };
+  }
+
+  reset() { this.setState({ screen: 0, route: 'A', answers: [], kitOn: null, buyer: 'final', hasBase: null, siteUrl: null, proyecto: null, extra: '' }); }
+
+  renderVals() {
+    const d = this.d(), st = this.state, route = st.route;
+    const accent = this.props.accentColor ?? '#D97706';
+    const [r, g, b] = this.hexRgb(accent);
+    const hb = this.hasBase(), m = this.main();
+    const dg = this.diagram(), q = this.quote(), ks = this.kitState();
+    const routeA = route === 'A', routeB = route === 'B';
+    const clientLabel = routeA ? d.empresa : d.clientB;
+    const answers = st.answers;
+    const askedQs = d.preguntas.slice(0, Math.min(answers.length + 1, 3)).map((p, qi) => ({
+      q: p.q, answered: qi < answers.length ? p.opts[answers[qi]] : '', open: qi >= answers.length,
+      opts: p.opts.map((o, oi) => ({ label: o, pick: () => this.answer(qi, oi) }))
+    }));
+    const isDist = st.buyer === 'dist';
+    const segBase = 'flex:1;padding:9px 8px;border-radius:10px;border:none;cursor:pointer;font-family:Inter,sans-serif;font-size:13px;font-weight:700;transition:all .25s;';
+    const sw = on => `width:42px;height:24px;border-radius:99px;border:none;cursor:pointer;position:relative;flex:none;padding:0;transition:background .3s;background:${on ? accent : 'rgba(15,27,45,.18)'};display:block;`;
+    const knob = on => `position:absolute;top:3px;left:${on ? '21px' : '3px'};width:18px;height:18px;border-radius:50%;background:#fff;transition:left .3s;box-shadow:0 1px 3px rgba(0,0,0,.25);display:block;`;
+    return {
+      accent, accentSoft: `rgba(${r},${g},${b},0.13)`, accentGlow: `rgba(${r},${g},${b},0.35)`,
+      screenNum: st.screen + 1,
+      s1: st.screen === 0, s2: st.screen === 1, s3: st.screen === 2, s4: st.screen === 3, s5: st.screen === 4,
+      prev: () => this.nav(-1), next: () => this.nav(1), resetAll: () => this.reset(),
+      siteUrl: st.siteUrl ?? d.url, onUrl: e => this.setState({ siteUrl: e.target.value }),
+      proyecto: st.proyecto ?? d.proyecto, onProyecto: e => this.setState({ proyecto: e.target.value }),
+      startA: () => this.setState({ route: 'A', screen: 1, answers: [], hasBase: null, kitOn: null }),
+      startB: () => this.setState({ route: 'B', screen: 1, answers: [], hasBase: null, kitOn: null }),
+      routeA, routeB,
+      extra: st.extra ?? '', onExtra: e => this.setState({ extra: e.target.value }), hasExtra: !!st.extra,
+      screen2Title: routeA ? 'El agente está leyendo tu sitio…' : 'El agente quiere entender tu proyecto',
+      empresa: d.empresa, siteUrlShown: (st.siteUrl ?? d.url).replace('https://', ''),
+      siteLine1: d.siteLines[0], siteLine2: d.siteLines[1], siteLine3: d.siteLines[2],
+      chips: d.chips.map((c, i) => ({ k: c[0], v: c[1], delay: (0.4 + i * 0.45) + 's' })),
+      proyectoShown: st.proyecto ?? d.proyecto,
+      askedQs, allAnswered: answers.length >= 3,
+      analysisSummary: `Listo. Para ${clientLabel}, la configuración parte de: ${m.name}.`,
+      goDiagram: () => this.setState({ screen: 2 }), goConfig: () => this.setState({ screen: 3 }),
+      clientLabel,
+      stages: dg.stages, equipos: dg.equipos, cons: dg.cons, links: dg.links,
+      mainName: m.name, mainDesc: m.desc, mainRange: this.fmt(m.min) + ' – ' + this.fmt(m.max),
+      toggleBase: () => this.setState({ hasBase: !hb, kitOn: null }),
+      baseSwStyle: sw(hb), baseKnobStyle: knob(hb),
+      baseNote: hb ? 'Sí → solo Rover + suscripción NTRIP' : 'No → Base + Rover completo con radio UHF',
+      kitItems: d.kit.map(k => {
+        const on = !!ks[k.id];
+        return {
+          name: k.name, desc: k.desc, range: this.fmt(k.min) + ' – ' + this.fmt(k.max),
+          rowOp: on ? '1' : '0.55', toggle: () => this.toggleKit(k.id),
+          swStyle: sw(on), knobStyle: knob(on)
+        };
+      }),
+      quoteLines: q.lines, hasDisc: !!q.disc, discName: q.disc ? q.disc.name : '', discVal: q.disc ? q.disc.r : '',
+      totalText: q.total, quoteClient: clientLabel, folio: 'TTQ-2026-0713',
+      setFinal: () => this.setState({ buyer: 'final' }), setDist: () => this.setState({ buyer: 'dist' }),
+      finalStyle: segBase + (isDist ? 'background:transparent;color:#5a6478;' : 'background:#ffffff;color:#0f1b2d;box-shadow:0 2px 8px rgba(15,27,45,.12);'),
+      distStyle: segBase + (isDist ? 'background:#ffffff;color:#0f1b2d;box-shadow:0 2px 8px rgba(15,27,45,.12);' : 'background:transparent;color:#5a6478;')
+    };
+  }
+}
+</script>
+</body>
+</html>
