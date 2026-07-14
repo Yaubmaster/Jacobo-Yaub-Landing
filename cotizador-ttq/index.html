@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Paleta — ajustable a paleta del cliente */
+html,body{margin:0;padding:0;background:#FAFBFC;scroll-behavior:smooth;}
+x-dc{--accent:#1E2761;--accent2:#EC4899;--ink:#1E293B;--muted:#64748B;}
+a{color:#1E2761;} a:hover{color:#EC4899;}
+@keyframes orb{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(46px,-38px) scale(1.08);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+@keyframes chipIn{from{opacity:0;transform:translateY(10px) scale(.95);}to{opacity:1;transform:none;}}
+@keyframes scan{0%{top:6%;}50%{top:74%;}100%{top:6%;}}
+@keyframes glowPulse{0%,100%{box-shadow:0 10px 30px rgba(30,39,97,.06);}50%{box-shadow:0 0 30px 2px rgba(236,72,153,.35);}}
+@keyframes blink{0%,100%{opacity:.3;}50%{opacity:1;}}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes yaubie{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-16px) rotate(3deg);}}
+@keyframes gradMove{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+
+/* ── Móvil ── */
+.mStageWrap{max-width:100%;}
+@media (max-width:760px){
+  .mOne{grid-template-columns:1fr !important;gap:14px !important;}
+  .mTwo{grid-template-columns:1fr 1fr !important;gap:12px !important;}
+  .mH1{font-size:31px !important;line-height:1.14 !important;}
+  .mHero{padding:96px 14px 44px !important;}
+  .hideM{display:none !important;}
+  .mNavBtn{padding:8px 13px !important;font-size:12px !important;}
+  .mStageWrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px;}
+  .mStage{max-width:none !important;}
+  .mModal{padding:18px 14px !important;border-radius:18px !important;}
+  #yaubie{width:64px !important;}
+  #chatCol{max-height:46vh !important;}
+}
+@keyframes yaubieTravel{0%{top:76%;left:-10%;transform:rotate(-6deg) scaleX(1);}12%{top:58%;left:16%;transform:rotate(5deg) scaleX(1);}25%{top:22%;left:36%;transform:rotate(-4deg) scaleX(1);}38%{top:10%;left:68%;transform:rotate(6deg) scaleX(1);}50%{top:38%;left:86%;transform:rotate(-5deg) scaleX(-1);}63%{top:70%;left:66%;transform:rotate(4deg) scaleX(-1);}76%{top:78%;left:36%;transform:rotate(-6deg) scaleX(-1);}88%{top:52%;left:8%;transform:rotate(5deg) scaleX(-1);}100%{top:76%;left:-10%;transform:rotate(-6deg) scaleX(1);}}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; --accent-soft: {{accentSoft}}; --accent-glow: {{accentGlow}}; --accent2: {{accent2}}; --ink:#1E293B; --muted:#64748B; --ink2:#1E2761; font-family:Inter,system-ui,sans-serif; color:var(--ink); background:#FAFBFC; min-height:100vh;">
+  <div style="position:fixed;width:560px;height:560px;border-radius:50%;background:#F9B8D9;opacity:.28;top:-160px;right:-140px;filter:blur(95px);animation:orb 16s ease-in-out infinite;pointer-events:none;z-index:0;"></div>
+  <div style="position:fixed;width:480px;height:480px;border-radius:50%;background:#B9C6F2;opacity:.32;bottom:-160px;left:6%;filter:blur(95px);animation:orb 20s ease-in-out infinite reverse;pointer-events:none;z-index:0;"></div>
+
+  <div style="position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:50;background:rgba(255,255,255,.6);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.7);">
+    <div style="display:flex;align-items:center;gap:11px;">
+      <img src="uploads/Yaub.icon.black.png" alt="Yaub" style="height:28px;width:auto;">
+      <span style="font-family:Manrope,sans-serif;font-weight:800;font-size:17px;letter-spacing:.18em;color:var(--ink2);">Jacobo<span style="color:var(--accent);">Yaub</span></span>
+      <span class="hideM" style="font-family:Manrope,sans-serif;font-weight:600;font-size:14px;color:var(--muted);">· IA a tu medida</span>
+    </div>
+    <button onClick="{{scrollHero}}" class="mNavBtn" style="padding:10px 22px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 8px 20px var(--accent-glow);" style-hover="filter:brightness(1.06);">Habla con mi consultor IA</button>
+  </div>
+
+  <img id="yaubie" src="uploads/yaubie.png" alt="Yaubie" style="position:fixed;top:0;left:0;z-index:40;width:104px;height:auto;cursor:pointer;opacity:.75;filter:drop-shadow(0 14px 24px rgba(30,39,97,.2));animation:yaubieTravel 52s ease-in-out infinite;" style-hover="opacity:1;">
+  <sc-if value="{{bookingOpen}}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:90;background:rgba(15,20,40,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;">
+      <div class="mModal" style="width:100%;max-width:600px;max-height:86vh;overflow-y:auto;background:#ffffff;border-radius:22px;box-shadow:0 30px 80px rgba(15,20,40,.35);padding:26px 28px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <div>
+            <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:19px;color:var(--ink2);">Agenda 15 min con Jacobo</div>
+            <div style="font-size:12.5px;color:var(--muted);">Sesión de consultoría · Yaub Calendar · hora de Monterrey</div>
+          </div>
+          <button onClick="{{closeBooking}}" style="width:34px;height:34px;border-radius:50%;border:none;background:rgba(30,39,97,.06);color:var(--ink2);font-size:16px;cursor:pointer;font-family:Inter,sans-serif;flex:none;">✕</button>
+        </div>
+        <sc-if value="{{bkLoading}}" hint-placeholder-val="{{ true }}">
+          <div style="text-align:center;padding:34px 0;color:var(--muted);font-size:13.5px;"><span style="animation:blink 1.2s infinite;">Buscando horarios disponibles…</span></div>
+        </sc-if>
+        <sc-if value="{{bkDone}}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;display:flex;flex-direction:column;gap:10px;padding:16px 0;">
+            <div style="font-size:38px;">✅</div>
+            <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:17px;color:var(--ink2);">Cita agendada: {{bkDoneLabel}}</div>
+            <div style="font-size:13px;color:var(--muted);">Ya quedó en el calendario de Jacobo. Te escribimos por WhatsApp para confirmar.</div>
+            <button onClick="{{closeBooking}}" style="align-self:center;padding:12px 28px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);">Listo</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{bkFormOn}}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;">
+            <sc-for list="{{bkDays}}" as="d" hint-placeholder-count="4"><button onClick="{{d.pick}}" style="{{d.style}}">{{d.label}}</button></sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;max-height:200px;overflow-y:auto;">
+            <sc-for list="{{bkTimes}}" as="t" hint-placeholder-count="8"><button onClick="{{t.pick}}" style="{{t.style}}">{{t.label}}</button></sc-for>
+          </div>
+          <div class="mOne" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <input value="{{bkName}}" onChange="{{onBkName}}" placeholder="Tu nombre" style="width:100%;box-sizing:border-box;padding:12px 15px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:#fff;font-size:13.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;">
+            <input value="{{bkPhone}}" onChange="{{onBkPhone}}" placeholder="Tu WhatsApp (10 dígitos)" style="width:100%;box-sizing:border-box;padding:12px 15px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:#fff;font-size:13.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;">
+          </div>
+          <sc-if value="{{bkErr}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;font-weight:600;color:#DC2626;text-align:center;">{{bkErr}}</div></sc-if>
+          <button onClick="{{confirmBooking}}" style="padding:14px;border-radius:14px;border:none;background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);" style-hover="filter:brightness(1.06);">{{bkBtn}}</button>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+  <div id="hero" class="mHero" style="position:relative;z-index:1;padding:130px 24px 70px;display:flex;flex-direction:column;align-items:center;gap:26px;">
+    <div style="text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center;max-width:860px;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">TU CONSULTOR PERSONAL DE IA · IA A TU MEDIDA</div>
+      <h1 class="mH1" style="font-family:Manrope,sans-serif;font-weight:800;font-size:52px;line-height:1.08;margin:0;color:var(--ink2);text-wrap:balance;">¿Cuánto de tu semana puede hacer <span style="background:linear-gradient(100deg, var(--accent), var(--accent2), var(--accent));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradMove 5s ease-in-out infinite;">la IA contigo</span>?</h1>
+      <p style="margin:0;font-size:18px;color:var(--muted);max-width:700px;">Mi consultor te escucha 15 minutos, entiende tu semana y te entrega un plan hecho para ti: skills, Cowork y precio. Gratis y sin compromiso.</p>
+    </div>
+    <div style="width:100%;max-width:1180px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);border-radius:24px;box-shadow:0 26px 70px rgba(30,39,97,.1);padding:24px 28px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;"></span><span style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:var(--muted);">{{stepLabel}}</span></div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button onClick="{{prevC}}" style="width:32px;height:32px;border-radius:50%;border:none;background:rgba(30,39,97,.06);color:var(--ink2);font-size:16px;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);color:var(--accent);">‹</button>
+          <span style="font-size:12.5px;font-weight:800;min-width:38px;text-align:center;font-family:Manrope,sans-serif;color:var(--ink2);">{{step}} / 5</span>
+          <button onClick="{{nextC}}" style="width:32px;height:32px;border-radius:50%;border:none;background:rgba(30,39,97,.06);color:var(--ink2);font-size:16px;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);color:var(--accent);">›</button>
+          <button onClick="{{resetC}}" style="padding:6px 14px;border-radius:999px;border:none;background:transparent;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;" style-hover="color:var(--accent);">Reset</button>
+        </div>
+      </div>
+      <sc-if value="{{c1}}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:14px;max-width:820px;margin:0 auto;width:100%;animation:fadeUp .4s ease both;">
+          <div class="mOne" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:12.5px;font-weight:700;color:var(--ink2);">Tu nombre completo</label><input value="{{nombreIn}}" onChange="{{onNombre}}" placeholder="Ej. Iván Ayala García" style="width:100%;box-sizing:border-box;padding:13px 16px;border-radius:13px;border:1px solid rgba(30,39,97,.12);background:rgba(255,255,255,.92);font-size:14.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;"></div>
+            <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:12.5px;font-weight:700;color:var(--ink2);">Tu WhatsApp <span style="color:#94A3B8;font-weight:500;">(para mandarte tu plan)</span></label><input value="{{telefonoIn}}" onChange="{{onTelefono}}" placeholder="10 dígitos" style="width:100%;box-sizing:border-box;padding:13px 16px;border-radius:13px;border:1px solid rgba(30,39,97,.12);background:rgba(255,255,255,.92);font-size:14.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;"></div>
+          </div>
+          <div class="mOne" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:12.5px;font-weight:700;color:var(--ink2);">Tu rol en la empresa</label><input value="{{rol}}" onChange="{{onRol}}" placeholder="Ej. Dueño de restaurante, asistente de dirección, contador…" style="width:100%;box-sizing:border-box;padding:13px 16px;border-radius:13px;border:1px solid rgba(30,39,97,.12);background:rgba(255,255,255,.92);font-size:14.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;"></div>
+            <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:12.5px;font-weight:700;color:var(--ink2);">Sitio web de tu empresa <span style="color:#94A3B8;font-weight:500;">(o donde trabajas)</span></label><input value="{{sitio}}" onChange="{{onSitio}}" placeholder="https://tuempresa.mx (opcional)" style="width:100%;box-sizing:border-box;padding:13px 16px;border-radius:13px;border:1px solid rgba(30,39,97,.12);background:rgba(255,255,255,.92);font-size:14.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:12.5px;font-weight:700;color:var(--ink2);">Platícanos tu día a día <span style="color:#94A3B8;font-weight:500;">— sé concreto: qué haces, cada cuándo y con qué</span></label><textarea value="{{proyecto}}" onChange="{{onProyecto}}" placeholder="Ej. Cada viernes armo el reporte semanal juntando 4 fuentes a mano, tomo minutas de 2 juntas y cuadro la agenda…" rows="3" style="width:100%;box-sizing:border-box;padding:13px 16px;border-radius:13px;border:1px solid rgba(30,39,97,.12);background:rgba(255,255,255,.92);font-size:14.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;resize:none;line-height:1.55;"></textarea></div>
+          <sc-if value="{{formErr}}" hint-placeholder-val="{{ false }}"><div style="text-align:center;font-size:13px;font-weight:600;color:#DC2626;">{{formErr}}</div></sc-if>
+          <button onClick="{{startCot}}" style="padding:15px;border-radius:14px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);" style-hover="filter:brightness(1.06);">Empezar con mi consultor</button>
+          <div style="text-align:center;font-size:12.5px;color:#94A3B8;">Con tu sitio web, tu consultor infiere tu giro antes de preguntar. Sin llamadas de venta, sin formularios fríos.</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{c2}}" hint-placeholder-val="{{ false }}">
+        <div class="mOne" style="display:grid;grid-template-columns:1.25fr .85fr;gap:22px;align-items:start;animation:fadeUp .4s ease both;">
+          <div style="display:flex;flex-direction:column;gap:11px;">
+            <div style="align-self:flex-end;max-width:520px;background:var(--ink2);color:#F6F8FB;padding:13px 17px;border-radius:16px 16px 4px 16px;font-size:13.5px;line-height:1.5;">{{introMsg}}</div>
+            <div id="chatCol" style="display:flex;flex-direction:column;gap:11px;max-height:520px;overflow-y:auto;padding-right:4px;">
+              <sc-for list="{{chatMsgs}}" as="m" hint-placeholder-count="1">
+                <sc-if value="{{m.bot}}" hint-placeholder-val="{{ true }}">
+                  <div style="align-self:flex-start;display:flex;gap:9px;align-items:flex-start;max-width:540px;animation:fadeUp .4s ease both;">
+                    <img src="uploads/yaubie.png" alt="Yaubie" style="width:34px;height:34px;object-fit:contain;flex:none;filter:drop-shadow(0 4px 8px rgba(30,39,97,.18));">
+                    <div style="background:rgba(255,255,255,.92);border:1px solid rgba(30,39,97,.06);padding:12px 16px;border-radius:4px 16px 16px 16px;font-size:14px;line-height:1.5;white-space:pre-wrap;">{{m.text}}</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{m.user}}" hint-placeholder-val="{{ false }}">
+                  <div style="align-self:flex-end;background:var(--accent);color:#fff;padding:10px 16px;border-radius:16px 16px 4px 16px;font-size:13.5px;font-weight:600;max-width:520px;white-space:pre-wrap;">{{m.text}}</div>
+                </sc-if>
+              </sc-for>
+              <sc-if value="{{botTyping}}" hint-placeholder-val="{{ true }}">
+                <div style="align-self:flex-start;display:flex;gap:9px;align-items:center;">
+                  <img src="uploads/yaubie.png" alt="Yaubie" style="width:34px;height:34px;object-fit:contain;flex:none;">
+                  <div style="background:rgba(255,255,255,.92);border:1px solid rgba(30,39,97,.06);padding:11px 16px;border-radius:4px 16px 16px 16px;font-size:13px;color:var(--muted);"><span style="animation:blink 1.2s infinite;">Tu consultor está escribiendo…</span></div>
+                </div>
+              </sc-if>
+            </div>
+            <div style="display:flex;gap:9px;">
+              <input value="{{chatDraft}}" onChange="{{onChatDraft}}" placeholder="Escribe tu respuesta…" style="flex:1;box-sizing:border-box;padding:13px 16px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:rgba(255,255,255,.95);font-size:14px;font-family:Inter,sans-serif;color:var(--ink);outline:none;">
+              <button onClick="{{sendChat}}" style="padding:13px 22px;border-radius:13px;border:none;background:var(--accent2);color:#fff;font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;white-space:nowrap;" style-hover="filter:brightness(1.15);">{{sendLabel}}</button>
+            </div>
+            <sc-if value="{{canGen}}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{genPlan}}" style="align-self:center;margin-top:4px;padding:14px 30px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);animation:fadeUp .4s ease both;" style-hover="filter:brightness(1.06);">Generar mi propuesta en segundos →</button>
+            </sc-if>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="padding:18px 20px;display:flex;flex-direction:column;gap:11px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);border-radius:18px;box-shadow:0 12px 32px rgba(30,39,97,.06);">
+              <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:var(--muted);">PLAN EN VIVO</div>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--ink2);"><span>MI SETUP</span><span>MI NEGOCIO</span><span>MI EQUIPO</span></div>
+              <div style="position:relative;height:9px;border-radius:999px;background:linear-gradient(90deg, rgba(30,39,97,.1), var(--accent-soft));">
+                <div style="position:absolute;top:50%;left:{{meterPos}}%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(255,255,255,.9), 0 0 16px var(--accent-glow);transition:left .6s cubic-bezier(.4,0,.2,1);"></div>
+              </div>
+              <div style="font-size:12.5px;color:var(--muted);">Tu consultor se inclina por <strong style="color:var(--ink2);">{{meterLead}}</strong></div>
+            </div>
+            <sc-if value="{{chipsOn}}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <sc-for list="{{chips}}" as="c" hint-placeholder-count="3"><div style="display:flex;gap:6px;align-items:center;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid rgba(30,39,97,.08);animation:chipIn .5s ease both;animation-delay:{{c.delay}};font-size:12px;"><span style="color:#94A3B8;">{{c.k}}</span><span style="font-weight:700;color:var(--ink2);">{{c.v}}</span></div></sc-for>
+            </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{c3}}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:center;animation:fadeUp .4s ease both;">
+          <div style="text-align:center;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:22px;color:var(--ink2);">Dónde cabe en la semana de {{nombre}}</div><div style="font-size:13.5px;color:var(--muted);">{{s3sub}}</div></div>
+          <div class="mStageWrap"><div class="mStage" style="position:relative;width:1080px;height:500px;flex:none;max-width:100%;">
+            <svg viewBox="0 0 1080 500" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+              <defs><marker id="arrL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".7"></path></marker></defs>
+              <sc-for list="{{links}}" as="ln" hint-placeholder-count="2"><path d="{{ln.d}}" stroke="rgba(30,39,97,.22)" stroke-width="1.5" stroke-dasharray="2 6" fill="none"></path><circle r="3" fill="#1E2761" opacity=".5"><animateMotion dur="{{ln.dur}}" begin="{{ln.begin}}" repeatCount="indefinite" path="{{ln.d}}"></animateMotion></circle></sc-for>
+              <sc-for list="{{cons}}" as="cn" hint-placeholder-count="2"><path d="{{cn.d}}" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 7" fill="none" opacity=".5" marker-end="url(#arrL)"></path><circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="{{cn.dur}}" begin="{{cn.begin}}" repeatCount="indefinite" path="{{cn.d}}"></animateMotion></circle></sc-for>
+            </svg>
+            <sc-for list="{{stages}}" as="st" hint-placeholder-count="3">
+              <div style="position:absolute;top:40px;left:{{st.left}}px;width:180px;box-sizing:border-box;padding:13px 15px;border-radius:16px;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);animation:{{st.anim}};">
+                <div style="font-size:10.5px;font-weight:800;letter-spacing:.16em;color:var(--accent);font-family:Manrope,sans-serif;">{{st.num}}</div>
+                <div style="font-size:14px;font-weight:700;color:var(--ink2);margin-top:3px;">{{st.label}}</div>
+                <div style="font-size:11.5px;color:#94A3B8;margin-top:2px;">{{st.sub}}</div>
+              </div>
+            </sc-for>
+            <sc-for list="{{cons}}" as="cl" hint-placeholder-count="2"><div style="position:absolute;left:{{cl.lx}}px;top:{{cl.ly}}px;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,.95);border:1px solid var(--accent-soft);font-size:10.5px;font-weight:800;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;font-family:Manrope,sans-serif;">{{cl.label}}</div></sc-for>
+            <sc-for list="{{equipos}}" as="eq" hint-placeholder-count="3">
+              <div style="position:absolute;top:360px;left:{{eq.left}}px;width:218px;box-sizing:border-box;padding:13px 15px;border-radius:17px;background:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(30,39,97,.08);display:flex;flex-direction:column;gap:5px;">
+                <div style="display:flex;align-items:center;gap:7px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;flex:none;"></span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">{{eq.name}}</span></div>
+                <div style="font-size:11.5px;color:var(--ink2);background:var(--accent-soft);padding:6px 9px;border-radius:9px;font-weight:600;line-height:1.4;">{{eq.ben}}</div>
+              </div>
+            </sc-for>
+          </div></div>
+          <button onClick="{{goPlan}}" style="padding:14px 30px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);" style-hover="filter:brightness(1.06);">{{goPlanLabel}}</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{c4}}" hint-placeholder-val="{{ false }}">
+        <div class="mOne" style="display:grid;grid-template-columns:1.02fr .98fr;gap:20px;align-items:start;animation:fadeUp .4s ease both;">
+          <div style="display:flex;flex-direction:column;gap:6px;padding:20px 22px;border-radius:18px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);">
+            <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:var(--muted);">TU STACK PERSONALIZADO</div>
+            <div style="display:flex;background:rgba(30,39,97,.06);border-radius:12px;padding:4px;gap:4px;margin-top:6px;">
+              <button onClick="{{setPkg0}}" style="{{pkg0Style}}">MI SETUP</button>
+              <button onClick="{{setPkg1}}" style="{{pkg1Style}}">MI NEGOCIO</button>
+              <button onClick="{{setPkg2}}" style="{{pkg2Style}}">MI EQUIPO</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 2px;border-bottom:1px solid rgba(30,39,97,.06);margin-top:4px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;"></span><div style="flex:1;"><div style="font-size:13.5px;font-weight:800;color:var(--ink2);">Cowork configurado</div><div style="font-size:11.5px;color:#94A3B8;">correo, calendario y Drive conectados</div></div><span style="padding:3px 11px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:700;">incluido</span></div>
+            <sc-for list="{{skillRows}}" as="sk" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid rgba(30,39,97,.06);"><span style="width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;"></span><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--ink2);">{{sk.name}}</div><div style="font-size:11.5px;color:#94A3B8;">{{sk.desc}}</div></div><span style="padding:3px 11px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:700;">incluido</span></div>
+            </sc-for>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid rgba(30,39,97,.06);"><span style="width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;"></span><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--ink2);">Capacitación en vivo + comunidad de por vida</div><div style="font-size:11.5px;color:#94A3B8;">{{pkgWeeks}}</div></div><span style="padding:3px 11px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:700;">incluido</span></div>
+            <sc-for list="{{addonRows}}" as="ad" hint-placeholder-count="2">
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid rgba(30,39,97,.06);opacity:{{ad.rowOp}};transition:opacity .3s;"><button onClick="{{ad.toggle}}" style="{{ad.swStyle}}"><span style="{{ad.knobStyle}}"></span></button><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--ink2);">{{ad.name}}</div><div style="font-size:11.5px;color:#94A3B8;">{{ad.desc}}</div></div><div style="font-size:12px;font-weight:600;white-space:nowrap;color:var(--ink2);">{{ad.price}}</div></div>
+            </sc-for>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 16px;border-radius:14px;border:1.5px solid var(--accent);background:rgba(255,255,255,.8);animation:glowPulse 3.4s ease-in-out infinite;margin-top:8px;"><span style="font-size:13px;font-weight:700;color:var(--ink2);">Tu inversión</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:17px;color:var(--ink2);text-align:right;">{{totalText}}</span></div>
+          </div>
+          <div style="background:rgba(255,255,255,.94);border:1px solid rgba(30,39,97,.08);border-radius:18px;box-shadow:0 20px 50px rgba(30,39,97,.12);padding:22px 24px;display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:15px;color:var(--ink2);">Tu plan personalizado</div><div style="font-size:11px;color:#94A3B8;">Folio {{folio}}</div></div>
+            <div style="font-size:12.5px;color:var(--muted);">Para: <strong style="color:var(--ink2);">{{cliente}}</strong> · {{rol}}</div>
+            <sc-if value="{{planIntro}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;color:var(--ink2);background:var(--accent-soft);border-radius:9px;padding:8px 12px;line-height:1.5;">{{planIntro}}</div></sc-if>
+            <sc-if value="{{hasExtra}}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--muted);background:rgba(30,39,97,.04);border-radius:9px;padding:8px 12px;">Tu nota: <em style="color:var(--ink2);">“{{extra}}”</em></div></sc-if>
+            <div style="padding:15px 18px;border-radius:14px;background:linear-gradient(135deg, var(--accent-soft), rgba(255,255,255,.7));border:1px solid rgba(30,39,97,.3);">
+              <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:11px;letter-spacing:.16em;color:var(--ink2);">{{pkgName}} · {{pkgAud}}</div>
+              <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:30px;color:var(--ink2);margin-top:3px;">{{pkgPrice}} <span style="font-size:13px;color:var(--muted);font-weight:600;">{{pkgPer}}</span></div>
+              <div style="font-size:11.5px;color:var(--muted);margin-top:4px;">{{pkgWeeks}} · precio de lanzamiento · válido 14 días</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <div style="flex:1;text-align:center;background:rgba(255,255,255,.9);border:1px solid rgba(30,39,97,.06);border-radius:12px;padding:10px 4px;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:18px;color:var(--accent);">{{hr1}}</div><div style="font-size:10.5px;color:#94A3B8;">recuperadas/sem</div></div>
+              <div style="flex:1;text-align:center;background:rgba(255,255,255,.9);border:1px solid rgba(30,39,97,.06);border-radius:12px;padding:10px 4px;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:18px;color:var(--accent);">{{hr2}}</div><div style="font-size:10.5px;color:#94A3B8;">más entregado, misma persona</div></div>
+              <div style="flex:1;text-align:center;background:rgba(255,255,255,.9);border:1px solid rgba(30,39,97,.06);border-radius:12px;padding:10px 4px;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:18px;color:var(--accent);">{{hr3}}</div><div style="font-size:10.5px;color:#94A3B8;">tu inversión pagada</div></div>
+            </div>
+            <div style="font-size:12px;color:var(--muted);background:rgba(30,39,97,.04);border-radius:10px;padding:9px 13px;line-height:1.55;">Ejemplo: si hoy salen <strong style="color:var(--ink2);">500 cotizaciones o correos al mes</strong>, con tu setup la misma persona entrega <strong style="color:var(--ink2);">~1,150</strong> — haces más con la misma gente y puedes compensar mejor. Tu consultor hace el cálculo con TUS números en el discovery.</div>
+            <div style="display:flex;flex-direction:column;">
+              <sc-for list="{{planLines}}" as="pl" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid rgba(30,39,97,.05);"><span style="font-size:12.5px;color:var(--ink2);flex:1;">{{pl.name}}</span><span style="font-size:12px;font-weight:600;color:var(--ink2);white-space:nowrap;">{{pl.r}}</span></div></sc-for>
+            </div>
+            <sc-if value="{{pdfOn}}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{dlPdf}}" style="padding:12px;border-radius:13px;border:1.5px solid var(--accent);background:rgba(255,255,255,.85);color:var(--accent);font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="background:var(--accent-soft);">{{pdfBtn}}</button>
+            </sc-if>
+            <sc-if value="{{notContactSent}}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;gap:8px;">
+                <input value="{{contacto}}" onChange="{{onContacto}}" placeholder="Tu WhatsApp o correo" style="flex:1;box-sizing:border-box;padding:12px 15px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:rgba(255,255,255,.95);font-size:13.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;">
+                <button onClick="{{sendContact}}" style="padding:12px 20px;border-radius:13px;border:none;background:var(--accent);color:#fff;font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);white-space:nowrap;" style-hover="filter:brightness(1.06);">{{contactBtn}}</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{contactSent}}" hint-placeholder-val="{{ false }}">
+              <div style="padding:13px;border-radius:13px;background:var(--accent-soft);border:1.5px solid var(--accent);text-align:center;font-size:13.5px;font-weight:700;color:var(--ink2);">✓ Listo — Jacobo ya tiene tu brief y tu plan. Te escribe en menos de 24 h hábiles.</div>
+            </sc-if>
+            <button onClick="{{openBooking}}" style="padding:12px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:transparent;color:var(--ink2);font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="border-color:var(--accent);color:var(--accent);">Agendar 15 min con Jacobo</button>
+            <button onClick="{{goStep5}}" style="border:none;background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" style-hover="color:var(--accent);">¿Qué pasa del otro lado? →</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{c5}}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;padding:30px 20px;animation:fadeUp .4s ease both;">
+          <img src="uploads/yaubie.png" alt="Yaubie" style="height:90px;width:auto;animation:yaubie 4.5s ease-in-out infinite;filter:drop-shadow(0 14px 24px rgba(30,39,97,.22));">
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:24px;color:var(--ink2);max-width:700px;">Del otro lado, Jacobo recibe tu brief completo y tu plan — no un formulario frío.</div>
+          <div style="font-size:15px;color:var(--muted);max-width:560px;">Tu seguimiento es personal: él aprueba tu plan, te lo manda por WhatsApp y te acompaña desde el día uno — con todo el equipo Yaub detrás.</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+            <button onClick="{{resetC}}" style="padding:13px 26px;border-radius:999px;border:1.5px solid rgba(30,39,97,.16);background:transparent;color:var(--ink2);font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="border-color:var(--accent);color:var(--accent);">Volver a empezar</button>
+            <button onClick="{{openBooking}}" style="padding:13px 26px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);">Agendar 15 min con Jacobo</button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+    <div style="font-size:12.5px;color:#94A3B8;">Gratis y sin compromiso — el brief es tuyo aunque no contrates.</div>
+  </div>
+
+  <div data-sec="s2" style="position:relative;z-index:1;padding:60px 24px;">
+    <div class="mOne" style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center;opacity:{{s2o}};transform:translateY({{s2y}});transition:opacity .7s ease, transform .7s ease;">
+      <div style="padding:14px;border-radius:26px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 24px 60px rgba(30,39,97,.12);">
+        <img src="uploads/Yaubmaster.png" alt="Jacobo Payán" style="width:100%;height:auto;border-radius:18px;display:block;">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">QUIÉN TE ACOMPAÑA</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:38px;line-height:1.12;margin:0;color:var(--ink2);">Te acompaño yo, no un curso grabado.</h2>
+        <p style="margin:0;font-size:16px;line-height:1.65;color:var(--muted);">Soy <strong style="color:var(--ink2);">Jacobo Payán</strong> — CEO de <strong style="color:var(--ink2);">Yaub AI</strong> y de <strong style="color:var(--ink2);">Alianzatel BPO &amp; Contact Center</strong>. Llevo años poniendo agentes de IA a operar de verdad: ventas por WhatsApp, voz, cobranza, reclutamiento y atención a clientes para marcas y operaciones de alto volumen. Con Yaub construí la plataforma con la que hoy corren millones de conversaciones. Esta consultoría es la versión 1 a 1 de todo eso: yo personalmente armo tu setup, te capacito sobre TU trabajo y me quedo contigo en la comunidad. Y no vengo solo del software: opero <strong style="color:var(--ink2);">equipos, agenda y clientes reales todos los días</strong> — las herramientas de IA me hicieron más eficiente y me dieron algo que hoy quiero compartirte:</p>
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:47px;line-height:1.05;background:linear-gradient(100deg, var(--accent), var(--accent2), var(--accent));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradMove 5s ease-in-out infinite;">EL PODER DE LA ACCIÓN</div>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;">
+          <span style="padding:8px 15px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid rgba(30,39,97,.08);font-size:12.5px;font-weight:700;color:var(--ink2);">CEO Yaub AI</span>
+          <span style="padding:8px 15px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid rgba(30,39,97,.08);font-size:12.5px;font-weight:700;color:var(--ink2);">CEO Alianzatel BPO &amp; Contact Center</span>
+          <span style="padding:8px 15px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid rgba(30,39,97,.08);font-size:12.5px;font-weight:700;color:var(--ink2);">Agentes en producción: ventas, voz, cobranza, RH</span>
+          <span style="padding:8px 15px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid rgba(30,39,97,.08);font-size:12.5px;font-weight:700;color:var(--ink2);">Millones de conversaciones operadas</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <a href="https://www.linkedin.com/search/results/all/?keywords=Jes%C3%BAs%20Jacobo%20Pay%C3%A1n%20Batarse" target="_blank" style="padding:11px 22px;border-radius:999px;border:1.5px solid var(--accent2);color:var(--accent2);font-size:13.5px;font-weight:700;text-decoration:none;" style-hover="background:rgba(30,39,97,.05);">Conóceme en LinkedIn →</a>
+          <span style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:var(--accent-soft);color:var(--ink2);font-size:12.5px;font-weight:700;"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;"></span>Cupo real: máximo 6 clientes activos a la vez — el acompañamiento es personal.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-sec="s5" style="position:relative;z-index:1;padding:60px 24px;">
+    <div style="max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:22px;opacity:{{s5o}};transform:translateY({{s5y}});transition:opacity .7s ease, transform .7s ease;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;">
+        <div>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">TESTIMONIOS</div>
+          <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:36px;line-height:1.12;margin:12px 0 0;color:var(--ink2);">Lo que dicen los que ya trabajan con IA a su medida.</h2>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onClick="{{testPrev}}" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(30,39,97,.14);background:rgba(255,255,255,.8);color:var(--ink2);font-size:17px;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);color:var(--accent);">‹</button>
+          <button onClick="{{testNext}}" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(30,39,97,.14);background:rgba(255,255,255,.8);color:var(--ink2);font-size:17px;cursor:pointer;font-family:Inter,sans-serif;" style-hover="background:var(--accent-soft);color:var(--accent);">›</button>
+        </div>
+      </div>
+      <div id="testRow" style="display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 18px;">
+        <div style="flex:none;width:380px;scroll-snap-align:start;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.08);overflow:hidden;">
+          <div style="position:relative;width:100%;height:220px;">
+            <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="video1" shape="rect" placeholder="Video testimonio 1" hint-size="100%,220px"></x-import>
+            <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;pointer-events:none;box-shadow:0 10px 26px rgba(30,39,97,.2);"><svg width="20" height="20" viewBox="0 0 24 24" fill="var(--ink2)"><path d="M8 5 L19 12 L8 19 Z"></path></svg></div>
+          </div>
+          <div style="padding:16px 20px;"><div style="font-size:14px;font-weight:800;color:var(--ink2);">“Recuperé mis viernes completos”</div><div style="font-size:12.5px;color:var(--muted);margin-top:4px;">Asistente de dirección · constructora</div></div>
+        </div>
+        <div style="flex:none;width:320px;scroll-snap-align:start;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.08);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="font-size:15px;line-height:1.55;color:var(--ink);">“El agente contesta a las 11 pm y cierra ventas mientras duermo.”</div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:auto;"><div style="width:48px;height:48px;flex:none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="foto-test-1" shape="circle" placeholder="Foto" hint-size="48px,48px"></x-import></div><div><div style="font-size:13px;font-weight:800;color:var(--ink2);">Dueño de refaccionaria</div><div style="font-size:11.5px;color:var(--muted);">Paquete Mi Negocio</div></div></div>
+        </div>
+        <div style="flex:none;width:380px;scroll-snap-align:start;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.08);overflow:hidden;">
+          <div style="position:relative;width:100%;height:220px;">
+            <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="video2" shape="rect" placeholder="Video testimonio 2" hint-size="100%,220px"></x-import>
+            <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;pointer-events:none;box-shadow:0 10px 26px rgba(30,39,97,.2);"><svg width="20" height="20" viewBox="0 0 24 24" fill="var(--ink2)"><path d="M8 5 L19 12 L8 19 Z"></path></svg></div>
+          </div>
+          <div style="padding:16px 20px;"><div style="font-size:14px;font-weight:800;color:var(--ink2);">“Capacitó a mi equipo de 8 en dos semanas”</div><div style="font-size:12.5px;color:var(--muted);margin-top:4px;">Gerente administrativa · despacho contable</div></div>
+        </div>
+        <div style="flex:none;width:320px;scroll-snap-align:start;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.08);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="font-size:15px;line-height:1.55;color:var(--ink);">“El reporte que me tomaba la mañana ahora sale en 10 minutos.”</div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:auto;"><div style="width:48px;height:48px;flex:none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="foto-test-2" shape="circle" placeholder="Foto" hint-size="48px,48px"></x-import></div><div><div style="font-size:13px;font-weight:800;color:var(--ink2);">Asistente de dirección</div><div style="font-size:11.5px;color:var(--muted);">Paquete Mi Setup</div></div></div>
+        </div>
+        <div style="flex:none;width:320px;scroll-snap-align:start;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.08);padding:22px 24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="font-size:15px;line-height:1.55;color:var(--ink);">“No sabía nada de IA. Hoy mi equipo no quiere volver a lo de antes.”</div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:auto;"><div style="width:48px;height:48px;flex:none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="foto-test-3" shape="circle" placeholder="Foto" hint-size="48px,48px"></x-import></div><div><div style="font-size:13px;font-weight:800;color:var(--ink2);">Dueña de estética (6 pers.)</div><div style="font-size:11.5px;color:var(--muted);">Paquete Mi Equipo</div></div></div>
+        </div>
+        <div style="flex:none;width:380px;scroll-snap-align:start;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.08);overflow:hidden;">
+          <div style="position:relative;width:100%;height:220px;">
+            <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="video3" shape="rect" placeholder="Video testimonio 3" hint-size="100%,220px"></x-import>
+            <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;pointer-events:none;box-shadow:0 10px 26px rgba(30,39,97,.2);"><svg width="20" height="20" viewBox="0 0 24 24" fill="var(--ink2)"><path d="M8 5 L19 12 L8 19 Z"></path></svg></div>
+          </div>
+          <div style="padding:16px 20px;"><div style="font-size:14px;font-weight:800;color:var(--ink2);">“Mi cotizador trabaja solo”</div><div style="font-size:12.5px;color:var(--muted);margin-top:4px;">Dueño de PyME · distribución</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-sec="s9" style="position:relative;z-index:1;padding:60px 24px;">
+    <div style="max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:26px;opacity:{{s9o}};transform:translateY({{s9y}});transition:opacity .7s ease, transform .7s ease;">
+      <div style="text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center;">
+        <span style="padding:7px 18px;border-radius:999px;background:linear-gradient(100deg, var(--accent), var(--accent2));color:#fff;font-family:Manrope,sans-serif;font-weight:800;font-size:11.5px;letter-spacing:.18em;box-shadow:0 10px 24px var(--accent-glow);">ACOMPAÑAMIENTO PREMIUM</span>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:38px;line-height:1.12;margin:0;color:var(--ink2);">Lo que vas a aprender — y a usar desde la semana uno</h2>
+        <p style="margin:0;font-size:16px;color:var(--muted);max-width:640px;">Nada de teoría: el poder de la acción aplicado a tu trabajo real, con las herramientas que yo uso todos los días. Y el acompañamiento y la comunidad no son solo conmigo: son con <strong style="color:var(--ink2);">todo el equipo Yaub</strong>.</p>
+      </div>
+      <div class="mOne" style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;">
+        <div style="padding:24px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);display:flex;flex-direction:column;gap:10px;transition:transform .3s;" style-hover="transform:translateY(-4px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="14" rx="2.5"></rect><path d="M3.5 9 h17 M8 4 v5"></path><circle cx="14.5" cy="13.5" r="2.2"></circle></svg>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16.5px;color:var(--ink2);">Claude Design</div>
+          <div style="font-size:13px;line-height:1.5;color:var(--muted);">Diseña mockups, landings y piezas visuales sin diseñador.</div>
+        </div>
+        <div style="padding:24px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);display:flex;flex-direction:column;gap:10px;transition:transform .3s;" style-hover="transform:translateY(-4px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8 L4 12 L8 16"></path><path d="M16 8 L20 12 L16 16"></path><path d="M13.5 5 L10.5 19"></path></svg>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16.5px;color:var(--ink2);">Claude Code</div>
+          <div style="font-size:13px;line-height:1.5;color:var(--muted);">Automatiza y construye herramientas sin ser programador.</div>
+        </div>
+        <div style="padding:24px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);display:flex;flex-direction:column;gap:10px;transition:transform .3s;" style-hover="transform:translateY(-4px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="12" rx="2"></rect><path d="M9 20 h6 M12 16.5 V20"></path><path d="M7 8 l2.5 2.5 L7 13 M12.5 13 h4"></path></svg>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16.5px;color:var(--ink2);">Claude Cowork</div>
+          <div style="font-size:13px;line-height:1.5;color:var(--muted);">Tu oficina con IA: correo, calendario y archivos conectados.</div>
+        </div>
+        <div style="padding:24px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);display:flex;flex-direction:column;gap:10px;transition:transform .3s;" style-hover="transform:translateY(-4px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5 h11 v4 H5 z"></path><path d="M5 12.5 h14 M5 16 h14 M5 19.5 h9"></path></svg>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16.5px;color:var(--ink2);">Contenido con IA</div>
+          <div style="font-size:13px;line-height:1.5;color:var(--muted);">Posts, campañas y copy para tu empresa, con tu voz.</div>
+        </div>
+        <div style="padding:24px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);display:flex;flex-direction:column;gap:10px;transition:transform .3s;" style-hover="transform:translateY(-4px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="11" rx="2"></rect><path d="M8 19 l4-4 4 4"></path><path d="M8 8 h8 M8 11 h5"></path></svg>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16.5px;color:var(--ink2);">Presentaciones de alto nivel</div>
+          <div style="font-size:13px;line-height:1.5;color:var(--muted);">Decks que sorprenden a tu equipo y a tus clientes.</div>
+        </div>
+        <div style="padding:24px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);display:flex;flex-direction:column;gap:10px;transition:transform .3s;" style-hover="transform:translateY(-4px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="12" height="12" rx="2.5"></rect><path d="M15.5 10 L20.5 7 v10 l-5-3"></path></svg>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16.5px;color:var(--ink2);">Generación de video</div>
+          <div style="font-size:13px;line-height:1.5;color:var(--muted);">Videos con IA para vender, capacitar y comunicar.</div>
+        </div>
+        <div style="padding:24px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);display:flex;flex-direction:column;gap:10px;transition:transform .3s;" style-hover="transform:translateY(-4px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7 a2 2 0 0 1 2-2 h4 l2 2.5 h7 a2 2 0 0 1 2 2 V17 a2 2 0 0 1 -2 2 h-13 a2 2 0 0 1 -2-2 z"></path><path d="M9 13.5 h6"></path></svg>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16.5px;color:var(--ink2);">Manejo de archivos</div>
+          <div style="font-size:13px;line-height:1.5;color:var(--muted);">Organiza, resume y encuentra todo en segundos.</div>
+        </div>
+        <div style="padding:24px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);display:flex;flex-direction:column;gap:10px;transition:transform .3s;" style-hover="transform:translateY(-4px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="11" rx="3"></rect><path d="M12 7 V4"></path><circle cx="9.5" cy="12" r="1" fill="var(--accent)" stroke="none"></circle><circle cx="14.5" cy="12" r="1" fill="var(--accent)" stroke="none"></circle><path d="M9.5 15.2 h5"></path></svg>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16.5px;color:var(--ink2);">Yaub Agents</div>
+          <div style="font-size:13px;line-height:1.5;color:var(--muted);">Ventas, atención al cliente, cobranza, reclutamiento y agenda con IA para tus clientes — 24/7.</div>
+        </div>
+        <div style="padding:24px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);display:flex;flex-direction:column;gap:10px;transition:transform .3s;" style-hover="transform:translateY(-4px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"></circle><circle cx="18" cy="6" r="2.5"></circle><circle cx="12" cy="18" r="2.5"></circle><path d="M8 7.5 L10.5 16 M16 7.5 L13.5 16 M8.5 6 h7"></path></svg>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16.5px;color:var(--ink2);">Yaub Platform</div>
+          <div style="font-size:13px;line-height:1.5;color:var(--muted);">Automatiza cualquier flujo vertical de tu negocio, de punta a punta.</div>
+        </div>
+        <div style="padding:24px 24px;border-radius:20px;background:linear-gradient(135deg, var(--accent-soft), rgba(255,255,255,.7));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid var(--accent);box-shadow:0 14px 36px rgba(30,39,97,.08);display:flex;flex-direction:column;gap:10px;transition:transform .3s;" style-hover="transform:translateY(-4px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 l1.7 4.3 L18 9 l-4.3 1.7 L12 15 l-1.7-4.3 L6 9 l4.3-1.7 z"></path><path d="M18.5 15 l.9 2.1 2.1.9 -2.1.9 -.9 2.1 -.9-2.1 -2.1-.9 2.1-.9 z"></path></svg>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:16.5px;color:var(--ink2);">…y lo que TU brief pida</div>
+          <div style="font-size:13px;line-height:1.5;color:var(--muted);">El temario se arma sobre tu operación real — por eso empieza con el discovery.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-sec="s3" style="position:relative;z-index:1;padding:60px 24px;">
+    <div style="max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:26px;opacity:{{s3o}};transform:translateY({{s3y}});transition:opacity .7s ease, transform .7s ease;">
+      <div style="text-align:center;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">CÓMO TE AYUDA EL PROGRAMA</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:38px;line-height:1.12;margin:12px 0 0;color:var(--ink2);">Esto no es un curso: es tu operación funcionando distinto.</h2>
+      </div>
+      <div class="mOne" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+        <div style="padding:24px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:14px;" style-hover="transform:translateY(-3px);">
+          <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.16em;font-weight:800;color:var(--muted);">TU SEMANA, ANTES Y DESPUÉS</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;"><span style="font-weight:700;color:var(--ink2);">Hoy</span><span style="color:var(--muted);">{{antesN}} h/sem en tareas repetitivas</span></div><div style="height:14px;border-radius:99px;background:rgba(30,39,97,.07);"><div style="width:{{barA}};height:100%;border-radius:99px;background:var(--accent2);transition:width .3s;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;"><span style="font-weight:700;color:var(--ink2);">Con tu setup</span><span style="color:var(--muted);">{{despN}} h/sem</span></div><div style="height:14px;border-radius:99px;background:rgba(30,39,97,.07);"><div style="width:{{barB}};height:100%;border-radius:99px;background:var(--accent);transition:width .3s;"></div></div></div>
+          </div>
+          <div style="font-size:12.5px;color:var(--muted);">Las 8 horas de diferencia se van a lo que sí cierra negocio.</div>
+        </div>
+        <div style="padding:24px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;align-items:center;" style-hover="transform:translateY(-3px);">
+          <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.16em;font-weight:800;color:var(--muted);align-self:flex-start;">EN QUÉ SE TE VA EL TIEMPO</div>
+          <svg width="170" height="170" viewBox="0 0 180 180">
+            <g transform="rotate(-90 90 90)">
+              <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(30,39,97,.06)" stroke-width="26"></circle>
+              <circle cx="90" cy="90" r="70" fill="none" stroke="var(--accent)" stroke-width="26" stroke-dasharray="{{d1}}" stroke-dashoffset="0"></circle>
+              <circle cx="90" cy="90" r="70" fill="none" stroke="var(--accent2)" stroke-width="26" stroke-dasharray="{{d2}}" stroke-dashoffset="{{o2}}"></circle>
+              <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(30,39,97,.45)" stroke-width="26" stroke-dasharray="{{d3}}" stroke-dashoffset="{{o3}}"></circle>
+              <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(236,72,153,.45)" stroke-width="26" stroke-dasharray="{{d4}}" stroke-dashoffset="{{o4}}"></circle>
+              <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(30,39,97,.18)" stroke-width="26" stroke-dasharray="{{d5}}" stroke-dashoffset="{{o5}}"></circle>
+            </g>
+          </svg>
+          <div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;font-size:11.5px;color:var(--muted);">
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:4px;"></span>Correos 30%</span>
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent2);margin-right:4px;"></span>Reportes 25%</span>
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:rgba(30,39,97,.45);margin-right:4px;"></span>Cotizaciones 20%</span>
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:rgba(236,72,153,.45);margin-right:4px;"></span>Agenda 15%</span>
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:rgba(30,39,97,.18);margin-right:4px;"></span>Otros 10%</span>
+          </div>
+        </div>
+        <div style="padding:24px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;" style-hover="transform:translateY(-3px);">
+          <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.16em;font-weight:800;color:var(--muted);">TIEMPO RECUPERADO ACUMULADO</div>
+          <svg viewBox="0 0 520 240" style="width:100%;height:auto;overflow:visible;">
+            <line x1="20" y1="215" x2="500" y2="215" stroke="rgba(30,39,97,.12)" stroke-width="1.5"></line>
+            <line x1="20" y1="190" x2="500" y2="190" stroke="rgba(30,39,97,.25)" stroke-width="1.5" stroke-dasharray="5 5"></line>
+            <text x="26" y="182" font-size="12" fill="#94A3B8" font-family="Inter,sans-serif">horas que hoy pierdes al mes</text>
+            <path d="M20,213 C110,208 170,180 250,130 C330,82 420,48 500,32" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="900" stroke-dashoffset="{{lineOff}}" style="transition:stroke-dashoffset .3s linear;"></path>
+            <circle cx="100" cy="192" r="6" fill="var(--accent)"><animate attributeName="r" values="5;9;5" dur="1.8s" repeatCount="indefinite"></animate></circle>
+            <text x="100" y="235" text-anchor="middle" font-size="12" fill="var(--ink2)" font-weight="700" font-family="Inter,sans-serif">payback · mes 2</text>
+            <text x="470" y="24" text-anchor="end" font-size="13" fill="var(--accent)" font-weight="800" font-family="Manrope,sans-serif">≈ 420 horas / 12 meses</text>
+          </svg>
+        </div>
+      </div>
+      <div class="mTwo" style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;">
+        <div style="padding:22px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:var(--accent);">{{st1}}</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">recuperadas por semana</div></div>
+        <div style="padding:22px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:var(--accent);">{{st2}}</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">payback de tu inversión</div></div>
+        <div style="padding:22px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:var(--accent);">{{st3}}</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">tu agente atiende si tienes negocio</div></div>
+        <div style="padding:22px 24px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 36px rgba(30,39,97,.06);"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:32px;color:var(--accent);">∞</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">de por vida en comunidad</div></div>
+      </div>
+      <div style="padding:26px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);">
+        <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.16em;font-weight:800;color:var(--muted);margin-bottom:14px;">TU PRIMERA SEMANA CONMIGO</div>
+        <div style="position:relative;height:120px;">
+          <svg viewBox="0 0 1100 120" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+            <path d="M70,34 L1030,34" stroke="rgba(30,39,97,.14)" stroke-width="2" fill="none"></path>
+            <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="4s" repeatCount="indefinite" path="M70,34 L1030,34"></animateMotion></circle>
+            <circle cx="70" cy="34" r="11" fill="var(--accent)"></circle>
+            <circle cx="390" cy="34" r="11" fill="var(--accent)"></circle>
+            <circle cx="710" cy="34" r="11" fill="var(--accent)"></circle>
+            <circle cx="1030" cy="34" r="11" fill="var(--accent2)"></circle>
+            <text x="70" y="72" text-anchor="middle" font-size="14" fill="#1E2761" font-weight="700" font-family="Inter,sans-serif">Día 1 · kickoff</text>
+            <text x="70" y="92" text-anchor="middle" font-size="12" fill="#64748B" font-family="Inter,sans-serif">tu brief a fondo</text>
+            <text x="390" y="72" text-anchor="middle" font-size="14" fill="#1E2761" font-weight="700" font-family="Inter,sans-serif">Día 2–3 · construcción</text>
+            <text x="390" y="92" text-anchor="middle" font-size="12" fill="#64748B" font-family="Inter,sans-serif">armo tus skills y tu Cowork</text>
+            <text x="710" y="72" text-anchor="middle" font-size="14" fill="#1E2761" font-weight="700" font-family="Inter,sans-serif">Día 4–5 · capacitación</text>
+            <text x="710" y="92" text-anchor="middle" font-size="12" fill="#64748B" font-family="Inter,sans-serif">en vivo, sobre tus tareas reales</text>
+            <text x="1030" y="72" text-anchor="middle" font-size="14" fill="#1E2761" font-weight="700" font-family="Inter,sans-serif">Día 7 · operando al 100</text>
+            <text x="1030" y="92" text-anchor="middle" font-size="12" fill="#64748B" font-family="Inter,sans-serif">con tu plan de 90 días</text>
+          </svg>
+        </div>
+        <div style="font-size:12.5px;color:#94A3B8;text-align:center;">y de ahí, sesiones semanales según tu paquete + comunidad para siempre</div>
+      </div>
+    </div>
+  </div>
+
+  <div data-sec="s4" style="position:relative;z-index:1;padding:50px 0;">
+    <div style="max-width:1160px;margin:0 auto;padding:0 24px;text-align:center;opacity:{{s4o}};transform:translateY({{s4y}});transition:opacity .7s ease, transform .7s ease;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">EMPRESAS QUE YA CONFÍAN EN NOSOTROS</div>
+      <div style="overflow:hidden;margin-top:26px;position:relative;">
+        <div style="display:flex;gap:16px;width:max-content;animation:marquee 32s linear infinite;" style-hover="animation-play-state:paused;">
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">SazónMX Food Service</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">Banca Delta</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">TicketPro</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">LogistiKa</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">Alianzatel BPO</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">Salud Vital</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">Grupo Andamio</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">EnvíosYa</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">Colectivo Café</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">AseguraPlus</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">SazónMX Food Service</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">Banca Delta</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">TicketPro</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">LogistiKa</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">Alianzatel BPO</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">Salud Vital</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">Grupo Andamio</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">EnvíosYa</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">Colectivo Café</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 26px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);filter:grayscale(1);opacity:.7;transition:all .3s;" style-hover="filter:grayscale(0);opacity:1;"><span style="width:34px;height:22px;border:1.5px dashed rgba(30,39,97,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94A3B8;">LOGO</span><span style="font-family:Manrope,sans-serif;font-weight:800;font-size:14px;color:var(--ink2);">AseguraPlus</span></div>
+        </div>
+      </div>
+      <div style="font-size:12.5px;color:#94A3B8;margin-top:16px;">Operaciones reales donde nuestros agentes ya trabajan todos los días.</div>
+    </div>
+  </div>
+
+  <div data-sec="s6" style="position:relative;z-index:1;padding:60px 24px;">
+    <div style="max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:26px;opacity:{{s6o}};transform:translateY({{s6y}});transition:opacity .7s ease, transform .7s ease;">
+      <div style="text-align:center;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">CÓMO FUNCIONA</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:36px;line-height:1.15;margin:12px 0 0;color:var(--ink2);max-width:900px;display:inline-block;">De la plática al plan, en minutos — de tu plan al cambio, en semanas.</h2>
+      </div>
+      <div style="position:relative;height:250px;">
+        <svg viewBox="0 0 1160 250" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+          <defs><marker id="arrF" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".8"></path></marker></defs>
+          <path d="M198,60 L242,60" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#arrF)"></path>
+          <path d="M438,60 L482,60" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#arrF)"></path>
+          <path d="M678,60 L722,60" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#arrF)"></path>
+          <path d="M918,60 L962,60" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#arrF)"></path>
+          <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="1.6s" repeatCount="indefinite" path="M198,60 L242,60"></animateMotion></circle>
+          <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="1.6s" begin=".4s" repeatCount="indefinite" path="M438,60 L482,60"></animateMotion></circle>
+          <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="1.6s" begin=".8s" repeatCount="indefinite" path="M678,60 L722,60"></animateMotion></circle>
+          <circle r="4.5" fill="var(--accent)" style="filter:drop-shadow(0 0 6px var(--accent));"><animateMotion dur="1.6s" begin="1.2s" repeatCount="indefinite" path="M918,60 L962,60"></animateMotion></circle>
+        </svg>
+        <div style="position:absolute;left:0;top:0;width:198px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.8);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(30,39,97,.08);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="11" rx="3"></rect><path d="M12 7 V4"></path><circle cx="9.5" cy="12" r="1" fill="var(--accent)" stroke="none"></circle><circle cx="14.5" cy="12" r="1" fill="var(--accent)" stroke="none"></circle><path d="M9.5 15.2 h5"></path></svg></div>
+          <div style="font-size:14px;font-weight:800;color:var(--ink2);">Discovery con tu consultor</div>
+          <div style="font-size:12px;color:var(--muted);">3 minutos, sin formularios</div>
+        </div>
+        <div style="position:absolute;left:242px;top:0;width:196px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.8);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(30,39,97,.08);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><path d="M7 3 h7 l4 4 v14 h-11 z"></path><path d="M14 3 v4 h4"></path><path d="M9.5 12 h5 M9.5 15.5 h5"></path></svg></div>
+          <div style="font-size:14px;font-weight:800;color:var(--ink2);">Tu brief queda armado</div>
+          <div style="font-size:12px;color:var(--muted);">rol, dolores, horas, herramientas</div>
+        </div>
+        <div style="position:absolute;left:482px;top:0;width:196px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
+          <div style="width:64px;height:64px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px var(--accent-glow);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 l1.7 4.3 L18 9 l-4.3 1.7 L12 15 l-1.7-4.3 L6 9 l4.3-1.7 z"></path><path d="M18.5 15 l.9 2.1 2.1.9 -2.1.9 -.9 2.1 -.9-2.1 -2.1-.9 2.1-.9 z"></path></svg></div>
+          <div style="font-size:14px;font-weight:800;color:var(--ink2);">Plan con precio en segundos</div>
+          <div style="font-size:12px;color:var(--muted);">stack, temario y ROI</div>
+        </div>
+        <div style="position:absolute;left:722px;top:0;width:196px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.8);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(30,39,97,.08);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20.5 c0-4 3.3-6.5 7.5-6.5 s7.5 2.5 7.5 6.5"></path></svg></div>
+          <div style="font-size:14px;font-weight:800;color:var(--ink2);">Semana intensiva con Jacobo</div>
+          <div style="font-size:12px;color:var(--muted);">skills, Cowork y capacitación 1 a 1</div>
+        </div>
+        <div style="position:absolute;left:962px;top:0;width:198px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.8);border:1.5px solid var(--accent2);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(30,39,97,.08);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="1.8" stroke-linecap="round"><path d="M12 12 c-2-3.5 -6-3.5 -7.5 -1 s.5 6 3.5 4.5 c1.6-.8 2.8-2.2 4-3.5 c1.2 1.3 2.4 2.7 4 3.5 c3 1.5 5-2 3.5-4.5 s-5.5-2.5-7.5 1 z"></path></svg></div>
+          <div style="font-size:14px;font-weight:800;color:var(--ink2);">Comunidad y mejoras para siempre</div>
+          <div style="font-size:12px;color:var(--muted);">sin costo extra, de por vida</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-sec="s7" style="position:relative;z-index:1;padding:60px 24px;">
+    <div style="max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:26px;opacity:{{s7o}};transform:translateY({{s7y}});transition:opacity .7s ease, transform .7s ease;">
+      <div style="text-align:center;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">PAQUETES · PRECIOS DE LANZAMIENTO · MXN</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:36px;line-height:1.12;margin:12px 0 0;color:var(--ink2);">Tres formas de empezar</h2>
+      </div>
+      <div class="mOne" style="display:grid;grid-template-columns:1fr 1.06fr 1fr;gap:22px;align-items:stretch;">
+        <div style="padding:30px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:13px;letter-spacing:.18em;color:var(--accent2);">MI SETUP</div>
+          <div style="font-size:13px;color:var(--muted);">Para ti (1 persona) · 4 semanas</div>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:42px;color:var(--ink2);">$4,990</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.7;">4 sesiones 1:1 de 90 min · 3–5 skills a tu medida · Cowork configurado · plan de 90 días · comunidad de por vida</div>
+          <button onClick="{{scrollHero}}" style="margin-top:auto;padding:12px;border-radius:12px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="background:var(--accent-soft);">Habla con mi consultor IA</button>
+        </div>
+        <div style="padding:30px 30px;border-radius:22px;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1.5px solid var(--accent);box-shadow:0 0 40px 4px var(--accent-glow), 0 20px 54px rgba(30,39,97,.1);display:flex;flex-direction:column;gap:10px;position:relative;">
+          <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);padding:5px 18px;border-radius:999px;background:var(--accent);color:#fff;font-family:Manrope,sans-serif;font-weight:800;font-size:11.5px;letter-spacing:.12em;box-shadow:0 8px 20px var(--accent-glow);">MÁS POPULAR</div>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:13px;letter-spacing:.18em;color:var(--accent2);">MI NEGOCIO</div>
+          <div style="font-size:13px;color:var(--muted);">Dueño + 2 personas · 6 semanas</div>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:42px;color:var(--ink2);">$12,900</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.7;">6 sesiones · diagnóstico + propuesta de automatización · skills por rol + Cowork para los 3 · <strong>agente de WhatsApp (1er mes incluido)</strong> · comunidad de por vida</div>
+          <button onClick="{{scrollHero}}" style="margin-top:auto;padding:12px;border-radius:12px;border:none;background:var(--accent);color:#fff;font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);" style-hover="filter:brightness(1.06);">Habla con mi consultor IA</button>
+        </div>
+        <div style="padding:30px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:13px;letter-spacing:.18em;color:var(--accent2);">MI EQUIPO</div>
+          <div style="font-size:13px;color:var(--muted);">Equipos de 5+ · 6 semanas</div>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:42px;color:var(--ink2);">desde $2,990 <span style="font-size:15px;color:var(--muted);font-weight:600;">p/p</span></div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.7;">4 talleres grupales · 1 sesión 1:1 por persona · skills por rol · 10–14 → $2,490 p/p · 15+ cotización (incluye agente) · comunidad de por vida</div>
+          <button onClick="{{scrollHero}}" style="margin-top:auto;padding:12px;border-radius:12px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="background:var(--accent-soft);">Habla con mi consultor IA</button>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:12.5px;color:#94A3B8;">Precios de lanzamiento, válidos 14 días desde tu plan. Todos incluyen comunidad de por vida con todo el equipo Yaub.</div>
+    </div>
+  </div>
+
+  <div data-sec="s8" style="position:relative;z-index:1;padding:60px 24px 40px;">
+    <div style="max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:34px;opacity:{{s8o}};transform:translateY({{s8y}});transition:opacity .7s ease, transform .7s ease;">
+      <div style="text-align:center;padding:44px 40px;border-radius:26px;background:rgba(255,255,255,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.7);box-shadow:0 24px 60px rgba(30,39,97,.1);display:flex;flex-direction:column;gap:16px;align-items:center;">
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:34px;line-height:1.15;margin:0;color:var(--ink2);">Tu plan está a una plática de distancia.</h2>
+        <div style="font-size:16px;color:var(--muted);">15 minutos con mi consultor, gratis y sin compromiso — y el brief es tuyo, pase lo que pase.</div>
+        <button onClick="{{scrollHero}}" style="padding:15px 36px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);" style-hover="filter:brightness(1.06);">Empezar mi discovery →</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <sc-for list="{{faqs}}" as="f" hint-placeholder-count="4">
+          <div style="border-radius:16px;background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.6);box-shadow:0 10px 28px rgba(30,39,97,.05);overflow:hidden;">
+            <button onClick="{{f.toggle}}" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 22px;border:none;background:transparent;cursor:pointer;font-family:Inter,sans-serif;text-align:left;">
+              <span style="font-size:15px;font-weight:700;color:var(--ink2);">{{f.q}}</span>
+              <span style="font-size:18px;color:var(--accent);font-weight:700;transform:rotate({{f.rot}});transition:transform .3s;display:inline-block;">+</span>
+            </button>
+            <div style="{{f.aStyle}}"><div style="padding:0 22px 18px;font-size:14px;line-height:1.6;color:var(--muted);">{{f.a}}</div></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:22px 4px 10px;border-top:1px solid rgba(30,39,97,.08);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <img src="uploads/Yaub.icon.black.png" alt="Yaub" style="height:22px;width:auto;opacity:.8;">
+          <span style="font-size:12.5px;color:var(--muted);">Jacobo Payán · Yaub AI · Alianzatel BPO &amp; Contact Center</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:18px;font-size:12.5px;">
+          <a href="https://www.linkedin.com/search/results/all/?keywords=Jes%C3%BAs%20Jacobo%20Pay%C3%A1n%20Batarse" target="_blank" style="color:var(--accent2);font-weight:600;text-decoration:none;">LinkedIn</a>
+          <a href="https://wa.me/" target="_blank" style="color:var(--accent2);font-weight:600;text-decoration:none;">WhatsApp</a>
+          <span style="color:#94A3B8;letter-spacing:.1em;font-weight:700;font-size:11px;">POWERED BY YAUB</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#1E2761&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#EC4899&quot;,&quot;#1E2761&quot;,&quot;#0EA5E9&quot;,&quot;#7C3AED&quot;],&quot;section&quot;:&quot;Paleta&quot;},&quot;accent2Color&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#EC4899&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#1E2761&quot;,&quot;#171C33&quot;,&quot;#0F766E&quot;,&quot;#7C3AED&quot;],&quot;section&quot;:&quot;Paleta&quot;}}">
+class Component extends DCLogic {
+  state = { step: 1, nombre: '', telefono: '', rol: '', sitio: '', proyecto: '', formErr: '', pkg: null, addOn: null, hp: 1, p3: 0, vis: {}, faq: -1,
+    pdfBusy: false, pdfUrl: null,
+    visitorId: null, chat: [], chatDraft: '', botTyping: false,
+    leadId: null, aiChips: null, aiResumen: null, aiNombre: null, aiPlan: null, planLoading: false,
+    contacto: '', contactSent: false, contactSending: false,
+    bookingOpen: false, bkLoading: false, bkSlots: [], bkTz: 'America/Monterrey', bkDay: null, bkSlot: null,
+    bkName: '', bkPhone: '', bkErr: '', bkBooking: false, bkDone: false, bkDoneLabel: '' };
+
+  API = 'https://xwjhuixuvmyzfhujvxhf.supabase.co/functions/v1/landing-consultor';
+  WIDGET = 'https://xwjhuixuvmyzfhujvxhf.supabase.co/functions/v1/widget-chat';
+  WIDGET_KEY = 'wk_6c2f86bb90c0a69cbb6d6712fcbac8f9';
+  APIKEY = 'sb_publishable_qfc96X-wr1P5IgmFDsjflg_AeQdKMfH';
+
+  // Fallback visual mientras el consultor responde o si la API falla
+  P = {
+    nombre: 'tu operación',
+    chips: [['Sitio', 'leyendo tu sitio…'], ['Tarea clave', 'analizando tu día a día…'], ['Frecuencia', 'detectando ritmo…'], ['Proceso', 'midiendo lo manual…']],
+    skills: [
+      { name: 'Skill 1 — en construcción', desc: 'tu consultor la está armando con tu brief' },
+      { name: 'Skill 2 — en construcción', desc: 'sale de lo que platicaste con él' },
+      { name: 'Skill 3 — en construcción', desc: 'hecha sobre tu trabajo real' }
+    ],
+    stages: [['Arranque', 'primera hora'], ['Lo pesado', 'lo que más pesa'], ['Números', 'de la semana'], ['Coordinación', 'juntas y agenda'], ['Cierre', 'entregar']],
+    equipos: [
+      { name: 'Cowork Yaub', ben: 'tu espacio de trabajo con IA', cx: 160, to: 0, lab: 'organiza' },
+      { name: 'Skill a tu medida', ben: 'sobre tu tarea más pesada', cx: 430, to: 1, lab: 'redacta' },
+      { name: 'Skill a tu medida', ben: 'sobre tu semana real', cx: 700, to: 3, lab: 'coordina' },
+      { name: 'Plan de 90 días', ben: 'sigues automatizando por tu cuenta', cx: 940, to: 4, lab: 'mejora' }
+    ]
+  };
+  PKGS = [
+    { name: 'MI SETUP', aud: 'para ti', price: '$4,990', per: 'MXN · por persona', weeks: '4 semanas · 4 sesiones 1:1' },
+    { name: 'MI NEGOCIO', aud: 'dueño + 2', price: '$12,900', per: 'MXN · por empresa', weeks: '6 semanas · 6 sesiones' },
+    { name: 'MI EQUIPO', aud: 'equipos de 5+', price: 'desde $2,990', per: 'MXN · por persona', weeks: '6 semanas · talleres + 1:1' }
+  ];
+  FAQS = [
+    { q: '¿Necesito saber de IA?', a: 'No. Por eso el temario arranca de cero y siempre sobre TU trabajo — con tus reportes, tus formatos y tus herramientas reales.' },
+    { q: '¿Qué pasa si no contrato?', a: 'Nada. El brief y el diagnóstico que arma el agente son tuyos, sin compromiso. Muchos regresan después con su plan en la mano.' },
+    { q: '¿Por qué hay cupo?', a: 'Porque te atiendo yo — máximo 6 clientes activos a la vez. El acompañamiento es personal, no un curso grabado.' },
+    { q: '¿Facturas?', a: 'Sí, todos los paquetes se facturan.' }
+  ];
+
+  setupYaubie() {
+    const el = document.getElementById('yaubie');
+    if (!el || this.yaubieBubble) return;
+    const HOVER = ['¡Hola! Soy Yaubie 👋', '¿Ya platicaste con tu consultor?', 'Pícame y verás 👀', 'Ando supervisando la página 😎', 'Tu plan sale en minutos, ¿eh?', 'Yo también trabajo con IA 🤖'];
+    const bub = document.createElement('div');
+    bub.style.cssText = 'position:fixed;z-index:60;padding:9px 15px;border-radius:14px 14px 14px 4px;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(30,39,97,.12);box-shadow:0 10px 26px rgba(30,39,97,.18);font-family:Inter,sans-serif;font-size:12.5px;font-weight:700;color:#1E2761;pointer-events:none;opacity:0;transition:opacity .25s;max-width:230px;';
+    document.body.appendChild(bub);
+    this.yaubieBubble = bub;
+    let hideT = null, followI = null;
+    const say = (txt, ms) => {
+      bub.textContent = txt;
+      bub.style.opacity = '1';
+      if (followI) clearInterval(followI);
+      const place = () => {
+        const r = el.getBoundingClientRect();
+        let x = r.right + 6, y = r.top - 38;
+        if (x + 240 > window.innerWidth) x = Math.max(8, r.left - 246);
+        if (y < 8) y = r.bottom + 8;
+        bub.style.left = x + 'px'; bub.style.top = y + 'px';
+      };
+      place();
+      followI = setInterval(place, 80);
+      if (hideT) clearTimeout(hideT);
+      hideT = setTimeout(() => { bub.style.opacity = '0'; clearInterval(followI); }, ms);
+    };
+    el.addEventListener('mouseenter', () => { if (!this.yaubieRunning) say(HOVER[Math.floor(Math.random() * HOVER.length)], 2600); });
+    el.addEventListener('click', () => {
+      say('WAAAAAAA', 5200);
+      if (this.yaubieRunning) return;
+      this.yaubieRunning = true;
+      el.style.animation = 'yaubieTravel 5s linear infinite';
+      setTimeout(() => { el.style.animation = 'yaubieTravel 52s ease-in-out infinite'; this.yaubieRunning = false; }, 5200);
+    });
+  }
+
+  componentDidMount() {
+    setTimeout(() => this.setupYaubie(), 600);
+    setTimeout(() => {
+      this.io = new IntersectionObserver((es) => {
+        es.forEach(en => {
+          if (en.isIntersecting) {
+            const k = en.target.getAttribute('data-sec');
+            this.setState(s => ({ vis: { ...s.vis, [k]: true } }));
+            if (k === 's3' && !this.p3on) { this.p3on = true; this.animP3(); }
+            this.io.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('[data-sec]').forEach(el => this.io.observe(el));
+    }, 400);
+  }
+  componentDidUpdate() {
+    const el = document.getElementById('chatCol');
+    if (el) el.scrollTop = el.scrollHeight;
+  }
+  componentWillUnmount() { if (this.io) this.io.disconnect(); if (this.ti) clearInterval(this.ti); if (this.hi) clearInterval(this.hi); if (this.iv) clearInterval(this.iv); if (this.yaubieBubble) { this.yaubieBubble.remove(); this.yaubieBubble = null; } }
+  animP3() {
+    const t0 = Date.now();
+    this.ti = setInterval(() => {
+      const t = Math.min(1, (Date.now() - t0) / 1700);
+      this.setState({ p3: t });
+      if (t >= 1) clearInterval(this.ti);
+    }, 40);
+  }
+  animHp() {
+    if (this.hi) clearInterval(this.hi);
+    this.setState({ hp: 0 });
+    const t0 = Date.now();
+    this.hi = setInterval(() => {
+      const t = Math.min(1, (Date.now() - t0) / 1400);
+      this.setState({ hp: t });
+      if (t >= 1) clearInterval(this.hi);
+    }, 40);
+  }
+
+  api(payload) {
+    return fetch(this.API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: this.APIKEY },
+      body: JSON.stringify(payload)
+    }).then(r => { if (!r.ok) throw new Error('api ' + r.status); return r.json(); });
+  }
+
+  // ── Chat real con el agente Discovery (vive en Yaub, mismo agente que WhatsApp) ──
+  widgetSend(text, isIntro) {
+    const vid = this.state.visitorId;
+    this.setState(s => ({ chat: [...s.chat, { role: 'user', text, intro: !!isIntro }], botTyping: true }));
+    fetch(this.WIDGET, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'message', key: this.WIDGET_KEY, visitor_id: vid, text })
+    })
+      .then(r => r.json())
+      .then(d => {
+        const reply = (d && d.reply) ? d.reply : (d && d.error) ? d.error : 'Perdón, se me cortó un segundo — ¿me lo repites?';
+        this.setState(s => ({ botTyping: false, chat: [...s.chat, { role: 'bot', text: reply }] }));
+      })
+      .catch(e => {
+        console.error('[consultor] widget:', e);
+        this.setState(s => ({ botTyping: false, chat: [...s.chat, { role: 'bot', text: 'Se me cortó la señal un segundo — ¿me lo mandas de nuevo?' }] }));
+      });
+  }
+  sendChat() {
+    const d = (this.state.chatDraft || '').trim();
+    if (!d || this.state.botTyping) return;
+    this.setState({ chatDraft: '' });
+    this.widgetSend(d, false);
+  }
+  userTurns() { return this.state.chat.filter(m => m.role === 'user' && !m.intro).length; }
+  canGen() { return this.userTurns() >= 3; }
+  maxUnlocked() {
+    if (this.state.aiPlan) return 5;
+    if (this.canGen()) return 3;
+    if (this.state.chat.length) return 2;
+    return 1;
+  }
+  transcript() {
+    return this.state.chat
+      .map(m => (m.intro ? 'Cliente (brief inicial)' : m.role === 'user' ? 'Cliente' : 'Consultor') + ': ' + m.text)
+      .join('\n').slice(0, 6000);
+  }
+
+  startCot() {
+    const nombre = (this.state.nombre || '').trim(), telefono = (this.state.telefono || '').trim();
+    const rol = (this.state.rol || '').trim(), sitio = (this.state.sitio || '').trim(), proyecto = (this.state.proyecto || '').trim();
+    if (nombre.length < 5 || telefono.replace(/\D/g, '').length < 10) {
+      this.setState({ formErr: 'Ponme tu nombre completo y tu WhatsApp a 10 dígitos — así tu consultor te da seguimiento personal.' });
+      return;
+    }
+    if (rol.length < 3 || proyecto.length < 20) {
+      this.setState({ formErr: 'Cuéntale a tu consultor tu rol y tu día a día real (2-3 líneas mínimo) — con eso trabaja, no con formularios vacíos.' });
+      return;
+    }
+    const vid = 'ld' + Date.now().toString(36) + Math.floor(Math.random() * 1e12).toString(36);
+    this.setState({ step: 2, formErr: '', visitorId: vid, chat: [], chatDraft: '', leadId: null, aiChips: null, aiResumen: null, aiNombre: null, aiPlan: null, planLoading: false, contactSent: false, contacto: telefono, bkName: nombre, bkPhone: telefono, pdfUrl: null, pkg: null, addOn: null });
+    this.api({ action: 'analyze', nombre, telefono, rol, sitio, proyecto }).then(res => {
+      if (res && res.ok) this.setState({
+        leadId: res.lead_id,
+        aiChips: (Array.isArray(res.chips) && res.chips.length === 4) ? res.chips : null,
+        aiResumen: res.resumen || null,
+        aiNombre: res.nombre_display || null
+      });
+    }).catch(e => console.error('[consultor] analyze:', e));
+    const intro = 'Hola, soy ' + nombre + ', ' + rol + '. Mi WhatsApp: ' + telefono + '.' + (sitio ? ' El sitio de mi empresa: ' + sitio + '.' : '') + ' Mi día a día: ' + proyecto;
+    setTimeout(() => this.widgetSend(intro, true), 0);
+  }
+  dlPdf() {
+    const st = this.state;
+    if (st.pdfUrl) { window.open(st.pdfUrl, '_blank'); return; }
+    if (!st.leadId || st.pdfBusy) return;
+    this.setState({ pdfBusy: true });
+    this.api({ action: 'plan_pdf', lead_id: st.leadId })
+      .then(res => {
+        if (res && res.ok && res.url) { this.setState({ pdfBusy: false, pdfUrl: res.url }); window.open(res.url, '_blank'); }
+        else this.setState({ pdfBusy: false });
+      })
+      .catch(e => { console.error('[consultor] pdf:', e); this.setState({ pdfBusy: false }); });
+  }
+  genPlan() {
+    if (!this.canGen()) return;
+    this.goStep(3);
+    const st = this.state;
+    if (st.aiPlan || st.planLoading) return;
+    this.setState({ planLoading: true });
+    this.api({ action: 'plan', lead_id: st.leadId, rol: st.rol, sitio: st.sitio, proyecto: st.proyecto, answers: [], extra: '', resumen: st.aiResumen || '', transcript: this.transcript() })
+      .then(res => {
+        if (res && res.ok) this.setState({ aiPlan: res, planLoading: false });
+        else this.setState({ planLoading: false });
+      })
+      .catch(e => { console.error('[consultor] plan:', e); this.setState({ planLoading: false }); });
+  }
+  sendContact() {
+    const st = this.state;
+    const c = (st.contacto || '').trim();
+    if (!c || st.contactSending || st.contactSent) return;
+    if (!st.leadId) { this.setState({ contactSent: true }); return; }
+    this.setState({ contactSending: true });
+    this.api({ action: 'contact', lead_id: st.leadId, contacto: c })
+      .then(() => this.setState({ contactSent: true, contactSending: false }))
+      .catch(e => { console.error('[consultor] contact:', e); this.setState({ contactSending: false }); });
+  }
+
+  // ── Agenda web (Yaub Calendar del Agente Consultoría Jacobo) ──
+  dayKey(iso) { return new Intl.DateTimeFormat('en-CA', { timeZone: this.state.bkTz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(iso)); }
+  fmtDay(iso) { return new Date(iso).toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short', timeZone: this.state.bkTz }); }
+  fmtTime(iso) { return new Date(iso).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: this.state.bkTz }); }
+  openBooking() {
+    this.setState({ bookingOpen: true, bkErr: '', bkDone: false });
+    if (this.state.bkSlots.length) return;
+    this.setState({ bkLoading: true });
+    const p = n => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
+    this.api({ action: 'agenda_slots', start_date: p(0), end_date: p(13) })
+      .then(res => {
+        if (res && res.ok) {
+          const sl = res.available_slots || [];
+          this.setState({ bkSlots: sl, bkTz: res.timezone || 'America/Monterrey', bkLoading: false, bkDay: sl.length ? this.dayKey(sl[0]) : null });
+        } else this.setState({ bkLoading: false, bkErr: 'No pude cargar horarios — intenta de nuevo.' });
+      })
+      .catch(e => { console.error('[agenda] slots:', e); this.setState({ bkLoading: false, bkErr: 'No pude cargar horarios — intenta de nuevo.' }); });
+  }
+  confirmBooking() {
+    const st = this.state;
+    const name = (st.bkName || '').trim(), phone = (st.bkPhone || '').replace(/\D/g, '');
+    if (!st.bkSlot) { this.setState({ bkErr: 'Elige un día y un horario.' }); return; }
+    if (name.length < 3 || phone.length < 10) { this.setState({ bkErr: 'Ponme tu nombre y tu WhatsApp a 10 dígitos.' }); return; }
+    if (st.bkBooking) return;
+    this.setState({ bkBooking: true, bkErr: '' });
+    this.api({ action: 'agenda_book', start: st.bkSlot, name, phone: phone, lead_id: st.leadId })
+      .then(res => {
+        if (res && res.ok) {
+          this.setState({ bkBooking: false, bkDone: true, bkDoneLabel: this.fmtDay(res.starts_at) + ' · ' + this.fmtTime(res.starts_at) + ' (hora MTY)' });
+        } else {
+          this.setState({ bkBooking: false, bkErr: (res && res.message) || 'Ese horario ya se ocupó — elige otro.', bkSlots: [], bkSlot: null });
+          this.openBooking();
+        }
+      })
+      .catch(e => { console.error('[agenda] book:', e); this.setState({ bkBooking: false, bkErr: 'Falló la conexión — intenta de nuevo.' }); });
+  }
+
+  goStep(n) {
+    n = Math.max(1, Math.min(n, this.maxUnlocked()));
+    if (n === 4 && !this.state.aiPlan) return;
+    if (n === 4) this.animHp();
+    this.setState({ step: n });
+  }
+  resetCot() { this.setState({ step: 1, nombre: '', telefono: '', rol: '', sitio: '', proyecto: '', formErr: '', pkg: null, addOn: null, visitorId: null, chat: [], chatDraft: '', botTyping: false, leadId: null, aiChips: null, aiResumen: null, aiNombre: null, aiPlan: null, planLoading: false, contacto: '', contactSent: false, contactSending: false, pdfBusy: false, pdfUrl: null }); }
+  pkgIdx() {
+    if (this.state.pkg !== null) return this.state.pkg;
+    if (this.state.aiPlan && [0, 1, 2].includes(this.state.aiPlan.pkg_rec)) return this.state.aiPlan.pkg_rec;
+    return 0;
+  }
+  meterPos() {
+    if (this.state.aiPlan) return [15, 50, 85][this.pkgIdx()];
+    return Math.min(16 + this.userTurns() * 14, 62);
+  }
+  addOnState() { const pk = this.pkgIdx(); const def = { agente: pk === 1, plus: false }; return this.state.addOn ? { ...def, ...this.state.addOn } : def; }
+  toggleAddOn(id) { const cur = this.addOnState(); this.setState({ addOn: { ...cur, [id]: !cur[id] } }); }
+  hexRgb(h) { h = (h || '#1E2761').replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); const n = parseInt(h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+
+  renderVals() {
+    const st = this.state, p = this.P;
+    const accent = this.props.accentColor ?? '#1E2761';
+    const accent2 = this.props.accent2Color ?? '#EC4899';
+    const [r, g, b] = this.hexRgb(accent);
+    const pk = this.pkgIdx(), pkg = this.PKGS[pk], ao = this.addOnState();
+
+    // Datos vivos del consultor (API) con fallback visual
+    const ai = st.aiPlan;
+    const skills = (ai && Array.isArray(ai.skills) && ai.skills.length === 3) ? ai.skills : p.skills;
+    const stagesSrc = (ai && Array.isArray(ai.stages) && ai.stages.length === 5) ? ai.stages.map(s => [s.label, s.sub]) : p.stages;
+    const equiposSrc = (ai && Array.isArray(ai.equipos) && ai.equipos.length === 4)
+      ? ai.equipos.map((e, i) => ({ name: e.name, ben: e.ben, lab: e.lab || p.equipos[i].lab, cx: p.equipos[i].cx, to: p.equipos[i].to }))
+      : p.equipos;
+    const chipsSrc = st.aiChips ? st.aiChips.map(c => [c.k, c.v]) : p.chips;
+    const nombre = (ai && ai.nombre_display) || st.aiNombre || p.nombre;
+
+    const meter = this.meterPos();
+    const meterLead = meter < 35 ? 'MI SETUP — para ti' : meter < 68 ? 'MI NEGOCIO — tú + 2' : 'MI EQUIPO — talleres por rol';
+    const SX = [110, 330, 550, 770, 970];
+    const stages = stagesSrc.map((s, i) => ({ label: s[0], sub: s[1], left: SX[i] - 90, num: '0' + (i + 1), anim: equiposSrc.some(e => e.to === i) ? 'glowPulse 3.6s ease-in-out infinite' : 'none' }));
+    const cons = equiposSrc.map((e, i) => { const sx = SX[e.to]; return { d: `M${e.cx},360 C${e.cx},290 ${sx},230 ${sx},140`, label: e.lab, lx: (e.cx + sx) / 2 - 36, ly: 240, dur: (2.6 + i * 0.4) + 's', begin: (i * 0.7) + 's' }; });
+    const links = SX.slice(0, -1).map((x, i) => ({ d: `M${x + 92},96 L${SX[i + 1] - 92},96`, dur: (1.8 + i * 0.2) + 's', begin: (i * 0.45) + 's' }));
+    const segBase = 'flex:1;padding:8px 6px;border-radius:9px;border:none;cursor:pointer;font-family:Manrope,sans-serif;font-size:11px;font-weight:800;letter-spacing:.06em;transition:all .25s;';
+    const segStyle = i => segBase + (pk === i ? 'background:#ffffff;color:#1E2761;box-shadow:0 2px 8px rgba(30,39,97,.14);' : 'background:transparent;color:#64748B;');
+    const sw = on => `width:40px;height:22px;border-radius:99px;border:none;cursor:pointer;position:relative;flex:none;padding:0;transition:background .3s;background:${on ? accent : 'rgba(30,39,97,.18)'};display:block;`;
+    const knob = on => `position:absolute;top:3px;left:${on ? '21px' : '3px'};width:16px;height:16px;border-radius:50%;background:#fff;transition:left .3s;box-shadow:0 1px 3px rgba(0,0,0,.25);display:block;`;
+    const addonRows = [
+      { id: 'agente', name: 'Agente de ventas WhatsApp', desc: pk === 1 ? '1er mes incluido en MI NEGOCIO' : 'cotiza y contesta 24/7', price: pk === 1 ? 'incluido 1er mes' : 'desde $1,900/mes', on: ao.agente },
+      { id: 'plus', name: 'Acompañamiento Plus', desc: '2 sesiones al mes después del programa', price: '$1,990/mes', on: ao.plus }
+    ].map(a => ({ ...a, rowOp: a.on ? '1' : '.55', toggle: () => this.toggleAddOn(a.id), swStyle: sw(a.on), knobStyle: knob(a.on) }));
+    let monthly = 0;
+    if (ao.agente && pk !== 1) monthly += 1900;
+    if (ao.plus) monthly += 1990;
+    const totalText = pkg.price + ' MXN' + (monthly ? ' + $' + monthly.toLocaleString('es-MX') + '/mes' : '');
+    const planLines = [
+      { name: 'Paquete ' + pkg.name + ' · ' + pkg.weeks, r: pkg.price },
+      { name: '3 skills + Cowork + capacitación', r: 'incluido' },
+      { name: 'Comunidad de por vida · con todo el equipo Yaub', r: 'incluida' }
+    ];
+    if (ao.agente) planLines.push({ name: 'Agente de ventas WhatsApp', r: pk === 1 ? '1er mes incluido' : 'desde $1,900/mes' });
+    if (ao.plus) planLines.push({ name: 'Acompañamiento Plus', r: '$1,990/mes' });
+    const hpE = 1 - Math.pow(1 - st.hp, 3);
+    const p3E = 1 - Math.pow(1 - st.p3, 3);
+    const C = 439.8;
+    const segs = [30, 25, 20, 15, 10];
+    let cum = 0;
+    const donut = segs.map(s => { const len = s / 100 * C * p3E; const off = -cum / 100 * C * p3E; cum += s; return { da: `${len} ${C}`, off: String(off) }; });
+    const vo = k => st.vis[k] ? '1' : '0';
+    const vy = k => st.vis[k] ? '0px' : '30px';
+    const stepLabels = ['ENTRADA — 3 DATOS, CERO FRICCIÓN', 'DISCOVERY CON TU CONSULTOR (EN VIVO)', 'DÓNDE CABE EN TU SEMANA', 'TU PLAN PERSONALIZADO', 'DEL OTRO LADO'];
+    return {
+      accent, accent2, accentSoft: `rgba(${r},${g},${b},0.13)`, accentGlow: `rgba(${r},${g},${b},0.35)`,
+      step: st.step, stepLabel: 'TU CONSULTOR · PASO ' + st.step + ' DE 5 · ' + stepLabels[st.step - 1],
+      c1: st.step === 1, c2: st.step === 2, c3: st.step === 3, c4: st.step === 4, c5: st.step === 5,
+      prevC: () => this.goStep(st.step - 1), nextC: () => this.goStep(st.step + 1), resetC: () => this.resetCot(),
+      nombreIn: st.nombre, onNombre: e => this.setState({ nombre: e.target.value, formErr: '' }),
+      telefonoIn: st.telefono, onTelefono: e => this.setState({ telefono: e.target.value, formErr: '' }),
+      cliente: st.nombre || 'ti',
+      pdfOn: !!st.aiPlan && !!st.leadId,
+      pdfBtn: st.pdfBusy ? 'Generando tu PDF…' : 'Descargar mi plan (PDF)',
+      dlPdf: () => this.dlPdf(),
+      rol: st.rol, onRol: e => this.setState({ rol: e.target.value, formErr: '' }),
+      sitio: st.sitio, onSitio: e => this.setState({ sitio: e.target.value }),
+      proyecto: st.proyecto, onProyecto: e => this.setState({ proyecto: e.target.value, formErr: '' }),
+      formErr: st.formErr,
+      startCot: () => this.startCot(),
+      introMsg: st.rol + (st.sitio ? ' · ' + st.sitio.replace('https://', '') : '') + ' — “' + st.proyecto + '”',
+      chatMsgs: st.chat.filter(m => !m.intro).map(m => ({ text: m.text, bot: m.role === 'bot', user: m.role === 'user' })),
+      botTyping: st.botTyping,
+      chatDraft: st.chatDraft, onChatDraft: e => this.setState({ chatDraft: e.target.value }),
+      sendChat: () => this.sendChat(), sendLabel: st.botTyping ? '…' : 'Enviar',
+      canGen: this.canGen() && !st.botTyping,
+      chipsOn: !!st.aiChips,
+      extra: '', hasExtra: false,
+      chips: chipsSrc.map((c, i) => ({ k: c[0], v: c[1], delay: (0.3 + i * 0.4) + 's' })),
+      meterPos: meter, meterLead,
+      genPlan: () => this.genPlan(),
+      goPlan: () => this.goStep(4),
+      goPlanLabel: st.aiPlan ? 'Ver mi plan y mi precio →' : (st.planLoading ? 'Tu consultor está armando tu plan…' : 'Ver mi plan y mi precio →'),
+      goStep5: () => this.goStep(5),
+      nombre,
+      s3sub: st.planLoading ? 'Tu consultor está armando tu plan en vivo con lo que le platicaste…' : 'Tu operación con tu stack de IA trabajando en cada etapa.',
+      planIntro: (ai && ai.intro) ? ai.intro : '',
+      folio: st.leadId ? ('YB-' + st.leadId.slice(0, 8).toUpperCase()) : 'YB-2026',
+      stages, cons, links, equipos: equiposSrc.map(e => ({ ...e, left: e.cx - 109 })),
+      setPkg0: () => this.setState({ pkg: 0, addOn: null }), setPkg1: () => this.setState({ pkg: 1, addOn: null }), setPkg2: () => this.setState({ pkg: 2, addOn: null }),
+      pkg0Style: segStyle(0), pkg1Style: segStyle(1), pkg2Style: segStyle(2),
+      pkgName: pkg.name, pkgAud: pkg.aud, pkgPrice: pkg.price, pkgPer: pkg.per, pkgWeeks: pkg.weeks,
+      skillRows: skills, addonRows, totalText, planLines,
+      contacto: st.contacto, onContacto: e => this.setState({ contacto: e.target.value }),
+      sendContact: () => this.sendContact(),
+      contactSent: st.contactSent, notContactSent: !st.contactSent,
+      contactBtn: st.contactSending ? 'Enviando…' : 'Recibir mi plan',
+      openBooking: () => this.openBooking(),
+      closeBooking: () => this.setState({ bookingOpen: false }),
+      bookingOpen: st.bookingOpen, bkLoading: st.bkLoading, bkDone: st.bkDone, bkDoneLabel: st.bkDoneLabel,
+      bkFormOn: !st.bkLoading && !st.bkDone, bkErr: st.bkErr,
+      bkDays: (() => {
+        const dm = {}; st.bkSlots.forEach(iso => { const k = this.dayKey(iso); (dm[k] = dm[k] || []).push(iso); });
+        const chip = on => `padding:9px 14px;border-radius:999px;border:1.5px solid ${on ? accent : 'rgba(30,39,97,.15)'};background:${on ? `rgba(${r},${g},${b},0.13)` : 'rgba(255,255,255,.9)'};color:var(--ink2);font-size:12.5px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;flex:none;`;
+        this._bkChip = chip; this._bkDayMap = dm;
+        return Object.keys(dm).sort().map(k => ({ label: this.fmtDay(dm[k][0]), style: chip(k === st.bkDay), pick: () => this.setState({ bkDay: k, bkSlot: null }) }));
+      })(),
+      bkTimes: ((this._bkDayMap && this._bkDayMap[st.bkDay]) || []).slice(0, 24).map(iso => ({ label: this.fmtTime(iso), style: this._bkChip(iso === st.bkSlot), pick: () => this.setState({ bkSlot: iso }) })),
+      bkName: st.bkName, onBkName: e => this.setState({ bkName: e.target.value }),
+      bkPhone: st.bkPhone, onBkPhone: e => this.setState({ bkPhone: e.target.value }),
+      confirmBooking: () => this.confirmBooking(),
+      bkBtn: st.bkBooking ? 'Agendando…' : 'Confirmar mi cita',
+      hr1: Math.round(7 * hpE) + ' h', hr2: (1 + 1.3 * hpE).toFixed(1) + '×', hr3: '< ' + Math.max(1, Math.round(2 * hpE)) + ' m',
+      antesN: Math.round(13 * p3E), despN: Math.round(5 * p3E), barA: (100 * p3E) + '%', barB: (38 * p3E) + '%',
+      d1: donut[0].da, d2: donut[1].da, o2: donut[1].off, d3: donut[2].da, o3: donut[2].off, d4: donut[3].da, o4: donut[3].off, d5: donut[4].da, o5: donut[4].off,
+      lineOff: String(900 * (1 - p3E)),
+      st1: Math.round(6 * p3E) + '–' + Math.round(10 * p3E) + ' h', st2: '< ' + Math.max(1, Math.round(2 * p3E)) + ' meses', st3: Math.round(24 * p3E) + '/7',
+      s2o: vo('s2'), s2y: vy('s2'), s9o: vo('s9'), s9y: vy('s9'), s3o: vo('s3'), s3y: vy('s3'), s4o: vo('s4'), s4y: vy('s4'),
+      s5o: vo('s5'), s5y: vy('s5'), s6o: vo('s6'), s6y: vy('s6'), s7o: vo('s7'), s7y: vy('s7'), s8o: vo('s8'), s8y: vy('s8'),
+      scrollHero: () => { const el = document.getElementById('hero'); if (el) window.scrollTo({ top: el.offsetTop - 60, behavior: 'smooth' }); },
+      testPrev: () => { const el = document.getElementById('testRow'); if (el) el.scrollBy({ left: -420, behavior: 'smooth' }); },
+      testNext: () => { const el = document.getElementById('testRow'); if (el) el.scrollBy({ left: 420, behavior: 'smooth' }); },
+      faqs: this.FAQS.map((f, i) => {
+        const open = st.faq === i;
+        return { q: f.q, a: f.a, toggle: () => this.setState({ faq: open ? -1 : i }), rot: open ? '45deg' : '0deg', aStyle: `overflow:hidden;max-height:${open ? '220px' : '0px'};opacity:${open ? '1' : '0'};transition:max-height .35s ease, opacity .35s ease;` };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>
