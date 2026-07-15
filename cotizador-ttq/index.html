@@ -31,6 +31,49 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
 @keyframes gradMove{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
 @keyframes heroPop{from{opacity:0;transform:translateY(8px) scale(.72);}60%{opacity:1;}to{opacity:1;transform:none;}}
 @keyframes typingDot{0%,60%,100%{transform:translateY(0);opacity:.35;}30%{transform:translateY(-5px);opacity:1;}}
+/* ── Chips de especialidad: cada uno con su icono SVG animado ──
+   Todo transform en SVG necesita transform-box:fill-box, si no el origen es el del lienzo
+   y las piezas salen volando. */
+.spec{display:inline-flex;align-items:center;gap:9px;padding:9px 16px 9px 12px;border-radius:999px;
+  font-size:12.5px;font-weight:700;font-family:Inter,sans-serif;color:var(--ink2);white-space:nowrap;
+  background:rgba(255,255,255,.8);border:1px solid rgba(30,39,97,.1);box-shadow:0 3px 14px rgba(30,39,97,.06);
+  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+  animation:chipIn .5s ease both var(--d,0s);}
+.spec:hover{transform:translateY(-2px);border-color:rgba(236,72,153,.45);box-shadow:0 10px 26px rgba(30,39,97,.12);}
+.spec svg{flex:none;overflow:visible;}
+
+/* 1 · Voz — orbe que "habla": anillo respirando + barras de waveform */
+@keyframes orbBreath{0%,100%{transform:scale(1);opacity:.45;}50%{transform:scale(1.18);opacity:.1;}}
+@keyframes vBar{0%,100%{transform:scaleY(.32);}50%{transform:scaleY(1);}}
+.orbRing{transform-box:fill-box;transform-origin:center;animation:orbBreath 2.2s ease-in-out infinite;}
+.vb{transform-box:fill-box;transform-origin:center;animation:vBar 1s ease-in-out infinite;}
+.vb2{animation-delay:.14s;} .vb3{animation-delay:.28s;} .vb4{animation-delay:.42s;}
+.spec:hover .vb{animation-duration:.6s;}
+
+/* 2 · Chat — burbuja con los 3 puntos escribiendo */
+@keyframes cDot{0%,58%,100%{transform:translateY(0);opacity:.3;}28%{transform:translateY(-2.6px);opacity:1;}}
+.cd{transform-box:fill-box;transform-origin:center;animation:cDot 1.35s ease-in-out infinite;}
+.cd2{animation-delay:.17s;} .cd3{animation-delay:.34s;}
+
+/* 3 · Contact center — diadema flotando */
+@keyframes headFloat{0%,100%{transform:translateY(0) rotate(-1.5deg);}50%{transform:translateY(-2.6px) rotate(1.5deg);}}
+@keyframes headGlow{0%,100%{opacity:.12;transform:scale(.9);}50%{opacity:.3;transform:scale(1.1);}}
+.icHead{transform-box:fill-box;transform-origin:center;animation:headFloat 2.8s ease-in-out infinite;}
+.hGlow{transform-box:fill-box;transform-origin:center;animation:headGlow 2.8s ease-in-out infinite;}
+
+/* ── Carrusel de operación ──
+   Clave: altura fija + width:auto = la foto conserva su proporcion y NO se recorta.
+   Nada de object-fit:cover aqui; eso era lo que cortaba las caras. */
+.gTrack{display:flex;width:max-content;align-items:center;padding:8px 0;animation:marquee 62s linear infinite;}
+.gCell{position:relative;flex:none;height:250px;margin-right:14px;border-radius:14px;overflow:hidden;
+  background:rgba(30,39,97,.04);box-shadow:0 8px 26px rgba(30,39,97,.09);
+  transition:transform .3s ease,box-shadow .3s ease;animation:fadeUp .5s ease both var(--d,0s);}
+.gCell:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(30,39,97,.17);}
+.gCell img{height:100%;width:auto;display:block;}
+.gCap{position:absolute;left:0;right:0;bottom:0;padding:24px 13px 10px;color:#fff;font-size:11.5px;font-weight:700;
+  background:linear-gradient(transparent,rgba(15,14,12,.85));opacity:0;transform:translateY(6px);
+  transition:opacity .3s ease,transform .3s ease;white-space:normal;line-height:1.3;}
+.gCell:hover .gCap{opacity:1;transform:none;}
 
 /* Lift sutil en tarjetas — se aplica con la clase .lift */
 .lift{transition:transform .22s ease, box-shadow .22s ease;}
@@ -63,6 +106,15 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
   /* carrusel de marcas: menos aire y logos mas chicos para que pasen varios en pantalla */
   .mLogo{margin-right:34px !important;transform:scale(.82);transform-origin:center;}
   .mMarquee{margin-top:18px !important;}
+  /* galeria: fotos mas chicas y el carrusel corre mas rapido para que en pantalla angosta
+     igual pasen varias. El caption se oculta: en tactil no hay hover y a 150px estorba. */
+  .gCell{height:150px !important;margin-right:9px !important;border-radius:11px !important;}
+  .gCap{display:none !important;}
+  .gTrack{animation-duration:38s !important;}
+  .spec{font-size:11.5px !important;padding:8px 13px !important;}
+}
+@media (min-width:761px) and (max-width:1024px){
+  .gCell{height:200px;}
 }
 @keyframes yaubieTravel{0%{top:76%;left:-10%;transform:rotate(-6deg) scaleX(1);}12%{top:58%;left:16%;transform:rotate(5deg) scaleX(1);}25%{top:22%;left:36%;transform:rotate(-4deg) scaleX(1);}38%{top:10%;left:68%;transform:rotate(6deg) scaleX(1);}50%{top:38%;left:86%;transform:rotate(-5deg) scaleX(-1);}63%{top:70%;left:66%;transform:rotate(4deg) scaleX(-1);}76%{top:78%;left:36%;transform:rotate(-6deg) scaleX(-1);}88%{top:52%;left:8%;transform:rotate(5deg) scaleX(-1);}100%{top:76%;left:-10%;transform:rotate(-6deg) scaleX(1);}}
 </style>
@@ -309,6 +361,38 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
         <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:38px;line-height:1.12;margin:0;color:var(--ink2);">Te acompaño yo, no un curso grabado.</h2>
         <p style="margin:0;font-size:16px;line-height:1.65;color:var(--muted);">Soy <strong style="color:var(--ink2);">Jacobo Payán</strong> — CEO de <strong style="color:var(--ink2);">Yaub AI</strong> y de <strong style="color:var(--ink2);">Alianzatel BPO &amp; Contact Center</strong>. Llevo años poniendo agentes de IA a operar de verdad: ventas por WhatsApp, voz, cobranza, reclutamiento y atención a clientes para marcas y operaciones de alto volumen. Con Yaub construí la plataforma con la que hoy corren millones de conversaciones. Esta consultoría es la versión 1 a 1 de todo eso: yo personalmente armo tu setup, te capacito sobre TU trabajo y me quedo contigo en la comunidad. Y no vengo solo del software: opero <strong style="color:var(--ink2);">equipos, agenda y clientes reales todos los días</strong> — las herramientas de IA me hicieron más eficiente y me dieron algo que hoy quiero compartirte:</p>
         <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:47px;line-height:1.05;background:linear-gradient(100deg, var(--accent), var(--accent2), var(--accent));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradMove 5s ease-in-out infinite;">EL PODER DE LA ACCIÓN</div>
+        <!-- Especialidades: chips con aro de gradiente girando (clase .spec en el <style>).
+             Van arriba de los chips planos a propósito — son la credencial, no un dato más. -->
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:4px;">
+          <span class="spec" style="--d:.05s;">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <defs><radialGradient id="orbG" cx="50%" cy="42%"><stop offset="0%" stop-color="#EC4899"></stop><stop offset="100%" stop-color="#1E2761"></stop></radialGradient></defs>
+              <circle class="orbRing" cx="12" cy="12" r="10.2" fill="none" stroke="var(--accent2)" stroke-width="1.1"></circle>
+              <circle cx="12" cy="12" r="9" fill="url(#orbG)" opacity=".13"></circle>
+              <rect class="vb vb1" x="6.4" y="9.4" width="1.9" height="5.2" rx=".95" fill="var(--accent)"></rect>
+              <rect class="vb vb2" x="9.6" y="6.6" width="1.9" height="10.8" rx=".95" fill="var(--accent2)"></rect>
+              <rect class="vb vb3" x="12.8" y="8.2" width="1.9" height="7.6" rx=".95" fill="var(--accent2)"></rect>
+              <rect class="vb vb4" x="16" y="9.9" width="1.9" height="4.2" rx=".95" fill="var(--accent)"></rect>
+            </svg>Voice Agent Specialist</span>
+          <span class="spec" style="--d:.16s;">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M3.6 6.8A3.4 3.4 0 0 1 7 3.4h10a3.4 3.4 0 0 1 3.4 3.4v6.4a3.4 3.4 0 0 1-3.4 3.4h-6.1l-4 3.1a.62.62 0 0 1-1-.49v-2.7a3.4 3.4 0 0 1-2.3-3.2z" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.35" stroke-linejoin="round"></path>
+              <circle class="cd cd1" cx="8.4" cy="10" r="1.15" fill="var(--accent2)"></circle>
+              <circle class="cd cd2" cx="12" cy="10" r="1.15" fill="var(--accent2)"></circle>
+              <circle class="cd cd3" cx="15.6" cy="10" r="1.15" fill="var(--accent2)"></circle>
+            </svg>Chat Agent Specialist</span>
+          <span class="spec" style="--d:.27s;">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <ellipse class="hGlow" cx="12" cy="13" rx="10.5" ry="9" fill="var(--accent2)"></ellipse>
+              <g class="icHead">
+                <path d="M4.6 13.4v-1.6a7.4 7.4 0 0 1 14.8 0v1.6" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"></path>
+                <rect x="2.5" y="12.6" width="4.2" height="6.6" rx="2.1" fill="var(--accent)"></rect>
+                <rect x="17.3" y="12.6" width="4.2" height="6.6" rx="2.1" fill="var(--accent)"></rect>
+                <path d="M19.4 19.2v.8a2.5 2.5 0 0 1-2.5 2.5h-2.6" fill="none" stroke="var(--accent2)" stroke-width="1.5" stroke-linecap="round"></path>
+                <circle cx="13.1" cy="22.5" r="1.5" fill="var(--accent2)"></circle>
+              </g>
+            </svg>Contact Center &amp; BPO Specialist</span>
+        </div>
         <div style="display:flex;flex-wrap:wrap;gap:9px;">
           <span style="padding:8px 15px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid rgba(30,39,97,.08);font-size:12.5px;font-weight:700;color:var(--ink2);">CEO Yaub AI</span>
           <span style="padding:8px 15px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid rgba(30,39,97,.08);font-size:12.5px;font-weight:700;color:var(--ink2);">CEO Alianzatel BPO &amp; Contact Center</span>
@@ -469,8 +553,8 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
            En móvil NO se puede reflowear: se scrollea dentro de su caja, igual que el stage del paso 3.
            mStageWrap = la caja que recorta y permite scroll; mStage = el lienzo que conserva su ancho real. -->
       <div class="mStageWrap">
-      <div class="mStage" style="position:relative;height:250px;min-width:1160px;">
-        <svg viewBox="0 0 1160 250" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
+      <div class="mStage" style="position:relative;height:160px;min-width:1160px;">
+        <svg viewBox="0 0 1160 160" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
           <defs><marker id="arrF" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".8"></path></marker></defs>
           <path d="M198,60 L242,60" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#arrF)"></path>
           <path d="M438,60 L482,60" stroke="rgba(30,39,97,.2)" stroke-width="2" fill="none" marker-end="url(#arrF)"></path>
@@ -507,6 +591,34 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
           <div style="font-size:12px;color:var(--muted);">skills, Cowork y mejoras de por vida</div>
         </div>
       </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- s10 · Galería de operación. Va después de s6 ("De la plática al plan") a propósito:
+       primero se promete el proceso, luego se enseña que existe de verdad.
+       Las fotos salen de GALERIA[] en el script; grid de 4 columnas donde cada celda ocupa {{g.sp}}.
+       Recuerda: toda sección con data-sec necesita su par vo()/vy() en renderVals o nace invisible. -->
+  <div data-sec="s10" style="position:relative;z-index:1;padding:40px 24px;">
+    <div style="max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:22px;opacity:{{s10o}};transform:translateY({{s10y}});transition:opacity .7s ease, transform .7s ease;">
+      <div style="text-align:center;">
+        <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--accent);">ESTO NO ES UN RENDER</div>
+        <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:36px;line-height:1.15;margin:12px 0 0;color:var(--ink2);max-width:900px;display:inline-block;">Agentes, equipo y operación — trabajando hoy.</h2>
+        <div style="margin:12px auto 0;font-size:15px;color:var(--muted);max-width:640px;">Lo que ves aquí es lo mismo que vas a construir conmigo: plataformas en producción, gente capacitándose y agentes atendiendo de verdad.</div>
+      </div>
+      <!-- Carrusel de fotos. Cada img va a ALTURA fija con width:auto -> conserva su proporcion
+           natural y NO se recorta (sin object-fit:cover). El set se repite 2x porque el keyframe
+           marquee corre a -50%; cada set mide ~2800px, mas ancho que cualquier pantalla, asi que
+           el loop no deja hueco. Se pausa al pasar el mouse. -->
+      <div class="gWrap" style="overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);">
+        <div class="gTrack" style-hover="animation-play-state:paused;">
+          <sc-for list="{{galeria}}" as="g" hint-placeholder-count="11">
+            <div class="gCell" style="--d:{{g.dly}};aspect-ratio:{{g.w}}/{{g.h}};">
+              <img src="{{g.src}}" alt="{{g.alt}}" width="{{g.w}}" height="{{g.h}}" fetchpriority="low" decoding="async">
+              <div class="gCap">{{g.cap}}</div>
+            </div>
+          </sc-for>
+        </div>
       </div>
     </div>
   </div>
@@ -685,6 +797,22 @@ class Component extends DCLogic {
     { src: 'uploads/logos/coffee-and-job.png', alt: 'Coffee & Job BPO', h: '46px' },
     { src: 'uploads/logos/yaub-ai.png', alt: 'Yaub AI', h: '36px' },
     { src: 'uploads/logos/yaub-movil.png', alt: 'Yaub Móvil', h: '34px' }
+  ];
+
+  // Galería de operación. `sp` = columnas que ocupa en el grid de 4 (2 = destacada).
+  // Las fotos ya vienen optimizadas en uploads/galeria/ (~1MB las 11, lado mayor 1000px).
+  GALERIA = [
+    { src: 'uploads/galeria/ai-operating-system.jpg', cap: 'El AI Operating System, corriendo', w: 1000, h: 534 },
+    { src: 'uploads/galeria/operacion-diaria.jpg', cap: 'Operación diaria sobre la plataforma', w: 765, h: 1000 },
+    { src: 'uploads/galeria/contenido-yaub.jpg', cap: 'Yaubie y el equipo, en cámara', w: 687, h: 1000 },
+    { src: 'uploads/galeria/construyendo-agentes.jpg', cap: 'Construyendo agentes, a dos pantallas', w: 1000, h: 617 },
+    { src: 'uploads/galeria/datos-operacion.jpg', cap: 'Los datos de la operación, en vivo', w: 784, h: 1000 },
+    { src: 'uploads/galeria/agentes-avatar.jpg', cap: 'Agentes con avatar y voz propia', w: 773, h: 1000 },
+    { src: 'uploads/galeria/capacitacion.jpg', cap: 'Capacitación en vivo, sobre trabajo real', w: 1000, h: 844 },
+    { src: 'uploads/galeria/sesion-equipo.jpg', cap: 'Sesión de trabajo con el equipo', w: 764, h: 1000 },
+    { src: 'uploads/galeria/reconocimiento.jpg', cap: 'Reconocimiento a la operación', w: 576, h: 682 },
+    { src: 'uploads/galeria/conarec.jpg', cap: 'CONAREC 2024', w: 758, h: 1000 },
+    { src: 'uploads/galeria/cx-forum.jpg', cap: 'CX Forum Monterrey', w: 577, h: 1000 }
   ];
 
   // Fallback visual mientras el consultor responde o si la API falla
@@ -1074,6 +1202,20 @@ class Component extends DCLogic {
       st1: Math.round(6 * p3E) + '–' + Math.round(10 * p3E) + ' h', st2: '< ' + Math.max(1, Math.round(2 * p3E)) + ' meses', st3: Math.round(24 * p3E) + '/7',
       s2o: vo('s2'), s2y: vy('s2'), s9o: vo('s9'), s9y: vy('s9'), s3o: vo('s3'), s3y: vy('s3'), s4o: vo('s4'), s4y: vy('s4'),
       s5o: vo('s5'), s5y: vy('s5'), s6o: vo('s6'), s6y: vy('s6'), s7o: vo('s7'), s7y: vy('s7'), s8o: vo('s8'), s8y: vy('s8'),
+      s10o: vo('s10'), s10y: vy('s10'),
+      // 2 copias: el marquee corre a -50%, asi que cada mitad debe ser un set completo.
+      // Un set mide ~2800px a 250px de alto — mas ancho que cualquier pantalla, no deja hueco.
+      // El alt solo va en la 1a copia; la 2a es decorativa y no debe repetirse a un lector de pantalla.
+      // NADA de loading=lazy aquí: el carrusel se mueve solo, y las fotos fuera de pantalla
+      // no disparaban la carga → se veían celdas grises entrando a cuadro. Van eager con
+      // fetchpriority=low para no competir con el hero. Los 2 sets comparten las mismas 11 URLs,
+      // así que el 2o no cuesta red — sale de caché. El alt solo en el 1er set; el 2o es decorativo.
+      galeria: Array.from({ length: 2 }, (_, k) => this.GALERIA.map((g, i) => ({
+        ...g,
+        alt: k === 0 ? g.cap : '',
+        dly: k === 0 ? (0.04 + i * 0.06).toFixed(2) + 's' : '0s',
+        key: k + '-' + i
+      }))).flat(),
       showTestimonials: this.SHOW_TESTIMONIALS,
       // 8 copias: el marquee corre a -50%, así que cada mitad (4 sets ≈ 2.6k px) debe pasar el ancho
       // de pantalla más grande razonable. Si no, al cerrar el ciclo se ve un hueco en blanco.
