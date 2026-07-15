@@ -172,7 +172,7 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
             <div style="font-size:38px;">✅</div>
             <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:17px;color:var(--ink2);">Cita agendada: {{bkDoneLabel}}</div>
             <div style="font-size:13px;color:var(--muted);">{{t_quedo_calendario_jacobo_escribimos}}</div>
-            <button onClick="{{closeBooking}}" style="align-self:center;padding:12px 28px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);">Listo</button>
+            <button onClick="{{closeBooking}}" style="align-self:center;padding:12px 28px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);">{{t_listo_btn}}</button>
           </div>
         </sc-if>
         <sc-if value="{{bkFormOn}}" hint-placeholder-val="{{ false }}">
@@ -199,6 +199,21 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
       <!-- Alterna A/B (más sobria): Haz 10× más, con la misma gente y las mismas horas. -->
       <p style="margin:0;font-size:18px;color:var(--muted);max-width:700px;">{{t_consultor_arma_semana_contigo}}</p>
     </div>
+    <!-- Carrusel de herramientas: lo que la IA va a operar por ti. Va entre el subtítulo y la card
+         porque responde de inmediato la pregunta que deja el hero: "¿automatizar QUÉ exactamente?" —
+         antes de pedirle datos a nadie.
+         La lista sale de TOOLS[] en el script; los iconos son SVG inline (ver ICONS). -->
+    <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:10px;align-items:center;">
+      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:11px;letter-spacing:.2em;color:var(--muted);">{{t_automatiza_lo_que_ya}}</div>
+      <div style="width:100%;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);">
+        <div class="tTrack" style-hover="animation-play-state:paused;">
+          <sc-for list="{{tools}}" as="tool" hint-placeholder-count="12">
+            <span class="tChip" style="animation:toolIn .4s ease both {{tool.dly}};"><svg width="15" height="15" viewBox="0 0 24 24" fill="{{tool.f}}" stroke="{{tool.s}}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="{{tool.d}}"></path></svg>{{tool.name}}</span>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
     <div style="width:100%;max-width:1180px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);border-radius:24px;box-shadow:0 26px 70px rgba(30,39,97,.1);padding:24px 28px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;"></span><span style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.18em;font-weight:800;color:var(--muted);">{{stepLabel}}</span></div>
@@ -369,19 +384,6 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
     </div>
     <div style="font-size:12.5px;color:#94A3B8;">{{t_platicar_con_consultor_gratis}}</div>
 
-    <!-- Carrusel de herramientas: lo que la IA va a operar por ti. Va aquí, debajo del cotizador,
-         porque responde la pregunta que deja el hero: "¿automatizar QUÉ exactamente?".
-         La lista sale de TOOLS[] en el script; los iconos son SVG inline (ver ICONS). -->
-    <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:4px;">
-      <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:11px;letter-spacing:.2em;color:var(--muted);">{{t_automatiza_lo_que_ya}}</div>
-      <div style="width:100%;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);">
-        <div class="tTrack" style-hover="animation-play-state:paused;">
-          <sc-for list="{{tools}}" as="tool" hint-placeholder-count="12">
-            <span class="tChip" style="animation:toolIn .4s ease both {{tool.dly}};"><svg width="15" height="15" viewBox="0 0 24 24" fill="{{tool.f}}" stroke="{{tool.s}}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="{{tool.d}}"></path></svg>{{tool.name}}</span>
-          </sc-for>
-        </div>
-      </div>
-    </div>
   </div>
 
   <div data-sec="s2" style="position:relative;z-index:1;padding:40px 24px;">
@@ -670,8 +672,8 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
         <div style="padding:24px 26px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:14px;" style-hover="transform:translateY(-3px);">
           <div style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.16em;font-weight:800;color:var(--muted);">{{t_semana_antes_despues}}</div>
           <div style="display:flex;flex-direction:column;gap:12px;">
-            <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;"><span style="font-weight:700;color:var(--ink2);">Hoy</span><span style="color:var(--muted);">{{antesN}} h/sem en tareas repetitivas</span></div><div style="height:14px;border-radius:99px;background:rgba(30,39,97,.07);"><div style="width:{{barA}};height:100%;border-radius:99px;background:var(--accent2);transition:width .3s;"></div></div></div>
-            <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;"><span style="font-weight:700;color:var(--ink2);">{{t_con_setup}}</span><span style="color:var(--muted);">{{despN}} h/sem</span></div><div style="height:14px;border-radius:99px;background:rgba(30,39,97,.07);"><div style="width:{{barB}};height:100%;border-radius:99px;background:var(--accent);transition:width .3s;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;"><span style="font-weight:700;color:var(--ink2);">{{t_hoy}}</span><span style="color:var(--muted);">{{antesN}} {{t_hsem_repetitivas}}</span></div><div style="height:14px;border-radius:99px;background:rgba(30,39,97,.07);"><div style="width:{{barA}};height:100%;border-radius:99px;background:var(--accent2);transition:width .3s;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;"><span style="font-weight:700;color:var(--ink2);">{{t_con_setup}}</span><span style="color:var(--muted);">{{despN}} {{t_hsem}}</span></div><div style="height:14px;border-radius:99px;background:rgba(30,39,97,.07);"><div style="width:{{barB}};height:100%;border-radius:99px;background:var(--accent);transition:width .3s;"></div></div></div>
           </div>
           <div style="font-size:12.5px;color:var(--muted);">{{t_las_horas_diferencia_van}}</div>
         </div>
@@ -765,7 +767,7 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
         <div style="padding:30px 30px;border-radius:22px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.6);box-shadow:0 16px 44px rgba(30,39,97,.07);display:flex;flex-direction:column;gap:10px;">
           <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:13px;letter-spacing:.18em;color:var(--accent2);">MI EQUIPO</div>
           <div style="font-size:13px;color:var(--muted);">{{t_equipos_semanas}}</div>
-          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:42px;color:var(--ink2);">desde $2,990 <span style="font-size:15px;color:var(--muted);font-weight:600;">p/p</span></div>
+          <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:42px;color:var(--ink2);">{{t_desde_2990}} <span style="font-size:15px;color:var(--muted);font-weight:600;">p/p</span></div>
           <div style="font-size:13px;color:var(--ink);line-height:1.7;">{{t_talleres_grupales_sesion_por}}</div>
           <button onClick="{{scrollHero}}" style="margin-top:auto;padding:12px;border-radius:12px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="background:var(--accent-soft);">{{t_habla_con_consultor}}</button>
         </div>
@@ -1016,11 +1018,24 @@ class Component extends DCLogic {
       'gcap14': 'Reconocimiento a la operación',
       'gcap15': 'CONAREC 2024',
       'gcap16': 'CX Forum Monterrey',
-      'automatiza_lo_que_ya': 'AUTOMATIZA LO QUE YA HACES TODOS LOS DÍAS'
+      'automatiza_lo_que_ya': 'AUTOMATIZA LO QUE YA HACES TODOS LOS DÍAS',
+      'tool_computer': 'Computer use',
+      'tool_coding': 'Coding',
+      'tool_present': 'Presentaciones',
+      'tool_cal': 'Calendario',
+      'tool_report': 'Reportes',
+      'tool_analisis': 'Análisis',
+      'tool_escritura': 'Escritura',
+      'hoy': 'Hoy',
+      'hsem_repetitivas': 'h/sem en tareas repetitivas',
+      'hsem': 'h/sem',
+      'listo_btn': 'Listo',
+      'desde_2990': 'desde $2,990',
+      'gcap_terminal': 'Claude Code, construyendo la operación'
     },
     en: {
       'llevo_anos_poniendo_agentes': '. I\'ve spent years putting AI agents to real work: WhatsApp sales, voice, collections, recruiting and customer service for high-volume brands and operations. With Yaub I built the platform running millions of conversations today. This consulting is the 1-on-1 version of all that: I personally build your setup, train you on YOUR work, and stay with you in the community. And I don\'t come from software alone: I run',
-      'consultor_arma_semana_contigo': 'Your AI consultant builds your week with you: skills, Cowork and agents made to measure. Same people, same hours — ten times the operation. The discovery is free, and the plan is fully credited back if we work together.',
+      'consultor_arma_semana_contigo': 'Your AI consultant builds your week with you: skills, Cowork and tailored agents. Same people, same hours — ten times the operation. The discovery is free, and the plan is fully credited back if we work together.',
       'nada_teoria_poder_accion': 'No theory: the power of action applied to your real work, with the tools I use every day. And the support and community aren\'t just with me: they\'re with',
       'talleres_grupales_sesion_por': '4 group workshops · 1 one-on-one session per person · skills by role · 10–14 → $2,490 each · 15+ custom quote (agent included) · lifetime community',
       'seguimiento_personal_aprueba_plan': 'Your follow-up is personal: he approves your plan, sends it over WhatsApp and walks with you from day one.',
@@ -1028,7 +1043,7 @@ class Component extends DCLogic {
       'haces_mas_con_misma': '— you deliver more with the same people and can pay them better. Your consultant runs the numbers with YOURS.',
       'precios_lanzamiento_validos_dias': 'Launch pricing, valid 14 days from your plan. All include lifetime community with the whole Yaub team.',
       'con_sitio_web_consultor': 'With your website, your consultant figures out your business before asking. No sales calls, no cold forms.',
-      'sesiones_min_skills_medida': '4 one-on-one 90-min sessions · 3–5 custom skills · Cowork configured · 90-day plan · lifetime community',
+      'sesiones_min_skills_medida': '4 one-on-one 90-min sessions · 3–5 tailored skills · Cowork configured · 90-day plan · lifetime community',
       'las_herramientas_hicieron_mas': '— AI tools made me more efficient and gave me something I want to share with you today:',
       'ventas_atencion_cliente_cobranza': 'Sales, customer service, collections, recruiting and scheduling with AI for your customers — 24/7.',
       'sesiones_diagnostico_propuesta_automatizacion': '6 sessions · diagnosis + automation proposal · skills by role + Cowork for all 3 ·',
@@ -1053,7 +1068,7 @@ class Component extends DCLogic {
       'disena_mockups_landings_piezas': 'Design mockups, landings and visuals without a designer.',
       'automatiza_construye_herramientas_sin': 'Automate and build tools without being a developer.',
       'marcas_operaciones_que_trabajan': 'Brands and operations already running on our AI.',
-      'que_dicen_los_que': 'What people already working with custom AI say.',
+      'que_dicen_los_que': 'What people already running tailored AI say.',
       'que_vas_aprender_usar': 'What you\'ll learn — and use from week one',
       'posts_campanas_copy_para': 'Posts, campaigns and copy for your company, in your voice.',
       'decks_que_sorprenden_equipo': 'Decks that impress your team and your clients.',
@@ -1063,7 +1078,7 @@ class Component extends DCLogic {
       'concreto_que_haces_cada': '— be specific: what you do, how often and with what',
       'organiza_resume_encuentra_todo': 'Organize, summarize and find everything in seconds.',
       'agentes_equipo_operacion_trabajando': 'Agents, team and operation — working today.',
-      'consultor_personal_medida': 'YOUR PERSONAL AI CONSULTANT · AI MADE TO MEASURE',
+      'consultor_personal_medida': 'YOUR PERSONAL AI CONSULTANT · TAILORED AI',
       'capacitacion_vivo_comunidad_por': 'Live training + lifetime community',
       'capacito_equipo_dos_semanas': '“It trained my team of 8 in two weeks”',
       'gerente_administrativa_despacho_contable': 'Admin manager · accounting firm',
@@ -1110,9 +1125,9 @@ class Component extends DCLogic {
       'primera_semana_conmigo': 'YOUR FIRST WEEK WITH ME',
       'equipos_semanas': 'Teams of 5+ · 6 weeks',
       'agenda_min_con_jacobo': 'Book 15 min with Jacobo',
-      'mas_que_hacias': 'more than you already did.',
+      'mas_que_hacias': 'more than you already do.',
       'empezar_con_consultor': 'Start with my consultant',
-      'por_vida_comunidad': 'lifetime in the community',
+      'por_vida_comunidad': 'lifetime community access',
       'para_mandarte_plan': '(to send you your plan)',
       'sitio_web_empresa': 'Your company website',
       'platicanos_dia_dia': 'Tell us about your day',
@@ -1149,7 +1164,7 @@ class Component extends DCLogic {
       'manejo_archivos': 'File handling',
       'quien_acompana': 'WHO\'S WITH YOU',
       'paquete_equipo': 'My Team package',
-      'medida': '· AI made to measure',
+      'medida': '· Tailored AI',
       'volver_empezar': 'Start over',
       'paquete_setup': 'My Setup package',
       'contenido_con': 'Content with AI',
@@ -1186,7 +1201,7 @@ class Component extends DCLogic {
       'ph_sitio': 'https://yourcompany.com (optional)',
       'ph_respuesta': 'Type your answer…',
       'ph_wa_mail': 'Your WhatsApp or email',
-      'ph_ej_dia': 'Ex. Every Friday I build the weekly report pulling 4 sources by hand, I take minutes from 2 meetings and I square the calendar...',
+      'ph_ej_dia': 'Ex. Every Friday I build the weekly report pulling 4 sources by hand, I take minutes from 2 meetings and I wrestle the calendar into shape...',
       'gcap0': 'The platform: 66 active agents',
       'gcap1': 'Yaub GPT: ask your operation anything',
       'gcap2': 'An agent running Airbnb without me',
@@ -1204,7 +1219,20 @@ class Component extends DCLogic {
       'gcap14': 'Recognition for the operation',
       'gcap15': 'CONAREC 2024',
       'gcap16': 'CX Forum Monterrey',
-      'automatiza_lo_que_ya': 'AUTOMATE WHAT YOU ALREADY DO EVERY DAY'
+      'automatiza_lo_que_ya': 'AUTOMATE WHAT YOU ALREADY DO EVERY DAY',
+      'tool_computer': 'Computer use',
+      'tool_coding': 'Coding',
+      'tool_present': 'Presentations',
+      'tool_cal': 'Calendar',
+      'tool_report': 'Reports',
+      'tool_analisis': 'Analysis',
+      'tool_escritura': 'Writing',
+      'hoy': 'Today',
+      'hsem_repetitivas': 'h/week on repetitive tasks',
+      'hsem': 'h/week',
+      'listo_btn': 'Done',
+      'desde_2990': 'from $2,990',
+      'gcap_terminal': 'Claude Code, building the operation'
     }
   };
 
@@ -1228,11 +1256,13 @@ class Component extends DCLogic {
     { name: 'Google Drive', d: 'M12.01 1.485c-2.082 0-3.754.02-3.743.047.01.02 1.708 3.001 3.774 6.62l3.76 6.574h3.76c2.081 0 3.753-.02 3.742-.047-.005-.02-1.708-3.001-3.775-6.62l-3.76-6.574zm-4.76 1.73a789.828 789.861 0 0 0-3.63 6.319L0 15.868l1.89 3.298 1.885 3.297 3.62-6.335 3.618-6.33-1.88-3.287C8.1 4.704 7.255 3.22 7.25 3.214zm2.259 12.653-.203.348c-.114.198-.96 1.672-1.88 3.287a423.93 423.948 0 0 1-1.698 2.97c-.01.026 3.24.042 7.222.042h7.244l1.796-3.157c.992-1.734 1.85-3.23 1.906-3.323l.104-.167h-7.249z', fill: true },
     { name: 'Sheets', d: 'M11.318 12.545H7.91v-1.909h3.41v1.91zM14.728 0v6h6l-6-6zm1.363 10.636h-3.41v1.91h3.41v-1.91zm0 3.273h-3.41v1.91h3.41v-1.91zM20.727 6.5v15.864c0 .904-.732 1.636-1.636 1.636H4.909a1.636 1.636 0 0 1-1.636-1.636V1.636C3.273.732 4.005 0 4.909 0h9.318v6.5h6.5zm-3.273 2.773H6.545v7.909h10.91v-7.91zm-6.136 4.636H7.91v1.91h3.41v-1.91z', fill: true },
     { name: 'Notion', d: 'M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z', fill: true },
-    { name: 'Computer use', d: 'M2.8 4.4h18.4v11.2H2.8zM8.2 19.6h7.6M12 15.6v4M11.2 8.4l4.4 3.4-2 .5 1.3 2.2-1.4.8-1.3-2.2-1.4 1.5z', fill: false },
-    { name: 'Coding', d: 'M8.6 17.4L3.6 12l5-5.4M15.4 6.6L20.4 12l-5 5.4M13.6 4.2l-3.2 15.6', fill: false },
-    { name: 'Presentaciones', d: 'M2.8 3.6h18.4v11.6H2.8zM12 15.2v3.4M8.2 20.4L12 18.6l3.8 1.8M6.6 11.8V8.4M9.9 11.8V6.6M13.2 11.8V9.4M16.5 11.8V7.2', fill: false },
-    { name: 'Calendario', d: 'M3.6 5.4h16.8v15H3.6zM3.6 10.2h16.8M8.2 2.8v4.4M15.8 2.8v4.4M7.6 14h2.2M13.8 14H16M7.6 17.4h2.2M13.8 17.4H16', fill: false },
-    { name: 'Reportes', d: 'M3.4 20.2h17.2M6.6 20.2V10.6M11 20.2V4.6M15.4 20.2v-6.4M19.8 20.2V8.2', fill: false }
+    { name: 'tool_computer', d: 'M2.8 4.4h18.4v11.2H2.8zM8.2 19.6h7.6M12 15.6v4M11.2 8.4l4.4 3.4-2 .5 1.3 2.2-1.4.8-1.3-2.2-1.4 1.5z', fill: false },
+    { name: 'tool_coding', d: 'M8.6 17.4L3.6 12l5-5.4M15.4 6.6L20.4 12l-5 5.4M13.6 4.2l-3.2 15.6', fill: false },
+    { name: 'tool_present', d: 'M2.8 3.6h18.4v11.6H2.8zM12 15.2v3.4M8.2 20.4L12 18.6l3.8 1.8M6.6 11.8V8.4M9.9 11.8V6.6M13.2 11.8V9.4M16.5 11.8V7.2', fill: false },
+    { name: 'tool_cal', d: 'M3.6 5.4h16.8v15H3.6zM3.6 10.2h16.8M8.2 2.8v4.4M15.8 2.8v4.4M7.6 14h2.2M13.8 14H16M7.6 17.4h2.2M13.8 17.4H16', fill: false },
+    { name: 'tool_report', d: 'M3.4 20.2h17.2M6.6 20.2V10.6M11 20.2V4.6M15.4 20.2v-6.4M19.8 20.2V8.2', fill: false },
+    { name: 'tool_analisis', d: 'M10.4 17.2a6.8 6.8 0 1 0 0-13.6 6.8 6.8 0 0 0 0 13.6zM15.4 15.4l5 5M7.4 12.4v-2M10.4 12.4V8.2M13.4 12.4v-3.4', fill: false },
+    { name: 'tool_escritura', d: 'M4 20h16M15.6 3.6l4.4 4.4M17.4 1.8a1.9 1.9 0 0 1 2.7 2.7L8.6 16l-3.8 1.1L5.9 13.3z', fill: false }
   ];
 
   // Marcas del carrusel. Única fuente: agregar/quitar aquí, el marquee se arma solo.
@@ -1255,6 +1285,7 @@ class Component extends DCLogic {
     { src: 'uploads/galeria/yaub-gpt-graficas.jpg', cap: 'gcap1', w: 1000, h: 570 },
     { src: 'uploads/galeria/agente-airbnb.jpg', cap: 'gcap2', w: 432, h: 1000 },
     { src: 'uploads/galeria/tarea-programada.jpg', cap: 'gcap3', w: 1000, h: 927 },
+    { src: 'uploads/galeria/terminal-claude-code.jpg', cap: 'gcap_terminal', w: 1000, h: 682 },
     { src: 'uploads/galeria/agente-digest.jpg', cap: 'gcap4', w: 546, h: 1000 },
     { src: 'uploads/galeria/yaub-gpt.jpg', cap: 'gcap5', w: 1000, h: 569 },
     { src: 'uploads/galeria/ai-operating-system.jpg', cap: 'gcap6', w: 1000, h: 534 },
@@ -1391,6 +1422,16 @@ class Component extends DCLogic {
   }
 
   componentDidMount() {
+    // Idioma: 1) el que eligio antes  2) el del navegador  3) español.
+    // Va en componentDidMount y no en el state inicial porque localStorage/navigator no existen
+    // hasta que el componente monta en el navegador.
+    try {
+      const guardado = localStorage.getItem('yaub_lang');
+      const nav = (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
+      const l = guardado || nav;
+      if (l !== this.state.lang) this.setState({ lang: l });
+    } catch (e) {}
+
     setTimeout(() => this.setupYaubie(), 600);
     setTimeout(() => {
       this.io = new IntersectionObserver((es) => {
@@ -1712,7 +1753,11 @@ class Component extends DCLogic {
       antesN: Math.round(13 * p3E), despN: Math.round(5 * p3E), barA: (100 * p3E) + '%', barB: (38 * p3E) + '%',
       d1: donut[0].da, d2: donut[1].da, o2: donut[1].off, d3: donut[2].da, o3: donut[2].off, d4: donut[3].da, o4: donut[3].off, d5: donut[4].da, o5: donut[4].off,
       lineOff: String(900 * (1 - p3E)),
-      st1: Math.round(6 * p3E) + '–' + Math.round(10 * p3E) + ' h', st2: '< ' + Math.max(1, Math.round(2 * p3E)) + ' meses', st3: Math.round(24 * p3E) + '/7',
+      st1: Math.round(6 * p3E) + '–' + Math.round(10 * p3E) + ' h', st2: (() => {   // ojo: decia "1 meses" — mal en español tambien. Ahora singulariza.
+        const m = Math.max(1, Math.round(2 * p3E));
+        const u = st.lang === 'en' ? (m === 1 ? ' month' : ' months') : (m === 1 ? ' mes' : ' meses');
+        return '< ' + m + u;
+      })(), st3: Math.round(24 * p3E) + '/7',
       s2o: vo('s2'), s2y: vy('s2'), s9o: vo('s9'), s9y: vy('s9'), s3o: vo('s3'), s3y: vy('s3'), s4o: vo('s4'), s4y: vy('s4'),
       s5o: vo('s5'), s5y: vy('s5'), s6o: vo('s6'), s6y: vy('s6'), s7o: vo('s7'), s7y: vy('s7'), s8o: vo('s8'), s8y: vy('s8'),
       s10o: vo('s10'), s10y: vy('s10'),
@@ -1724,6 +1769,9 @@ class Component extends DCLogic {
       // que la pantalla, asi que no deja hueco al cerrar el ciclo.
       tools: Array.from({ length: 2 }, (_, k) => this.TOOLS.map((x, i) => ({
         ...x,
+        // las marcas (Gmail, Slack...) no estan en el diccionario y quedan tal cual;
+        // los conceptuales (Calendario, Reportes...) traen clave y se resuelven al idioma
+        name: (this.T[st.lang] || this.T.es)[x.name] || x.name,
         f: x.fill ? 'currentColor' : 'none',   // Simple Icons son solidos; los propios, de trazo
         s: x.fill ? 'none' : 'currentColor',
         dly: k === 0 ? (0.03 + i * 0.04).toFixed(2) + 's' : '0s', key: k + '-' + i
@@ -1734,7 +1782,11 @@ class Component extends DCLogic {
       // a t_clave y se mezcla al nivel raiz de renderVals.
       ...Object.fromEntries(Object.entries(this.T[st.lang] || this.T.es).map(([k, v]) => ['t_' + k, v])),
       langAlt: st.lang === 'es' ? 'EN' : 'ES',
-      toggleLang: () => this.setState({ lang: st.lang === 'es' ? 'en' : 'es' }),
+      toggleLang: () => {
+        const l = st.lang === 'es' ? 'en' : 'es';
+        try { localStorage.setItem('yaub_lang', l); } catch (e) {}   // modo privado: falla y no pasa nada
+        this.setState({ lang: l });
+      },
       // 8 copias: el marquee corre a -50%, así que cada mitad (4 sets ≈ 2.6k px) debe pasar el ancho
       // de pantalla más grande razonable. Si no, al cerrar el ciclo se ve un hueco en blanco.
       marqueeBrands: Array.from({ length: 8 }, (_, k) => this.BRANDS.map((b, i) => ({ ...b, alt: k === 0 ? b.alt : '', key: k + '-' + i }))).flat(),
