@@ -27,6 +27,7 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
 @keyframes glowPulse{0%,100%{box-shadow:0 10px 30px rgba(30,39,97,.06);}50%{box-shadow:0 0 30px 2px rgba(236,72,153,.35);}}
 @keyframes blink{0%,100%{opacity:.3;}50%{opacity:1;}}
 @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes marqueeRev{from{transform:translateX(-50%);}to{transform:translateX(0);}}
 @keyframes yaubie{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-16px) rotate(3deg);}}
 @keyframes gradMove{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
 @keyframes heroPop{from{opacity:0;transform:translateY(8px) scale(.72);}60%{opacity:1;}to{opacity:1;transform:none;}}
@@ -64,7 +65,7 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
 /* ── Carrusel de operación ──
    Clave: altura fija + width:auto = la foto conserva su proporcion y NO se recorta.
    Nada de object-fit:cover aqui; eso era lo que cortaba las caras. */
-.gTrack{display:flex;width:max-content;align-items:center;padding:8px 0;animation:marquee 62s linear infinite;}
+.gTrack{display:flex;width:max-content;align-items:center;padding:4px 0;animation-timing-function:linear;animation-iteration-count:infinite;}
 .gCell{position:relative;flex:none;height:250px;margin-right:14px;border-radius:14px;overflow:hidden;
   background:rgba(30,39,97,.04);box-shadow:0 8px 26px rgba(30,39,97,.09);
   transition:transform .3s ease,box-shadow .3s ease;animation:fadeUp .5s ease both var(--d,0s);}
@@ -108,9 +109,10 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
   .mMarquee{margin-top:18px !important;}
   /* galeria: fotos mas chicas y el carrusel corre mas rapido para que en pantalla angosta
      igual pasen varias. El caption se oculta: en tactil no hay hover y a 150px estorba. */
-  .gCell{height:150px !important;margin-right:9px !important;border-radius:11px !important;}
+  .gCell{height:132px !important;margin-right:9px !important;border-radius:11px !important;}
   .gCap{display:none !important;}
-  .gTrack{animation-duration:38s !important;}
+  /* mas rapido en movil: la fila es la misma pero la pantalla es 4x mas angosta */
+  .gTrack{animation-duration:34s !important;}
   .spec{font-size:11.5px !important;padding:8px 13px !important;}
 }
 @media (min-width:761px) and (max-width:1024px){
@@ -606,19 +608,23 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
         <h2 style="font-family:Manrope,sans-serif;font-weight:800;font-size:36px;line-height:1.15;margin:12px 0 0;color:var(--ink2);max-width:900px;display:inline-block;">Agentes, equipo y operación — trabajando hoy.</h2>
         <div style="margin:12px auto 0;font-size:15px;color:var(--muted);max-width:640px;">Lo que ves aquí es lo mismo que vas a construir conmigo: plataformas en producción, gente capacitándose y agentes atendiendo de verdad.</div>
       </div>
-      <!-- Carrusel de fotos. Cada img va a ALTURA fija con width:auto -> conserva su proporcion
-           natural y NO se recorta (sin object-fit:cover). El set se repite 2x porque el keyframe
-           marquee corre a -50%; cada set mide ~2800px, mas ancho que cualquier pantalla, asi que
-           el loop no deja hueco. Se pausa al pasar el mouse. -->
-      <div class="gWrap" style="overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);">
-        <div class="gTrack" style-hover="animation-play-state:paused;">
-          <sc-for list="{{galeria}}" as="g" hint-placeholder-count="11">
-            <div class="gCell" style="--d:{{g.dly}};aspect-ratio:{{g.w}}/{{g.h}};">
-              <img src="{{g.src}}" alt="{{g.alt}}" width="{{g.w}}" height="{{g.h}}" fetchpriority="low" decoding="async">
-              <div class="gCap">{{g.cap}}</div>
+      <!-- Carrusel de fotos por filas. El reparto lo hace armarFilas() en el script:
+           máx 6 por fila, mín 3, y si la última quedaría huérfana se fusiona con la anterior.
+           Cada fila alterna sentido (marquee / marqueeRev) y lleva su propia velocidad.
+           Cada img va a ALTURA fija con width:auto -> conserva su proporción y NO se recorta. -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <sc-for list="{{galeriaFilas}}" as="fila" hint-placeholder-count="2">
+          <div class="gWrap" style="overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);">
+            <div class="gTrack" style="animation-name:{{fila.dir}};animation-duration:{{fila.dur}};" style-hover="animation-play-state:paused;">
+              <sc-for list="{{fila.fotos}}" as="g" hint-placeholder-count="6">
+                <div class="gCell" style="--d:{{g.dly}};aspect-ratio:{{g.w}}/{{g.h}};">
+                  <img src="{{g.src}}" alt="{{g.alt}}" width="{{g.w}}" height="{{g.h}}" fetchpriority="low" decoding="async">
+                  <div class="gCap">{{g.cap}}</div>
+                </div>
+              </sc-for>
             </div>
-          </sc-for>
-        </div>
+          </div>
+        </sc-for>
       </div>
     </div>
   </div>
@@ -844,6 +850,41 @@ class Component extends DCLogic {
     { q: '¿Y el depósito de la cita?', a: 'Se devuelve completo cuando nos conectamos. Es solo para apartar el horario: te atiendo yo, y una silla vacía es tiempo que le quito a alguien más.' },
     { q: '¿Facturas?', a: 'Sí, todos los paquetes se facturan.' }
   ];
+
+  // Reparte GALERIA en filas de carrusel.
+  //  · MAX por fila; si la última quedaría con menos de MIN, se fusiona con la anterior —
+  //    preferimos una fila inflada a una fila huérfana con 1-2 fotos.
+  //  · Direcciones alternas: fila par ←, fila impar →.
+  //  · copias: cada fila se repite hasta que UNA MITAD supere ANCHO_MIN. El keyframe corre a
+  //    -50%, así que si la mitad es más angosta que la pantalla el loop deja un hueco en blanco.
+  //    Las copias son pares por lo mismo. El ancho se estima con las medidas reales (w/h × alto).
+  armarFilas() {
+    const MAX = 6, MIN = 3, ALTO = 250, GAP = 14, ANCHO_MIN = 2600;
+    const G = this.GALERIA;
+    const filas = [];
+    for (let i = 0; i < G.length; i += MAX) filas.push(G.slice(i, i + MAX));
+    if (filas.length > 1 && filas[filas.length - 1].length < MIN) {
+      filas[filas.length - 2].push(...filas.pop());
+    }
+    return filas.map((fotos, k) => {
+      const ancho = fotos.reduce((s, g) => s + (g.w / g.h) * ALTO + GAP, 0);
+      const copias = 2 * Math.max(1, Math.ceil(ANCHO_MIN / ancho));
+      const items = [];
+      for (let c = 0; c < copias; c++) {
+        fotos.forEach((g, j) => items.push({
+          ...g,
+          alt: c === 0 ? g.cap : '',            // solo la 1a copia se anuncia; el resto es decorativo
+          dly: c === 0 ? (0.04 + j * 0.06).toFixed(2) + 's' : '0s',
+          key: k + '-' + c + '-' + j
+        }));
+      }
+      return {
+        dir: k % 2 === 0 ? 'marquee' : 'marqueeRev',   // alterna el sentido por fila
+        dur: (52 + k * 9) + 's',                        // distinta velocidad = no marchan en bloque
+        fotos: items
+      };
+    });
+  }
 
   setupYaubie() {
     const el = document.getElementById('yaubie');
@@ -1206,16 +1247,7 @@ class Component extends DCLogic {
       // 2 copias: el marquee corre a -50%, asi que cada mitad debe ser un set completo.
       // Un set mide ~2800px a 250px de alto — mas ancho que cualquier pantalla, no deja hueco.
       // El alt solo va en la 1a copia; la 2a es decorativa y no debe repetirse a un lector de pantalla.
-      // NADA de loading=lazy aquí: el carrusel se mueve solo, y las fotos fuera de pantalla
-      // no disparaban la carga → se veían celdas grises entrando a cuadro. Van eager con
-      // fetchpriority=low para no competir con el hero. Los 2 sets comparten las mismas 11 URLs,
-      // así que el 2o no cuesta red — sale de caché. El alt solo en el 1er set; el 2o es decorativo.
-      galeria: Array.from({ length: 2 }, (_, k) => this.GALERIA.map((g, i) => ({
-        ...g,
-        alt: k === 0 ? g.cap : '',
-        dly: k === 0 ? (0.04 + i * 0.06).toFixed(2) + 's' : '0s',
-        key: k + '-' + i
-      }))).flat(),
+      galeriaFilas: this.armarFilas(),
       showTestimonials: this.SHOW_TESTIMONIALS,
       // 8 copias: el marquee corre a -50%, así que cada mitad (4 sets ≈ 2.6k px) debe pasar el ancho
       // de pantalla más grande razonable. Si no, al cerrar el ciclo se ve un hueco en blanco.
