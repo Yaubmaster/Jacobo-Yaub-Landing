@@ -227,7 +227,8 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
           </div>
           <sc-if value="{{slotMoreOn}}" hint-placeholder-val="{{ false }}"><button onClick="{{slotMore}}" style="align-self:center;border:none;background:transparent;color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" style-hover="color:var(--accent);">Ver más horarios</button></sc-if>
           <sc-if value="{{slotErrOn}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;font-weight:600;color:#DC2626;text-align:center;">{{slotErr}}</div></sc-if>
-          <button onClick="{{skipSlot}}" style="align-self:center;border:none;background:transparent;color:#94A3B8;font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;text-decoration:underline;" style-hover="color:var(--accent);">Solo quiero mi plan, sin sesión →</button>
+          <div style="display:flex;align-items:center;gap:10px;margin:2px 0;"><span style="flex:1;height:1px;background:rgba(30,39,97,.1);"></span><span style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#94A3B8;">O SI PREFIERES</span><span style="flex:1;height:1px;background:rgba(30,39,97,.1);"></span></div>
+          <button onClick="{{skipSlot}}" style="align-self:center;padding:12px 24px;border-radius:999px;border:1.5px solid var(--accent);background:rgba(255,255,255,.92);color:var(--accent);font-size:14px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 6px 16px rgba(30,39,97,.08);" style-hover="background:var(--accent-soft);transform:translateY(-1px);">Solo quiero mi plan, sin sesión →</button>
         </div>
       </sc-if>
       <sc-if value="{{feeGate}}" hint-placeholder-val="{{ false }}">
@@ -392,6 +393,7 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
             <div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:15px;color:var(--ink2);">{{t_plan_personalizado}}</div><div style="font-size:11px;color:#94A3B8;">Folio {{folio}}</div></div>
             <div style="font-size:12.5px;color:var(--muted);">{{t_para}} <strong style="color:var(--ink2);">{{cliente}}</strong> · {{rol}}</div>
             <sc-if value="{{planIntro}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;color:var(--ink2);background:var(--accent-soft);border-radius:9px;padding:8px 12px;line-height:1.5;">{{planIntro}}</div></sc-if>
+            <div style="display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--ink2);background:rgba(30,39,97,.04);border:1px solid rgba(30,39,97,.1);border-radius:11px;padding:10px 13px;line-height:1.5;"><span style="font-size:15px;line-height:1.2;flex:none;">📩</span><span>Tus skills te llegan por correo junto con tu plan completo, listo para que lo implementes tú solo — paso a paso.</span></div>
             <sc-if value="{{hasExtra}}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--muted);background:rgba(30,39,97,.04);border-radius:9px;padding:8px 12px;">{{t_nota}} <em style="color:var(--ink2);">“{{extra}}”</em></div></sc-if>
             <div style="padding:15px 18px;border-radius:14px;background:linear-gradient(135deg, var(--accent-soft), rgba(255,255,255,.7));border:1px solid rgba(30,39,97,.3);">
               <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:11px;letter-spacing:.16em;color:var(--ink2);">{{pkgName}} · {{pkgAud}}</div>
