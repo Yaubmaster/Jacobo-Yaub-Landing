@@ -44,6 +44,16 @@ const PKGS = [
   { name: "MI EQUIPO", price_mxn: 0, price: "desde $2,990 MXN por persona", weeks: "6 semanas · talleres + 1:1", chargeable: false },
 ];
 
+// ── Fee del plan (NUEVO funnel) — cobro previo a generar el plan. SEPARADO del pago del PROGRAMA.
+// El discovery deja de ser gratis: se cobra y se reembolsa (manual, ≤24h háb.) SOLO si contratan.
+//   plan_fee : $99  → solo el plan, sin cita.
+//   deposito : $499 → plan + aparta el horario elegido (hold de 5 min durante el checkout).
+const HOLD_MINUTES = 5;
+const FEES: Record<string, { amount_mxn: number; label: string; title: string; holds_slot: boolean }> = {
+  plan_fee: { amount_mxn: 99,  label: "$99 MXN",  title: "Yaub — Tu plan a la medida",                 holds_slot: false },
+  deposito: { amount_mxn: 499, label: "$499 MXN", title: "Yaub — Plan + reserva de tu sesión con Jacobo", holds_slot: true },
+};
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
 
 const corsHeaders = {
@@ -68,6 +78,8 @@ const RATE_LIMITS: Record<string, { limit: number; win: number }> = {
   // Apretado a propósito: es el único freno contra fuerza bruta a la master password.
   access_unlock: { limit: 8, win: 3600 },
   payment_status:{ limit: 120, win: 600 },
+  fee_checkout:  { limit: 20, win: 3600 },
+  fee_status:    { limit: 120, win: 600 },
 };
 
 function json(body: unknown, status = 200) {
@@ -269,7 +281,22 @@ async function handleAnalyze(body: any) {
   });
 }
 
-async function handlePlan(body: any) {
+async function handlePlan(body: any, isTrusted = false) {
+  // Gate del funnel de pago: el plan solo se genera tras pagar el fee ($99/$499).
+  // Las llamadas confiables (service-role: tools de WhatsApp/voz) se saltan el gate —
+  // ese canal genera planes sin cobro, como siempre. Solo el web (untrusted) paga.
+  if (!isTrusted && body.lead_id) {
+    const { data: gate } = await supabase
+      .from("landing_leads")
+      .select("plan_unlocked, access_granted")
+      .eq("id", body.lead_id)
+      .maybeSingle();
+    // access_granted (pagó el programa o master password) también desbloquea el plan.
+    if (gate && !gate.plan_unlocked && !gate.access_granted) {
+      return json({ ok: false, error: "plan_bloqueado", message: "Paga tu plan para generarlo." }, 402);
+    }
+  }
+
   const rol = (body.rol ?? "").toString().slice(0, 200);
   const sitio = (body.sitio ?? "").toString().slice(0, 300);
   const proyecto = (body.proyecto ?? "").toString().slice(0, 2000);
@@ -418,7 +445,22 @@ async function handleAgendaSlots(body: any) {
   }
   const r = await callCalendarProxy({ action: "check_availability", start_date: startDate, end_date: endDate, duration_minutes: 15 });
   if (r?.error) return json({ ok: false, error: r.error }, 502);
-  const isoSlots: string[] = r.available_slots ?? [];
+  let isoSlots: string[] = r.available_slots ?? [];
+
+  // Quita los horarios con hold activo de OTRO lead (alguien los está pagando ahora mismo).
+  // El propio lead sí ve su hold como disponible. Los holds vencidos se ignoran (no hace falta borrarlos).
+  const selfLead = (body.lead_id ?? "").toString();
+  const { data: holds } = await supabase
+    .from("landing_slot_holds")
+    .select("slot_start, lead_id")
+    .gt("expires_at", new Date().toISOString());
+  if (Array.isArray(holds) && holds.length) {
+    const blocked = new Set(
+      holds.filter((h: any) => String(h.lead_id) !== selfLead).map((h: any) => new Date(h.slot_start).getTime()),
+    );
+    if (blocked.size) isoSlots = isoSlots.filter((s) => !blocked.has(new Date(s).getTime()));
+  }
+
   return json({
     ok: true,
     server_today: today,
@@ -589,6 +631,133 @@ async function handlePlanCheckout(body: any) {
   });
 }
 
+// ── Fee del plan (NUEVO funnel): cobra $99 (solo plan) o $499 (plan + aparta horario) ANTES de generar.
+// external_reference = "fee:<lead_id>" para distinguirlo del pago del PROGRAMA ("lead:<uuid>").
+async function handleFeeCheckout(body: any) {
+  if (!MP_TOKEN) return json({ ok: false, error: "mp_no_configurado" }, 500);
+  if (!body.lead_id) return json({ ok: false, error: "faltan_datos", message: "Falta lead_id." }, 400);
+
+  const kind = body.kind === "deposito" ? "deposito" : "plan_fee";
+  const fee = FEES[kind];
+
+  const { data: lead } = await supabase
+    .from("landing_leads")
+    .select("id, nombre, telefono, plan_unlocked, access_granted")
+    .eq("id", body.lead_id)
+    .maybeSingle();
+  if (!lead) return json({ ok: false, error: "lead_no_encontrado" }, 404);
+
+  // Ya desbloqueó el plan (pagó fee, programa, o master password): no lo cobres otra vez.
+  if (lead.plan_unlocked || lead.access_granted) {
+    return json({ ok: true, already: true, plan_unlocked: true, lead_id: lead.id });
+  }
+
+  // Path depósito: aparta el horario 5 min mientras completa el checkout.
+  let holdExpires: string | null = null;
+  let heldStart: string | null = null;
+  if (fee.holds_slot) {
+    const start = String(body.slot_start ?? "");
+    if (!start || isNaN(new Date(start).getTime())) {
+      return json({ ok: false, error: "falta_horario", message: "Elige un horario para el depósito." }, 200);
+    }
+    if (new Date(start).getTime() < Date.now()) {
+      return json({ ok: false, reason: "slot_pasado", message: "Ese horario ya pasó. Elige otro." }, 200);
+    }
+    // ¿alguien más ya lo tiene apartado (hold vivo de otro lead)?
+    const { data: clash } = await supabase.from("landing_slot_holds")
+      .select("id, lead_id").eq("slot_start", start).gt("expires_at", new Date().toISOString());
+    if (Array.isArray(clash) && clash.some((h: any) => String(h.lead_id) !== String(lead.id))) {
+      return json({ ok: false, reason: "slot_ocupado", message: "Ese horario se acaba de apartar. Elige otro." }, 200);
+    }
+    heldStart = new Date(start).toISOString();
+    holdExpires = new Date(Date.now() + HOLD_MINUTES * 60000).toISOString();
+    // Un hold vivo por lead: limpia el anterior y crea el nuevo.
+    await supabase.from("landing_slot_holds").delete().eq("lead_id", lead.id);
+    await supabase.from("landing_slot_holds").insert({ lead_id: lead.id, slot_start: heldStart, expires_at: holdExpires });
+  }
+
+  const nombreLead = (lead.nombre || "").trim();
+  const pref: Record<string, unknown> = {
+    items: [{ title: fee.title, description: kind === "deposito" ? "Reembolsable al contratar (≤24h háb.)" : "Plan personalizado", quantity: 1, unit_price: fee.amount_mxn, currency_id: "MXN" }],
+    external_reference: `fee:${lead.id}`,
+    notification_url: `${SUPABASE_URL}/functions/v1/landing-consultor?mp=1`,
+    statement_descriptor: "YAUB",
+    back_urls: {
+      success: `${LANDING_URL}/?fee=success&lead=${lead.id}&kind=${kind}`,
+      failure: `${LANDING_URL}/?fee=failure&lead=${lead.id}&kind=${kind}`,
+      pending: `${LANDING_URL}/?fee=pending&lead=${lead.id}&kind=${kind}`,
+    },
+    auto_return: "approved",
+    metadata: { lead_id: lead.id, tipo: "fee", kind },
+  };
+  if (nombreLead) {
+    (pref as any).payer = {
+      name: nombreLead.split(" ")[0].slice(0, 60),
+      surname: nombreLead.split(" ").slice(1).join(" ").slice(0, 60) || "-",
+    };
+  }
+
+  const { signal, cancel } = withTimeout(15000);
+  let mpData: any;
+  try {
+    const mpRes = await fetch("https://api.mercadopago.com/checkout/preferences", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${MP_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify(pref),
+      signal,
+    });
+    mpData = await mpRes.json();
+    if (!mpRes.ok) {
+      console.error("fee preference failed:", JSON.stringify(mpData).slice(0, 500));
+      return json({ ok: false, error: "mp_preference_failed", message: mpData?.message ?? "MercadoPago rechazó la preferencia." }, 502);
+    }
+  } catch (e) {
+    console.error("fee preference error:", e);
+    return json({ ok: false, error: "mp_unreachable" }, 502);
+  } finally {
+    cancel();
+  }
+
+  await supabase.from("landing_leads").update({
+    fee_kind: kind,
+    fee_amount_mxn: fee.amount_mxn,
+    fee_status: "pending",
+    fee_mp_preference_id: mpData.id,
+    held_slot_start: heldStart,
+    status: "fee_pendiente",
+    updated_at: new Date().toISOString(),
+  }).eq("id", lead.id);
+
+  return json({
+    ok: true,
+    lead_id: lead.id,
+    kind,
+    amount_mxn: fee.amount_mxn,
+    price_label: fee.label,
+    holds_slot: fee.holds_slot,
+    hold_expires_at: holdExpires,
+    preference_id: mpData.id,
+    checkout_url: mpData.init_point ?? mpData.sandbox_init_point,
+  });
+}
+
+// Estado del fee — el front hace polling aquí al volver de MercadoPago (fee=success).
+// La verdad es plan_unlocked (viene del webhook confirmado con MP), NO el query param.
+async function handleFeeStatus(body: any) {
+  if (!body.lead_id) return json({ ok: false, error: "faltan_datos" }, 400);
+  const { data: lead } = await supabase
+    .from("landing_leads")
+    .select("id, fee_kind, fee_status, fee_amount_mxn, fee_paid_at, plan_unlocked, held_slot_start")
+    .eq("id", body.lead_id)
+    .maybeSingle();
+  if (!lead) return json({ ok: false, error: "lead_no_encontrado" }, 404);
+  return json({
+    ok: true,
+    ...lead,
+    held_slot_label: lead.held_slot_start ? slotLabel(lead.held_slot_start) : null,
+  });
+}
+
 // Estado de pago/acceso — el wizard del front hace polling aquí al volver de MercadoPago.
 async function handlePaymentStatus(body: any) {
   if (!body.lead_id) return json({ ok: false, error: "faltan_datos" }, 400);
@@ -653,6 +822,51 @@ async function handleMpWebhook(body: any) {
   }
 
   const ref = String(pay.external_reference ?? "");
+
+  // Fee del plan ($99/$499): desbloquea la generación del plan. NO da acceso al programa completo.
+  if (ref.startsWith("fee:")) {
+    const feeLeadId = ref.slice(4);
+    const feeApproved = pay.status === "approved";
+    const feePatch: Record<string, unknown> = {
+      fee_status: feeApproved ? "paid" : pay.status,
+      fee_mp_payment_id: String(pay.id),
+      updated_at: new Date().toISOString(),
+    };
+    if (feeApproved) {
+      feePatch.plan_unlocked = true;
+      feePatch.fee_paid_at = new Date().toISOString();
+      feePatch.status = "fee_pagado";
+    }
+    const { data: fl } = await supabase.from("landing_leads")
+      .update(feePatch).eq("id", feeLeadId)
+      .select("id, nombre, telefono, fee_kind, fee_amount_mxn, held_slot_start").maybeSingle();
+    if (feeApproved && RESEND_API_KEY && fl) {
+      try {
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            from: FROM_EMAIL,
+            to: NOTIFICATION_EMAILS,
+            subject: `🧾 Fee de plan pagado — ${esc(fl.fee_kind) || "plan_fee"} · ${esc(fl.nombre || "sin nombre")}`,
+            html: `<div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;">
+              <h2>🧾 Fee del plan pagado</h2>
+              <p><strong>Cliente:</strong> ${esc(fl.nombre) || "—"}<br/>
+              <strong>WhatsApp:</strong> ${esc(fl.telefono) || "—"}<br/>
+              <strong>Tipo:</strong> ${esc(fl.fee_kind) || "—"} ($${esc(fl.fee_amount_mxn)} MXN)<br/>
+              ${fl.held_slot_start ? `<strong>Horario apartado:</strong> ${esc(slotLabel(fl.held_slot_start))}<br/>` : ""}
+              <strong>Pago MP:</strong> ${esc(pay.id)}</p>
+              <p>Reembolsable (manual, ≤24h háb.) SOLO si contrata. Lead ${esc(feeLeadId)}.</p>
+            </div>`,
+          }),
+        });
+      } catch (e) {
+        console.error("resend fee error:", e);
+      }
+    }
+    return json({ ok: true, lead_id: feeLeadId, kind: "fee", status: pay.status });
+  }
+
   if (!ref.startsWith("lead:")) return json({ ok: true, ignored: "no_es_lead" }); // facturas de tenants las cobra mp-platform-webhook
   const leadId = ref.slice(5);
   const approved = pay.status === "approved";
@@ -842,7 +1056,7 @@ Deno.serve(async (req) => {
   try {
     switch (body.action) {
       case "analyze": return await handleAnalyze(body);
-      case "plan": return await handlePlan(body);
+      case "plan": return await handlePlan(body, isTrusted);
       case "contact": return await handleContact(body);
       case "agenda_slots": return await handleAgendaSlots(body);
       case "agenda_book": return await handleAgendaBook(body);
@@ -850,6 +1064,8 @@ Deno.serve(async (req) => {
       case "plan_checkout": return await handlePlanCheckout(body);
       case "payment_status": return await handlePaymentStatus(body);
       case "access_unlock": return await handleAccessUnlock(body, ip);
+      case "fee_checkout": return await handleFeeCheckout(body);
+      case "fee_status": return await handleFeeStatus(body);
       default: return json({ error: "unknown_action" }, 400);
     }
   } catch (e) {
