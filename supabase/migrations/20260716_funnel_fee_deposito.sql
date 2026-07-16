@@ -21,14 +21,18 @@ alter table public.landing_leads
 -- 2) Holds temporales de horario (5 min) — protegen el slot durante el checkout del depósito.
 --    OJO: solo bloquean a otros visitantes del landing; la reserva real del calendario sigue
 --    pasando por calendar-proxy al confirmarse el pago. Suficiente para 1 consultor, baja concurrencia.
+-- hold_token: el visitante elige fecha ANTES de que exista su lead (el lead nace en analyze,
+-- tras el formulario). El token lo genera el cliente y liga el hold a esa sesión del navegador.
 create table if not exists public.landing_slot_holds (
   id          uuid primary key default gen_random_uuid(),
-  lead_id     uuid references public.landing_leads(id) on delete cascade,
+  lead_id     uuid references public.landing_leads(id) on delete cascade,  -- se liga después
+  hold_token  text,
   slot_start  timestamptz not null,
   expires_at  timestamptz not null,
   created_at  timestamptz default now()
 );
 create index if not exists idx_slot_holds_active on public.landing_slot_holds (slot_start, expires_at);
+create index if not exists idx_slot_holds_token  on public.landing_slot_holds (hold_token);
 
 -- RLS igual que el resto de la landing: habilitado y SIN policies → solo el service-role de la
 -- edge function puede leer/escribir. Ver atlas_database.

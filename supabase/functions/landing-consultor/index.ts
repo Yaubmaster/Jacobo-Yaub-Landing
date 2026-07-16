@@ -48,7 +48,7 @@ const PKGS = [
 // El discovery deja de ser gratis: se cobra y se reembolsa (manual, ≤24h háb.) SOLO si contratan.
 //   plan_fee : $99  → solo el plan, sin cita.
 //   deposito : $499 → plan + aparta el horario elegido (hold de 5 min durante el checkout).
-const HOLD_MINUTES = 5;
+const HOLD_MINUTES = 15; // el hold arranca al elegir fecha y debe cubrir el cotizador + la decisión
 const FEES: Record<string, { amount_mxn: number; label: string; title: string; holds_slot: boolean }> = {
   plan_fee: { amount_mxn: 99,  label: "$99 MXN",  title: "Yaub — Tu plan a la medida",                 holds_slot: false },
   deposito: { amount_mxn: 499, label: "$499 MXN", title: "Yaub — Plan + reserva de tu sesión con Jacobo", holds_slot: true },
@@ -72,6 +72,7 @@ const RATE_LIMITS: Record<string, { limit: number; win: number }> = {
   plan:          { limit: 25, win: 600 },
   contact:       { limit: 15, win: 3600 },
   agenda_slots:  { limit: 90, win: 600 },
+  agenda_hold:   { limit: 60, win: 600 },
   agenda_book:   { limit: 30, win: 3600 },
   plan_pdf:      { limit: 40, win: 3600 },
   plan_checkout: { limit: 20, win: 3600 },
@@ -288,11 +289,13 @@ async function handlePlan(body: any, isTrusted = false) {
   if (!isTrusted && body.lead_id) {
     const { data: gate } = await supabase
       .from("landing_leads")
-      .select("plan_unlocked, access_granted")
+      .select("fee_kind, plan_unlocked, access_granted")
       .eq("id", body.lead_id)
       .maybeSingle();
-    // access_granted (pagó el programa o master password) también desbloquea el plan.
-    if (gate && !gate.plan_unlocked && !gate.access_granted) {
+    // Compatible hacia atrás: solo bloquea si el lead ENTRÓ al funnel de pago (fee_kind puesto)
+    // y aún no desbloqueó. Un lead del front viejo (fee_kind null) NO se bloquea → nada se rompe
+    // al desplegar antes de actualizar Vercel. access_granted (programa/master password) también libera.
+    if (gate && gate.fee_kind && !gate.plan_unlocked && !gate.access_granted) {
       return json({ ok: false, error: "plan_bloqueado", message: "Paga tu plan para generarlo." }, 402);
     }
   }
@@ -447,17 +450,18 @@ async function handleAgendaSlots(body: any) {
   if (r?.error) return json({ ok: false, error: r.error }, 502);
   let isoSlots: string[] = r.available_slots ?? [];
 
-  // Quita los horarios con hold activo de OTRO lead (alguien los está pagando ahora mismo).
-  // El propio lead sí ve su hold como disponible. Los holds vencidos se ignoran (no hace falta borrarlos).
+  // Quita los horarios con hold activo de OTRO visitante (alguien lo está decidiendo/pagando ahora).
+  // El propio visitante (mismo hold_token o lead_id) SÍ ve su hold como disponible.
+  // Los holds vencidos se ignoran (no hace falta borrarlos).
+  const selfToken = (body.hold_token ?? "").toString();
   const selfLead = (body.lead_id ?? "").toString();
   const { data: holds } = await supabase
     .from("landing_slot_holds")
-    .select("slot_start, lead_id")
+    .select("slot_start, lead_id, hold_token")
     .gt("expires_at", new Date().toISOString());
   if (Array.isArray(holds) && holds.length) {
-    const blocked = new Set(
-      holds.filter((h: any) => String(h.lead_id) !== selfLead).map((h: any) => new Date(h.slot_start).getTime()),
-    );
+    const mine = (h: any) => (selfToken && String(h.hold_token) === selfToken) || (selfLead && String(h.lead_id) === selfLead);
+    const blocked = new Set(holds.filter((h: any) => !mine(h)).map((h: any) => new Date(h.slot_start).getTime()));
     if (blocked.size) isoSlots = isoSlots.filter((s) => !blocked.has(new Date(s).getTime()));
   }
 
@@ -469,6 +473,32 @@ async function handleAgendaSlots(body: any) {
     slots: isoSlots.slice(0, 40).map((s) => ({ start: s, label: slotLabel(s) })),
     count: isoSlots.length,
   });
+}
+
+// Aparta un horario al ELEGIRLO (antes de que exista el lead), identificado por hold_token del cliente.
+// Dura HOLD_MINUTES; cubre el cotizador + la decisión $99/$499. Renovable (re-eligiendo el mismo).
+async function handleAgendaHold(body: any) {
+  const start = String(body.slot_start ?? body.start ?? "");
+  const token = (body.hold_token ?? "").toString().slice(0, 80);
+  if (!token) return json({ ok: false, error: "falta_token" }, 400);
+  if (!start || isNaN(new Date(start).getTime())) {
+    return json({ ok: false, error: "falta_horario", message: "Elige un horario válido." }, 200);
+  }
+  if (new Date(start).getTime() < Date.now()) {
+    return json({ ok: false, reason: "slot_pasado", message: "Ese horario ya pasó. Elige otro." }, 200);
+  }
+  const iso = new Date(start).toISOString();
+  // ¿otro visitante ya lo tiene apartado (hold vivo de otro token)?
+  const { data: clash } = await supabase.from("landing_slot_holds")
+    .select("id, hold_token").eq("slot_start", iso).gt("expires_at", new Date().toISOString());
+  if (Array.isArray(clash) && clash.some((h: any) => String(h.hold_token) !== token)) {
+    return json({ ok: false, reason: "slot_ocupado", message: "Ese horario se acaba de apartar. Elige otro." }, 200);
+  }
+  const expires = new Date(Date.now() + HOLD_MINUTES * 60000).toISOString();
+  // Un hold vivo por token: limpia el anterior y crea el nuevo (permite cambiar de horario).
+  await supabase.from("landing_slot_holds").delete().eq("hold_token", token);
+  await supabase.from("landing_slot_holds").insert({ hold_token: token, slot_start: iso, expires_at: expires });
+  return json({ ok: true, slot_start: iso, label: slotLabel(iso), hold_expires_at: expires, hold_minutes: HOLD_MINUTES });
 }
 
 async function handleAgendaBook(body: any) {
@@ -652,10 +682,12 @@ async function handleFeeCheckout(body: any) {
     return json({ ok: true, already: true, plan_unlocked: true, lead_id: lead.id });
   }
 
-  // Path depósito: aparta el horario 5 min mientras completa el checkout.
+  // Path depósito: el horario ya se apartó al elegirlo (agenda_hold, por hold_token).
+  // Aquí lo confirmamos, lo ligamos al lead y renovamos la expiración para cubrir el checkout.
   let holdExpires: string | null = null;
   let heldStart: string | null = null;
   if (fee.holds_slot) {
+    const token = (body.hold_token ?? "").toString().slice(0, 80);
     const start = String(body.slot_start ?? "");
     if (!start || isNaN(new Date(start).getTime())) {
       return json({ ok: false, error: "falta_horario", message: "Elige un horario para el depósito." }, 200);
@@ -663,17 +695,18 @@ async function handleFeeCheckout(body: any) {
     if (new Date(start).getTime() < Date.now()) {
       return json({ ok: false, reason: "slot_pasado", message: "Ese horario ya pasó. Elige otro." }, 200);
     }
-    // ¿alguien más ya lo tiene apartado (hold vivo de otro lead)?
+    heldStart = new Date(start).toISOString();
+    // ¿lo tiene apartado alguien más (hold vivo de otro token y otro lead)?
     const { data: clash } = await supabase.from("landing_slot_holds")
-      .select("id, lead_id").eq("slot_start", start).gt("expires_at", new Date().toISOString());
-    if (Array.isArray(clash) && clash.some((h: any) => String(h.lead_id) !== String(lead.id))) {
+      .select("id, hold_token, lead_id").eq("slot_start", heldStart).gt("expires_at", new Date().toISOString());
+    if (Array.isArray(clash) && clash.some((h: any) => String(h.hold_token) !== token && String(h.lead_id) !== String(lead.id))) {
       return json({ ok: false, reason: "slot_ocupado", message: "Ese horario se acaba de apartar. Elige otro." }, 200);
     }
-    heldStart = new Date(start).toISOString();
     holdExpires = new Date(Date.now() + HOLD_MINUTES * 60000).toISOString();
-    // Un hold vivo por lead: limpia el anterior y crea el nuevo.
+    // Reconcilia: un solo hold vivo para este lead/token, con la expiración renovada.
+    if (token) await supabase.from("landing_slot_holds").delete().eq("hold_token", token);
     await supabase.from("landing_slot_holds").delete().eq("lead_id", lead.id);
-    await supabase.from("landing_slot_holds").insert({ lead_id: lead.id, slot_start: heldStart, expires_at: holdExpires });
+    await supabase.from("landing_slot_holds").insert({ lead_id: lead.id, hold_token: token || null, slot_start: heldStart, expires_at: holdExpires });
   }
 
   const nombreLead = (lead.nombre || "").trim();
@@ -787,6 +820,7 @@ async function handleAccessUnlock(body: any, ip: string) {
       access_reason: "master_password",
       access_granted_at: new Date().toISOString(),
       payment_status: "bypass",
+      plan_unlocked: true,
       status: "acceso_master",
       updated_at: new Date().toISOString(),
     }).eq("id", leadId);
@@ -1059,6 +1093,7 @@ Deno.serve(async (req) => {
       case "plan": return await handlePlan(body, isTrusted);
       case "contact": return await handleContact(body);
       case "agenda_slots": return await handleAgendaSlots(body);
+      case "agenda_hold": return await handleAgendaHold(body);
       case "agenda_book": return await handleAgendaBook(body);
       case "plan_pdf": return await handlePlanPdf(body);
       case "plan_checkout": return await handlePlanCheckout(body);
