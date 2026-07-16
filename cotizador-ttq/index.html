@@ -250,7 +250,7 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
           <sc-if value="{{unlockClosed}}" hint-placeholder-val="{{ true }}"><button onClick="{{openUnlock}}" style="align-self:center;border:none;background:transparent;color:#94A3B8;font-size:11.5px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;text-decoration:underline;" style-hover="color:var(--accent);">Tengo un código de acceso</button></sc-if>
           <sc-if value="{{unlockOpen}}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;gap:8px;">
-              <input value="{{unlockPw}}" onChange="{{onUnlockPw}}" type="password" placeholder="Tu código de acceso" style="flex:1;box-sizing:border-box;padding:12px 15px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:rgba(255,255,255,.95);font-size:13.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;">
+              <input value="{{unlockPw}}" onChange="{{onUnlockPw}}" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" name="yaub-code" placeholder="Tu código de acceso" style="flex:1;box-sizing:border-box;padding:12px 15px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:rgba(255,255,255,.95);font-size:13.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;-webkit-text-security:disc;">
               <button onClick="{{unlockAccess}}" style="padding:12px 20px;border-radius:13px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;white-space:nowrap;" style-hover="background:var(--accent-soft);">{{unlockBtn}}</button>
             </div>
             <sc-if value="{{unlockErrOn}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;font-weight:600;color:#DC2626;text-align:center;">{{unlockErr}}</div></sc-if>
@@ -437,7 +437,7 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
               </sc-if>
               <sc-if value="{{unlockOpen}}" hint-placeholder-val="{{ false }}">
                 <div style="display:flex;gap:8px;">
-                  <input value="{{unlockPw}}" onChange="{{onUnlockPw}}" type="password" placeholder="Tu código de acceso" style="flex:1;box-sizing:border-box;padding:12px 15px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:rgba(255,255,255,.95);font-size:13.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;">
+                  <input value="{{unlockPw}}" onChange="{{onUnlockPw}}" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" name="yaub-code" placeholder="Tu código de acceso" style="flex:1;box-sizing:border-box;padding:12px 15px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:rgba(255,255,255,.95);font-size:13.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;-webkit-text-security:disc;">
                   <button onClick="{{unlockAccess}}" style="padding:12px 20px;border-radius:13px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;white-space:nowrap;" style-hover="background:var(--accent-soft);">{{unlockBtn}}</button>
                 </div>
                 <sc-if value="{{unlockErrOn}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;font-weight:600;color:#DC2626;text-align:center;">{{unlockErr}}</div></sc-if>
@@ -1770,8 +1770,9 @@ class Component extends DCLogic {
   onUnlocked() {
     const st = this.state;
     this.setState({ feeGate: false, feeLoading: false, planUnlocked: true, unlockOpen: false, unlockPw: '' });
-    // Si eligió depósito ($499), convierte el horario apartado en cita real ahora que está confirmado.
-    if (st.feeKind === 'deposito' && st.heldSlot) {
+    // Al final se agenda: si apartó sesión y NO eligió "solo plan" ($99), el horario se
+    // convierte en cita real ahora que está confirmado (aplica a $499 y al código de acceso).
+    if (st.heldSlot && st.feeKind !== 'plan_fee') {
       const name = (st.nombre || '').trim(), phone = (st.telefono || '').replace(/\D/g, '');
       if (name && phone.length >= 10) {
         this.api({ action: 'agenda_book', start: st.heldSlot, name, phone, lead_id: st.leadId })
