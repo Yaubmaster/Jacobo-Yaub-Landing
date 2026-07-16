@@ -1,9 +1,16 @@
 // landing-consultor — cerebro del consultor IA del landing "IA a tu medida".
 // Público (pre-login), mismo patrón que scan-business.
 // Acciones:
-//   analyze : { rol, sitio, proyecto }            → Firecrawl (sitio) + Foundry → chips + resumen; crea lead
-//   plan    : { lead_id, rol, sitio, proyecto, answers[], extra, resumen } → Foundry → plan personalizado
-//   contact : { lead_id, contacto }               → guarda contacto + email al equipo
+//   analyze       : { rol, sitio, proyecto }            → Firecrawl (sitio) + Foundry → chips + resumen; crea lead
+//   plan          : { lead_id, rol, sitio, proyecto, answers[], extra, resumen } → Foundry → plan personalizado
+//   contact       : { lead_id, contacto }               → guarda contacto + email al equipo
+//   agenda_slots  : { }                                 → horarios reales (el servidor calcula las fechas)
+//   agenda_book   : { start, name, phone, lead_id? }    → agenda 15 min con Jacobo
+//   plan_pdf      : { lead_id | nombre+plan_texto }     → PDF del plan
+//   plan_checkout : { lead_id } o { nombre, telefono, pkg } → link de pago MercadoPago (Checkout Pro)
+//   access_unlock : { lead_id, password }               → bypass de pago con master password (SOLO server-side)
+//   payment_status: { lead_id }                         → estado de pago/acceso del lead (para el wizard del front)
+// Webhook de MercadoPago: POST ?mp=1 (MP no manda Origin ni JWT; se valida re-consultando el pago a la API de MP).
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { PDFDocument, StandardFonts, rgb } from "https://esm.sh/pdf-lib@1.17.1";
@@ -13,6 +20,10 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const FIRECRAWL_API_KEY = Deno.env.get("FIRECRAWL_API_KEY");
 const AZURE_FOUNDRY_API_KEY = Deno.env.get("AZURE_FOUNDRY_API_KEY");
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const MP_TOKEN = Deno.env.get("MERCADOPAGO_ACCESS_TOKEN") || Deno.env.get("MP_ACCESS_TOKEN") || "";
+// Master password: mueve esto a un secret (YAUB_MASTER_PASSWORD) cuando puedas. Nunca se manda al cliente.
+const MASTER_PASSWORD = Deno.env.get("YAUB_MASTER_PASSWORD") || "yaubmaster1103";
+const LANDING_URL = Deno.env.get("LANDING_URL") || "https://jacobo.yaub.ai";
 
 const FOUNDRY_ENDPOINT = Deno.env.get("AZURE_FOUNDRY_ENDPOINT") ||
   "https://jacob-mn3yo64e-eastus2.services.ai.azure.com/models/chat/completions";
@@ -25,6 +36,23 @@ const FROM_EMAIL = "Yaub Bot <noreply@yaub.ai>";
 // Agente Consultoría Jacobo (assistants) — su calendario nativo vive en Yaub Calendar
 const CONSULTOR_ASSISTANT_ID = "6abc23ed-5ae0-4d90-b47d-7c16d5ea5614";
 const CONSULTOR_TENANT_ID = "2cc20bca-5bbb-49a4-8bee-067ff5fd62db";
+
+// Catálogo de paquetes. pkg_rec del plan indexa aquí. MI EQUIPO no se auto-cobra (precio por persona).
+const PKGS = [
+  { name: "MI SETUP", price_mxn: 4990, price: "$4,990 MXN por persona", weeks: "4 semanas · 4 sesiones 1:1", chargeable: true },
+  { name: "MI NEGOCIO", price_mxn: 12900, price: "$12,900 MXN por empresa", weeks: "6 semanas · 6 sesiones", chargeable: true },
+  { name: "MI EQUIPO", price_mxn: 0, price: "desde $2,990 MXN por persona", weeks: "6 semanas · talleres + 1:1", chargeable: false },
+];
+
+// ── Fee del plan (NUEVO funnel) — cobro previo a generar el plan. SEPARADO del pago del PROGRAMA.
+// El discovery deja de ser gratis: se cobra y se reembolsa (manual, ≤24h háb.) SOLO si contratan.
+//   plan_fee : $99  → solo el plan, sin cita.
+//   deposito : $499 → plan + aparta el horario elegido (hold de 5 min durante el checkout).
+const HOLD_MINUTES = 15; // el hold arranca al elegir fecha y debe cubrir el cotizador + la decisión
+const FEES: Record<string, { amount_mxn: number; label: string; title: string; holds_slot: boolean }> = {
+  plan_fee: { amount_mxn: 99,  label: "$99 MXN",  title: "Yaub — Tu plan a la medida",                 holds_slot: false },
+  deposito: { amount_mxn: 499, label: "$499 MXN", title: "Yaub — Plan + reserva de tu sesión con Jacobo", holds_slot: true },
+};
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
 
@@ -40,12 +68,19 @@ const corsHeaders = {
 // traer el service role → se les hace bypass. El resto (incl. floods por curl) va por rate-limit por IP.
 const ALLOWED_ORIGIN = /^https?:\/\/(jacobo\.yaub\.ai|([a-z0-9-]+\.)?vercel\.app|localhost(:\d+)?|127\.0\.0\.1(:\d+)?)$/i;
 const RATE_LIMITS: Record<string, { limit: number; win: number }> = {
-  analyze:      { limit: 25, win: 600 },
-  plan:         { limit: 25, win: 600 },
-  contact:      { limit: 15, win: 3600 },
-  agenda_slots: { limit: 90, win: 600 },
-  agenda_book:  { limit: 30, win: 3600 },
-  plan_pdf:     { limit: 40, win: 3600 },
+  analyze:       { limit: 25, win: 600 },
+  plan:          { limit: 25, win: 600 },
+  contact:       { limit: 15, win: 3600 },
+  agenda_slots:  { limit: 90, win: 600 },
+  agenda_hold:   { limit: 60, win: 600 },
+  agenda_book:   { limit: 30, win: 3600 },
+  plan_pdf:      { limit: 40, win: 3600 },
+  plan_checkout: { limit: 20, win: 3600 },
+  // Apretado a propósito: es el único freno contra fuerza bruta a la master password.
+  access_unlock: { limit: 8, win: 3600 },
+  payment_status:{ limit: 120, win: 600 },
+  fee_checkout:  { limit: 20, win: 3600 },
+  fee_status:    { limit: 120, win: 600 },
 };
 
 function json(body: unknown, status = 200) {
@@ -63,6 +98,20 @@ function withTimeout(ms: number): { signal: AbortSignal; cancel: () => void } {
   const ac = new AbortController();
   const t = setTimeout(() => ac.abort(), ms);
   return { signal: ac.signal, cancel: () => clearTimeout(t) };
+}
+
+function clientIp(req: Request): string {
+  return (req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "unknown").trim();
+}
+
+// Comparación en tiempo constante: evita distinguir la password por latencia.
+function safeEqual(a: string, b: string): boolean {
+  const ea = new TextEncoder().encode(a);
+  const eb = new TextEncoder().encode(b);
+  if (ea.length !== eb.length) return false;
+  let diff = 0;
+  for (let i = 0; i < ea.length; i++) diff |= ea[i] ^ eb[i];
+  return diff === 0;
 }
 
 function normalizeUrl(raw: string): string | null {
@@ -154,12 +203,13 @@ REGLAS:
 - Español mexicano neutro. Sin markdown.`;
 
 const PLAN_SYSTEM = `Eres el consultor IA de Yaub ("IA a tu medida"). Con el brief completo del prospecto
-armas su plan personalizado. El programa entrega: 3 skills de IA hechas sobre su trabajo real + "Cowork Yaub"
-(su espacio de trabajo con IA) + capacitación 1:1 con Jacobo.
+armas su plan personalizado, YA PRE-ARMADO para arrancar (no una cotización a construir). El programa entrega: 3 skills de IA hechas sobre su trabajo real + "Cowork Yaub"
+(su espacio de trabajo con IA: correo, calendario y Drive conectados) + capacitación 1:1 con Jacobo + comunidad de por vida.
+Si la persona es dueño de negocio o dueño/responsable de un proceso, ADEMÁS se le ofrece un Agente Yaub por vertical (WhatsApp/voz 24/7).
 
 Paquetes (elige el que mejor le queda):
 0 = MI SETUP ($4,990 MXN, individual, 4 semanas) — una persona optimizando su propio trabajo.
-1 = MI NEGOCIO ($12,900 MXN, dueño + 2, 6 semanas) — dueño de negocio que quiere meter IA a su operación.
+1 = MI NEGOCIO ($12,900 MXN, dueño + 2, 6 semanas) — dueño de negocio que quiere meter IA a su operación (incluye 1er mes de agente de WhatsApp).
 2 = MI EQUIPO (desde $2,990/persona, 6 semanas) — equipos de 5 o más.
 
 DEVUELVE EXCLUSIVAMENTE UN OBJETO JSON con esta forma EXACTA:
@@ -168,8 +218,11 @@ DEVUELVE EXCLUSIVAMENTE UN OBJETO JSON con esta forma EXACTA:
   "skills": [ { "name": "Skill <nombre corto y memorable>", "desc": "qué hace, en sus palabras, máx 60 caracteres" } ],
   "stages": [ { "label": "etapa de su semana, 1-3 palabras", "sub": "matiz corto, máx 25 caracteres" } ],
   "equipos": [ { "name": "pieza del stack", "ben": "beneficio concreto para él/ella, máx 55 caracteres", "lab": "verbo corto (organiza/redacta/coordina/mejora)" } ],
-  "pkg_rec": 0 | 1 | 2,
-  "intro": "1 frase cálida de consultor presentando el plan, máx 140 caracteres"
+  "es_dueno": true,
+  "vertical": "reclutamiento | cobranza | inmobiliaria | atencion_clientes | ventas | restaurantes | otro | null",
+  "agente_yaub": { "name": "Agente <Vertical> Yaub", "ben": "qué hace 24/7 por WhatsApp/voz para SU negocio, máx 60 caracteres" },
+  "pkg_rec": 0,
+  "intro": "1 frase cálida de consultor presentando el plan YA armado, máx 140 caracteres"
 }
 
 REGLAS:
@@ -177,7 +230,9 @@ REGLAS:
 - "stages": EXACTAMENTE 5, las etapas reales de SU semana en orden cronológico.
 - "equipos": EXACTAMENTE 4. La primera SIEMPRE es "Cowork Yaub"; la última SIEMPRE es "Plan de 90 días"
   con ben tipo "sigues automatizando por tu cuenta". Las 2 de en medio son 2 de las 3 skills.
-- "pkg_rec": usa las respuestas (equipo, horas) para decidir.
+- "es_dueno": true si es dueño de negocio o dueño/responsable de un proceso (contratación, cobranza, ventas, atención...); false si es empleado que solo optimiza su propio trabajo.
+- "vertical" y "agente_yaub": SOLO cuando es_dueno=true. Elige la vertical que mejor encaje (reclutamiento, cobranza, inmobiliaria, atencion_clientes, ventas, restaurantes u otro) y arma el agente para SU negocio. Si es_dueno=false → vertical="null" y agente_yaub=null. No inventes precios: el agente va dentro de Mi Negocio (1er mes incluido) o se cotiza en el discovery.
+- "pkg_rec": si es_dueno=true recomienda 1 (MI NEGOCIO); equipos de 5+ → 2; individual → 0.
 - Español mexicano neutro. Sin markdown. Nada de promesas de métricas específicas.`;
 
 async function handleAnalyze(body: any) {
@@ -227,7 +282,24 @@ async function handleAnalyze(body: any) {
   });
 }
 
-async function handlePlan(body: any) {
+async function handlePlan(body: any, isTrusted = false) {
+  // Gate del funnel de pago: el plan solo se genera tras pagar el fee ($99/$499).
+  // Las llamadas confiables (service-role: tools de WhatsApp/voz) se saltan el gate —
+  // ese canal genera planes sin cobro, como siempre. Solo el web (untrusted) paga.
+  if (!isTrusted && body.lead_id) {
+    const { data: gate } = await supabase
+      .from("landing_leads")
+      .select("fee_kind, plan_unlocked, access_granted")
+      .eq("id", body.lead_id)
+      .maybeSingle();
+    // Compatible hacia atrás: solo bloquea si el lead ENTRÓ al funnel de pago (fee_kind puesto)
+    // y aún no desbloqueó. Un lead del front viejo (fee_kind null) NO se bloquea → nada se rompe
+    // al desplegar antes de actualizar Vercel. access_granted (programa/master password) también libera.
+    if (gate && gate.fee_kind && !gate.plan_unlocked && !gate.access_granted) {
+      return json({ ok: false, error: "plan_bloqueado", message: "Paga tu plan para generarlo." }, 402);
+    }
+  }
+
   const rol = (body.rol ?? "").toString().slice(0, 200);
   const sitio = (body.sitio ?? "").toString().slice(0, 300);
   const proyecto = (body.proyecto ?? "").toString().slice(0, 2000);
@@ -248,11 +320,17 @@ async function handlePlan(body: any) {
     return json({ ok: false, error: "foundry_failed" }, 502);
   }
 
+  const agente = ai.agente_yaub && ai.agente_yaub.name
+    ? { name: String(ai.agente_yaub.name).slice(0, 60), ben: String(ai.agente_yaub.ben ?? "").slice(0, 90) }
+    : null;
   const plan = {
     nombre_display: ai.nombre_display ?? null,
     skills: Array.isArray(ai.skills) ? ai.skills.slice(0, 3) : [],
     stages: Array.isArray(ai.stages) ? ai.stages.slice(0, 5) : [],
     equipos: Array.isArray(ai.equipos) ? ai.equipos.slice(0, 4) : [],
+    es_dueno: typeof ai.es_dueno === "boolean" ? ai.es_dueno : !!agente,
+    vertical: ai.vertical && ai.vertical !== "null" ? String(ai.vertical).slice(0, 40) : null,
+    agente_yaub: agente,
     pkg_rec: [0, 1, 2].includes(ai.pkg_rec) ? ai.pkg_rec : 0,
     intro: ai.intro ?? null,
   };
@@ -265,7 +343,7 @@ async function handlePlan(body: any) {
         extra: extra || null,
         transcript: transcript || null,
         plan,
-        pkg: ["MI SETUP", "MI NEGOCIO", "MI EQUIPO"][plan.pkg_rec],
+        pkg: PKGS[plan.pkg_rec].name,
         status: "plan_generado",
         updated_at: new Date().toISOString(),
       })
@@ -280,9 +358,18 @@ async function handleContact(body: any) {
   const contacto = (body.contacto ?? "").toString().trim().slice(0, 200);
   if (!contacto || !body.lead_id) return json({ ok: false, error: "faltan_datos" }, 400);
 
+  // Si el front manda nombre/telefono por separado, los persistimos en sus columnas
+  // (sin ellas el lead queda sin forma de cobrarle ni darle seguimiento).
+  const nombre = (body.nombre ?? "").toString().trim().slice(0, 120);
+  const telefono = (body.telefono ?? "").toString().trim().slice(0, 30);
+
+  const patch: Record<string, unknown> = { contacto, status: "contacto_capturado", updated_at: new Date().toISOString() };
+  if (nombre) patch.nombre = nombre;
+  if (telefono) patch.telefono = telefono;
+
   const { data: lead, error } = await supabase
     .from("landing_leads")
-    .update({ contacto, status: "contacto_capturado", updated_at: new Date().toISOString() })
+    .update(patch)
     .eq("id", body.lead_id)
     .select("id, rol, sitio, proyecto, pkg, plan, site_summary")
     .single();
@@ -290,6 +377,7 @@ async function handleContact(body: any) {
 
   if (RESEND_API_KEY) {
     const skills = (lead.plan?.skills ?? []).map((s: any) => `<li><strong>${esc(s.name)}</strong> — ${esc(s.desc)}</li>`).join("");
+    const agenteHtml = lead.plan?.agente_yaub ? `<p><strong>Agente Yaub sugerido:</strong> ${esc(lead.plan.agente_yaub.name)} — ${esc(lead.plan.agente_yaub.ben)} (vertical: ${esc(lead.plan.vertical) || "—"})</p>` : "";
     try {
       await fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -306,6 +394,7 @@ async function handleContact(body: any) {
             <strong>Paquete recomendado:</strong> ${esc(lead.pkg) || "—"}</p>
             <p><strong>Su día a día:</strong><br/>${esc(lead.proyecto) || "—"}</p>
             <p><strong>Resumen del negocio:</strong><br/>${esc(lead.site_summary) || "—"}</p>
+            ${agenteHtml}
             ${skills ? `<p><strong>Skills propuestas:</strong></p><ul>${skills}</ul>` : ""}
             <p style="color:#888;font-size:12px;">Lead ${esc(lead.id)} · tabla landing_leads</p>
           </div>`,
@@ -359,7 +448,23 @@ async function handleAgendaSlots(body: any) {
   }
   const r = await callCalendarProxy({ action: "check_availability", start_date: startDate, end_date: endDate, duration_minutes: 15 });
   if (r?.error) return json({ ok: false, error: r.error }, 502);
-  const isoSlots: string[] = r.available_slots ?? [];
+  let isoSlots: string[] = r.available_slots ?? [];
+
+  // Quita los horarios con hold activo de OTRO visitante (alguien lo está decidiendo/pagando ahora).
+  // El propio visitante (mismo hold_token o lead_id) SÍ ve su hold como disponible.
+  // Los holds vencidos se ignoran (no hace falta borrarlos).
+  const selfToken = (body.hold_token ?? "").toString();
+  const selfLead = (body.lead_id ?? "").toString();
+  const { data: holds } = await supabase
+    .from("landing_slot_holds")
+    .select("slot_start, lead_id, hold_token")
+    .gt("expires_at", new Date().toISOString());
+  if (Array.isArray(holds) && holds.length) {
+    const mine = (h: any) => (selfToken && String(h.hold_token) === selfToken) || (selfLead && String(h.lead_id) === selfLead);
+    const blocked = new Set(holds.filter((h: any) => !mine(h)).map((h: any) => new Date(h.slot_start).getTime()));
+    if (blocked.size) isoSlots = isoSlots.filter((s) => !blocked.has(new Date(s).getTime()));
+  }
+
   return json({
     ok: true,
     server_today: today,
@@ -368,6 +473,32 @@ async function handleAgendaSlots(body: any) {
     slots: isoSlots.slice(0, 40).map((s) => ({ start: s, label: slotLabel(s) })),
     count: isoSlots.length,
   });
+}
+
+// Aparta un horario al ELEGIRLO (antes de que exista el lead), identificado por hold_token del cliente.
+// Dura HOLD_MINUTES; cubre el cotizador + la decisión $99/$499. Renovable (re-eligiendo el mismo).
+async function handleAgendaHold(body: any) {
+  const start = String(body.slot_start ?? body.start ?? "");
+  const token = (body.hold_token ?? "").toString().slice(0, 80);
+  if (!token) return json({ ok: false, error: "falta_token" }, 400);
+  if (!start || isNaN(new Date(start).getTime())) {
+    return json({ ok: false, error: "falta_horario", message: "Elige un horario válido." }, 200);
+  }
+  if (new Date(start).getTime() < Date.now()) {
+    return json({ ok: false, reason: "slot_pasado", message: "Ese horario ya pasó. Elige otro." }, 200);
+  }
+  const iso = new Date(start).toISOString();
+  // ¿otro visitante ya lo tiene apartado (hold vivo de otro token)?
+  const { data: clash } = await supabase.from("landing_slot_holds")
+    .select("id, hold_token").eq("slot_start", iso).gt("expires_at", new Date().toISOString());
+  if (Array.isArray(clash) && clash.some((h: any) => String(h.hold_token) !== token)) {
+    return json({ ok: false, reason: "slot_ocupado", message: "Ese horario se acaba de apartar. Elige otro." }, 200);
+  }
+  const expires = new Date(Date.now() + HOLD_MINUTES * 60000).toISOString();
+  // Un hold vivo por token: limpia el anterior y crea el nuevo (permite cambiar de horario).
+  await supabase.from("landing_slot_holds").delete().eq("hold_token", token);
+  await supabase.from("landing_slot_holds").insert({ hold_token: token, slot_start: iso, expires_at: expires });
+  return json({ ok: true, slot_start: iso, label: slotLabel(iso), hold_expires_at: expires, hold_minutes: HOLD_MINUTES });
 }
 
 async function handleAgendaBook(body: any) {
@@ -393,18 +524,441 @@ async function handleAgendaBook(body: any) {
   if (body.lead_id) {
     const { error } = await supabase
       .from("landing_leads")
-      .update({ contacto: `${name} · ${phone}`, status: "cita_agendada", updated_at: new Date().toISOString() })
+      .update({ nombre: name, telefono: phone, contacto: `${name} · ${phone}`, status: "cita_agendada", updated_at: new Date().toISOString() })
       .eq("id", body.lead_id);
     if (error) console.error("lead cita update error:", error);
   }
   return json({ ok: true, appointment_id: r.appointment_id, starts_at: r.starts_at, ends_at: r.ends_at, starts_at_label: slotLabel(r.starts_at) });
 }
 
+// ── Pagos (MercadoPago Checkout Pro, credenciales de PLATAFORMA — Yaub cobra al prospecto) ──
+// Caso A del proyecto (mismo token que mp-platform-checkout), pero sin invoices/tenants:
+// el prospecto del landing todavía no es tenant. external_reference = "lead:<uuid>".
+function pkgIndexFor(lead: any, bodyPkg?: unknown): number {
+  const byName = typeof bodyPkg === "string" ? PKGS.findIndex((p) => p.name.toLowerCase() === bodyPkg.toLowerCase()) : -1;
+  if (byName >= 0) return byName;
+  if (typeof bodyPkg === "number" && [0, 1, 2].includes(bodyPkg)) return bodyPkg;
+  const rec = lead?.plan?.pkg_rec;
+  return [0, 1, 2].includes(rec) ? rec : 0;
+}
+
+const LEAD_COLS = "id, nombre, telefono, rol, pkg, plan, payment_status, access_granted, mp_preference_id, amount_mxn";
+
+async function handlePlanCheckout(body: any) {
+  if (!MP_TOKEN) return json({ ok: false, error: "mp_no_configurado", message: "Falta MERCADOPAGO_ACCESS_TOKEN." }, 500);
+
+  let lead: any = null;
+
+  if (body.lead_id) {
+    const { data } = await supabase.from("landing_leads").select(LEAD_COLS).eq("id", body.lead_id).maybeSingle();
+    if (!data) return json({ ok: false, error: "lead_no_encontrado" }, 404);
+    lead = data;
+  } else {
+    // Canal WhatsApp/voz: no hay lead del landing. Creamos uno para que TODO pago
+    // viva en la misma tabla y no se abran dos sistemas de cobro en paralelo.
+    const nombre = (body.nombre ?? "").toString().trim().slice(0, 120);
+    const telefono = (body.telefono ?? "").toString().trim().slice(0, 30);
+    if (!nombre || telefono.replace(/\D/g, "").length < 10) {
+      return json({ ok: false, error: "faltan_datos", message: "Para generar el link necesito el nombre y el WhatsApp (10 dígitos) del cliente." }, 200);
+    }
+    // Si ya le generamos link antes al mismo teléfono, reusamos su lead (no duplicamos prospectos).
+    const { data: prev } = await supabase.from("landing_leads").select(LEAD_COLS)
+      .eq("telefono", telefono).eq("source", "whatsapp_consultor")
+      .order("created_at", { ascending: false }).limit(1).maybeSingle();
+    if (prev) {
+      lead = prev;
+    } else {
+      const idxNew = pkgIndexFor(null, body.pkg);
+      const { data: nl, error } = await supabase.from("landing_leads").insert({
+        source: "whatsapp_consultor",
+        rol: (body.rol ?? "").toString().slice(0, 200) || null,
+        proyecto: (body.notas ?? "").toString().slice(0, 2000) || null,
+        nombre, telefono,
+        contacto: `${nombre} · ${telefono}`,
+        pkg: PKGS[idxNew].name,
+        plan: { pkg_rec: idxNew },
+        status: "pago_pendiente",
+      }).select(LEAD_COLS).single();
+      if (error || !nl) {
+        console.error("lead whatsapp insert error:", error);
+        return json({ ok: false, error: "lead_insert_failed" }, 500);
+      }
+      lead = nl;
+    }
+  }
+
+  // Ya tiene acceso (pagó o entró con master password): no lo mandes a pagar otra vez.
+  if (lead.access_granted) return json({ ok: true, already: true, access: true, lead_id: lead.id, payment_status: lead.payment_status });
+
+  const idx = pkgIndexFor(lead, body.pkg);
+  const pk = PKGS[idx];
+  if (!pk.chargeable) {
+    return json({ ok: false, error: "requiere_cotizacion", pkg: pk.name, message: "MI EQUIPO se cotiza por persona: Jacobo te manda el link a la medida." }, 200);
+  }
+
+  const nombreLead = (lead.nombre || "").trim();
+  const title = `Yaub — IA a tu medida · ${pk.name}`;
+  const pref: Record<string, unknown> = {
+    items: [{ title, description: pk.weeks, quantity: 1, unit_price: pk.price_mxn, currency_id: "MXN" }],
+    external_reference: `lead:${lead.id}`,
+    notification_url: `${SUPABASE_URL}/functions/v1/landing-consultor?mp=1`,
+    statement_descriptor: "YAUB",
+    back_urls: {
+      success: `${LANDING_URL}/?pago=success&lead=${lead.id}`,
+      failure: `${LANDING_URL}/?pago=failure&lead=${lead.id}`,
+      pending: `${LANDING_URL}/?pago=pending&lead=${lead.id}`,
+    },
+    auto_return: "approved",
+    metadata: { lead_id: lead.id, pkg: pk.name, origen: "landing_ia_a_tu_medida" },
+  };
+  if (nombreLead) {
+    (pref as any).payer = {
+      name: nombreLead.split(" ")[0].slice(0, 60),
+      surname: nombreLead.split(" ").slice(1).join(" ").slice(0, 60) || "-",
+    };
+  }
+
+  const { signal, cancel } = withTimeout(15000);
+  let mpData: any;
+  try {
+    const mpRes = await fetch("https://api.mercadopago.com/checkout/preferences", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${MP_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify(pref),
+      signal,
+    });
+    mpData = await mpRes.json();
+    if (!mpRes.ok) {
+      console.error("mp preference failed:", JSON.stringify(mpData).slice(0, 500));
+      return json({ ok: false, error: "mp_preference_failed", message: mpData?.message ?? "MercadoPago rechazó la preferencia." }, 502);
+    }
+  } catch (e) {
+    console.error("mp preference error:", e);
+    return json({ ok: false, error: "mp_unreachable" }, 502);
+  } finally {
+    cancel();
+  }
+
+  await supabase.from("landing_leads").update({
+    mp_preference_id: mpData.id,
+    amount_mxn: pk.price_mxn,
+    payment_status: "pending",
+    pkg: pk.name,
+    status: "pago_pendiente",
+    updated_at: new Date().toISOString(),
+  }).eq("id", lead.id);
+
+  return json({
+    ok: true,
+    lead_id: lead.id,
+    pkg: pk.name,
+    amount_mxn: pk.price_mxn,
+    price_label: pk.price,
+    preference_id: mpData.id,
+    init_point: mpData.init_point,
+    sandbox_init_point: mpData.sandbox_init_point,
+    checkout_url: mpData.init_point ?? mpData.sandbox_init_point,
+  });
+}
+
+// ── Fee del plan (NUEVO funnel): cobra $99 (solo plan) o $499 (plan + aparta horario) ANTES de generar.
+// external_reference = "fee:<lead_id>" para distinguirlo del pago del PROGRAMA ("lead:<uuid>").
+async function handleFeeCheckout(body: any) {
+  if (!MP_TOKEN) return json({ ok: false, error: "mp_no_configurado" }, 500);
+  if (!body.lead_id) return json({ ok: false, error: "faltan_datos", message: "Falta lead_id." }, 400);
+
+  const kind = body.kind === "deposito" ? "deposito" : "plan_fee";
+  const fee = FEES[kind];
+
+  const { data: lead } = await supabase
+    .from("landing_leads")
+    .select("id, nombre, telefono, plan_unlocked, access_granted")
+    .eq("id", body.lead_id)
+    .maybeSingle();
+  if (!lead) return json({ ok: false, error: "lead_no_encontrado" }, 404);
+
+  // Ya desbloqueó el plan (pagó fee, programa, o master password): no lo cobres otra vez.
+  if (lead.plan_unlocked || lead.access_granted) {
+    return json({ ok: true, already: true, plan_unlocked: true, lead_id: lead.id });
+  }
+
+  // Path depósito: el horario ya se apartó al elegirlo (agenda_hold, por hold_token).
+  // Aquí lo confirmamos, lo ligamos al lead y renovamos la expiración para cubrir el checkout.
+  let holdExpires: string | null = null;
+  let heldStart: string | null = null;
+  if (fee.holds_slot) {
+    const token = (body.hold_token ?? "").toString().slice(0, 80);
+    const start = String(body.slot_start ?? "");
+    if (!start || isNaN(new Date(start).getTime())) {
+      return json({ ok: false, error: "falta_horario", message: "Elige un horario para el depósito." }, 200);
+    }
+    if (new Date(start).getTime() < Date.now()) {
+      return json({ ok: false, reason: "slot_pasado", message: "Ese horario ya pasó. Elige otro." }, 200);
+    }
+    heldStart = new Date(start).toISOString();
+    // ¿lo tiene apartado alguien más (hold vivo de otro token y otro lead)?
+    const { data: clash } = await supabase.from("landing_slot_holds")
+      .select("id, hold_token, lead_id").eq("slot_start", heldStart).gt("expires_at", new Date().toISOString());
+    if (Array.isArray(clash) && clash.some((h: any) => String(h.hold_token) !== token && String(h.lead_id) !== String(lead.id))) {
+      return json({ ok: false, reason: "slot_ocupado", message: "Ese horario se acaba de apartar. Elige otro." }, 200);
+    }
+    holdExpires = new Date(Date.now() + HOLD_MINUTES * 60000).toISOString();
+    // Reconcilia: un solo hold vivo para este lead/token, con la expiración renovada.
+    if (token) await supabase.from("landing_slot_holds").delete().eq("hold_token", token);
+    await supabase.from("landing_slot_holds").delete().eq("lead_id", lead.id);
+    await supabase.from("landing_slot_holds").insert({ lead_id: lead.id, hold_token: token || null, slot_start: heldStart, expires_at: holdExpires });
+  }
+
+  const nombreLead = (lead.nombre || "").trim();
+  const pref: Record<string, unknown> = {
+    items: [{ title: fee.title, description: kind === "deposito" ? "Reembolsable al contratar (≤24h háb.)" : "Plan personalizado", quantity: 1, unit_price: fee.amount_mxn, currency_id: "MXN" }],
+    external_reference: `fee:${lead.id}`,
+    notification_url: `${SUPABASE_URL}/functions/v1/landing-consultor?mp=1`,
+    statement_descriptor: "YAUB",
+    back_urls: {
+      success: `${LANDING_URL}/?fee=success&lead=${lead.id}&kind=${kind}`,
+      failure: `${LANDING_URL}/?fee=failure&lead=${lead.id}&kind=${kind}`,
+      pending: `${LANDING_URL}/?fee=pending&lead=${lead.id}&kind=${kind}`,
+    },
+    auto_return: "approved",
+    metadata: { lead_id: lead.id, tipo: "fee", kind },
+  };
+  if (nombreLead) {
+    (pref as any).payer = {
+      name: nombreLead.split(" ")[0].slice(0, 60),
+      surname: nombreLead.split(" ").slice(1).join(" ").slice(0, 60) || "-",
+    };
+  }
+
+  const { signal, cancel } = withTimeout(15000);
+  let mpData: any;
+  try {
+    const mpRes = await fetch("https://api.mercadopago.com/checkout/preferences", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${MP_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify(pref),
+      signal,
+    });
+    mpData = await mpRes.json();
+    if (!mpRes.ok) {
+      console.error("fee preference failed:", JSON.stringify(mpData).slice(0, 500));
+      return json({ ok: false, error: "mp_preference_failed", message: mpData?.message ?? "MercadoPago rechazó la preferencia." }, 502);
+    }
+  } catch (e) {
+    console.error("fee preference error:", e);
+    return json({ ok: false, error: "mp_unreachable" }, 502);
+  } finally {
+    cancel();
+  }
+
+  await supabase.from("landing_leads").update({
+    fee_kind: kind,
+    fee_amount_mxn: fee.amount_mxn,
+    fee_status: "pending",
+    fee_mp_preference_id: mpData.id,
+    held_slot_start: heldStart,
+    status: "fee_pendiente",
+    updated_at: new Date().toISOString(),
+  }).eq("id", lead.id);
+
+  return json({
+    ok: true,
+    lead_id: lead.id,
+    kind,
+    amount_mxn: fee.amount_mxn,
+    price_label: fee.label,
+    holds_slot: fee.holds_slot,
+    hold_expires_at: holdExpires,
+    preference_id: mpData.id,
+    checkout_url: mpData.init_point ?? mpData.sandbox_init_point,
+  });
+}
+
+// Estado del fee — el front hace polling aquí al volver de MercadoPago (fee=success).
+// La verdad es plan_unlocked (viene del webhook confirmado con MP), NO el query param.
+async function handleFeeStatus(body: any) {
+  if (!body.lead_id) return json({ ok: false, error: "faltan_datos" }, 400);
+  const { data: lead } = await supabase
+    .from("landing_leads")
+    .select("id, fee_kind, fee_status, fee_amount_mxn, fee_paid_at, plan_unlocked, held_slot_start")
+    .eq("id", body.lead_id)
+    .maybeSingle();
+  if (!lead) return json({ ok: false, error: "lead_no_encontrado" }, 404);
+  return json({
+    ok: true,
+    ...lead,
+    held_slot_label: lead.held_slot_start ? slotLabel(lead.held_slot_start) : null,
+  });
+}
+
+// Estado de pago/acceso — el wizard del front hace polling aquí al volver de MercadoPago.
+async function handlePaymentStatus(body: any) {
+  if (!body.lead_id) return json({ ok: false, error: "faltan_datos" }, 400);
+  const { data: lead } = await supabase
+    .from("landing_leads")
+    .select("id, pkg, payment_status, access_granted, access_reason, amount_mxn, paid_at, status")
+    .eq("id", body.lead_id)
+    .maybeSingle();
+  if (!lead) return json({ ok: false, error: "lead_no_encontrado" }, 404);
+  return json({ ok: true, ...lead });
+}
+
+// Bypass con master password. SOLO se valida aquí (server-side): la password NUNCA
+// viaja al navegador ni se devuelve en ninguna respuesta. Rate-limit 8/h por IP + auditoría.
+async function handleAccessUnlock(body: any, ip: string) {
+  const password = (body.password ?? "").toString();
+  const leadId = body.lead_id ?? null;
+  const ok = !!password && safeEqual(password, MASTER_PASSWORD);
+
+  await supabase.from("landing_access_attempts").insert({ lead_id: leadId, ip, success: ok });
+
+  if (!ok) return json({ ok: false, error: "password_incorrecto" }, 200);
+
+  if (leadId) {
+    await supabase.from("landing_leads").update({
+      access_granted: true,
+      access_reason: "master_password",
+      access_granted_at: new Date().toISOString(),
+      payment_status: "bypass",
+      plan_unlocked: true,
+      status: "acceso_master",
+      updated_at: new Date().toISOString(),
+    }).eq("id", leadId);
+  }
+  return json({ ok: true, access: true, reason: "master_password" });
+}
+
+// Webhook de MercadoPago. Llega sin JWT y sin Origin, así que NO confiamos en el body:
+// solo tomamos el payment id y le preguntamos a MP directo con nuestro token.
+async function handleMpWebhook(body: any) {
+  const paymentId = body?.data?.id ?? body?.resource ?? null;
+  const topic = body?.type ?? body?.topic ?? "";
+  if (!paymentId || (topic && !String(topic).includes("payment"))) return json({ ok: true, ignored: true });
+  if (!MP_TOKEN) return json({ ok: true, ignored: "sin_token" });
+
+  const { signal, cancel } = withTimeout(15000);
+  let pay: any;
+  try {
+    const r = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+      headers: { Authorization: `Bearer ${MP_TOKEN}` },
+      signal,
+    });
+    if (!r.ok) {
+      console.error("mp payment fetch failed:", r.status);
+      return json({ ok: true, ignored: "payment_no_encontrado" });
+    }
+    pay = await r.json();
+  } catch (e) {
+    console.error("mp webhook error:", e);
+    return json({ ok: true, ignored: "mp_unreachable" }); // 200 para que MP no reintente en loop
+  } finally {
+    cancel();
+  }
+
+  const ref = String(pay.external_reference ?? "");
+
+  // Fee del plan ($99/$499): desbloquea la generación del plan. NO da acceso al programa completo.
+  if (ref.startsWith("fee:")) {
+    const feeLeadId = ref.slice(4);
+    const feeApproved = pay.status === "approved";
+    const feePatch: Record<string, unknown> = {
+      fee_status: feeApproved ? "paid" : pay.status,
+      fee_mp_payment_id: String(pay.id),
+      updated_at: new Date().toISOString(),
+    };
+    if (feeApproved) {
+      feePatch.plan_unlocked = true;
+      feePatch.fee_paid_at = new Date().toISOString();
+      feePatch.status = "fee_pagado";
+    }
+    const { data: fl } = await supabase.from("landing_leads")
+      .update(feePatch).eq("id", feeLeadId)
+      .select("id, nombre, telefono, fee_kind, fee_amount_mxn, held_slot_start").maybeSingle();
+    if (feeApproved && RESEND_API_KEY && fl) {
+      try {
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            from: FROM_EMAIL,
+            to: NOTIFICATION_EMAILS,
+            subject: `🧾 Fee de plan pagado — ${esc(fl.fee_kind) || "plan_fee"} · ${esc(fl.nombre || "sin nombre")}`,
+            html: `<div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;">
+              <h2>🧾 Fee del plan pagado</h2>
+              <p><strong>Cliente:</strong> ${esc(fl.nombre) || "—"}<br/>
+              <strong>WhatsApp:</strong> ${esc(fl.telefono) || "—"}<br/>
+              <strong>Tipo:</strong> ${esc(fl.fee_kind) || "—"} ($${esc(fl.fee_amount_mxn)} MXN)<br/>
+              ${fl.held_slot_start ? `<strong>Horario apartado:</strong> ${esc(slotLabel(fl.held_slot_start))}<br/>` : ""}
+              <strong>Pago MP:</strong> ${esc(pay.id)}</p>
+              <p>Reembolsable (manual, ≤24h háb.) SOLO si contrata. Lead ${esc(feeLeadId)}.</p>
+            </div>`,
+          }),
+        });
+      } catch (e) {
+        console.error("resend fee error:", e);
+      }
+    }
+    return json({ ok: true, lead_id: feeLeadId, kind: "fee", status: pay.status });
+  }
+
+  if (!ref.startsWith("lead:")) return json({ ok: true, ignored: "no_es_lead" }); // facturas de tenants las cobra mp-platform-webhook
+  const leadId = ref.slice(5);
+  const approved = pay.status === "approved";
+
+  const patch: Record<string, unknown> = {
+    payment_status: pay.status,
+    mp_payment_id: String(pay.id),
+    updated_at: new Date().toISOString(),
+  };
+  if (approved) {
+    patch.paid_at = new Date().toISOString();
+    patch.access_granted = true;
+    patch.access_reason = "paid";
+    patch.access_granted_at = new Date().toISOString();
+    patch.status = "pagado";
+    patch.amount_mxn = pay.transaction_amount ?? null;
+  }
+
+  const { data: lead, error } = await supabase.from("landing_leads")
+    .update(patch).eq("id", leadId)
+    .select("id, nombre, telefono, rol, pkg, contacto").maybeSingle();
+  if (error) console.error("lead pago update error:", error);
+
+  if (approved && RESEND_API_KEY && lead) {
+    try {
+      await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: FROM_EMAIL,
+          to: NOTIFICATION_EMAILS,
+          subject: `💰 PAGO RECIBIDO — ${esc(lead.pkg) || "IA a tu medida"} · ${esc(lead.nombre || lead.contacto || "sin nombre")}`,
+          html: `<div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;">
+            <h2>💰 Pago aprobado</h2>
+            <p><strong>Cliente:</strong> ${esc(lead.nombre || lead.contacto) || "—"}<br/>
+            <strong>WhatsApp:</strong> ${esc(lead.telefono) || "—"}<br/>
+            <strong>Rol:</strong> ${esc(lead.rol) || "—"}<br/>
+            <strong>Paquete:</strong> ${esc(lead.pkg) || "—"}<br/>
+            <strong>Monto:</strong> $${esc(pay.transaction_amount)} MXN<br/>
+            <strong>Pago MP:</strong> ${esc(pay.id)}</p>
+            <p>Ya tiene acceso. Contáctalo para arrancar.</p>
+            <p style="color:#888;font-size:12px;">Lead ${esc(leadId)} · tabla landing_leads</p>
+          </div>`,
+        }),
+      });
+    } catch (e) {
+      console.error("resend pago error:", e);
+    }
+  }
+
+  return json({ ok: true, lead_id: leadId, status: pay.status });
+}
+
 // ── PDF del plan (web: botón de descarga · WhatsApp: tool consultor_plan_pdf + send_document) ──
 function winAnsiSafe(s: string): string {
   return (s || "")
-    .replace(/[✓✅]/g, "·").replace(/[→⇒]/g, ">").replace(/[""]/g, '"').replace(/['']/g, "'")
-    .replace(/[^\x20-\x7E -ÿ–—‘’“”•]/g, "");
+    .replace(/[✓✅]/g, "·").replace(/[→⇒]/g, ">").replace(/[“”]/g, '"').replace(/[‘’]/g, "'")
+    .replace(/[^\x20-\x7E -ÿ–—‘’“”•]/g, "");
 }
 
 async function handlePlanPdf(body: any) {
@@ -430,12 +984,6 @@ async function handlePlanPdf(body: any) {
   }
   if (!nombre) return json({ ok: false, error: "faltan_datos", message: "Falta el nombre del cliente." }, 200);
   if (!plan && !planTexto) return json({ ok: false, error: "faltan_datos", message: "Falta el contenido del plan (plan_texto)." }, 200);
-
-  const PKGS = [
-    { name: "MI SETUP", price: "$4,990 MXN por persona", weeks: "4 semanas · 4 sesiones 1:1" },
-    { name: "MI NEGOCIO", price: "$12,900 MXN por empresa", weeks: "6 semanas · 6 sesiones" },
-    { name: "MI EQUIPO", price: "desde $2,990 MXN por persona", weeks: "6 semanas · talleres + 1:1" },
-  ];
 
   const doc = await PDFDocument.create();
   const page = doc.addPage([595, 842]);
@@ -474,6 +1022,12 @@ async function handlePlanPdf(body: any) {
     draw("TU SEMANA, CON EL STACK TRABAJANDO", { size: 10, b: true, color: accent });
     for (const st of plan.stages ?? []) draw(`• ${st.label} — ${st.sub}`, { size: 10 });
     y -= 6;
+    if (plan.agente_yaub && plan.agente_yaub.name) {
+      draw("TU AGENTE YAUB 24/7 (WHATSAPP Y VOZ)", { size: 10, b: true, color: accent });
+      draw(`• ${plan.agente_yaub.name}`, { b: true });
+      for (const l of wrap(plan.agente_yaub.ben || "", 88)) draw(l, { size: 10, color: muted, x: 60 });
+      y -= 6;
+    }
     const pk = PKGS[[0, 1, 2].includes(plan.pkg_rec) ? plan.pkg_rec : 0];
     draw("PAQUETE RECOMENDADO", { size: 10, b: true, color: accent });
     draw(`${pk.name} — ${pk.price}`, { size: 13, b: true });
@@ -501,17 +1055,28 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
   const body = await req.json().catch(() => null);
+
+  // ── Webhook de MercadoPago (?mp=1): va antes del check de action porque MP manda su propio "action". ──
+  if (new URL(req.url).searchParams.has("mp")) {
+    try {
+      return await handleMpWebhook(body);
+    } catch (e) {
+      console.error("mp webhook fatal:", e);
+      return json({ ok: true }); // 200 siempre: si fallamos, que MP no reintente en loop
+    }
+  }
+
   if (!body?.action) return json({ error: "missing_action" }, 400);
 
   // ── Anti-abuso (solo para llamadas no confiables) ──
   const bearer = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "").trim();
   const isTrusted = !!bearer && bearer === SUPABASE_SERVICE_ROLE_KEY; // runtime server-to-server
+  const ip = clientIp(req);
   if (!isTrusted) {
     const origin = req.headers.get("origin") || "";
     if (origin && !ALLOWED_ORIGIN.test(origin)) return json({ ok: false, error: "forbidden_origin" }, 403);
     const rl = RATE_LIMITS[body.action];
     if (rl) {
-      const ip = (req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "unknown").trim();
       try {
         const { data, error } = await supabase.rpc("landing_rl_hit", { p_ip: ip, p_action: body.action, p_limit: rl.limit, p_window_secs: rl.win });
         if (error) console.error("rate-limit rpc error:", error); // fail-open: un fallo del RPC no tumba el landing
@@ -525,11 +1090,17 @@ Deno.serve(async (req) => {
   try {
     switch (body.action) {
       case "analyze": return await handleAnalyze(body);
-      case "plan": return await handlePlan(body);
+      case "plan": return await handlePlan(body, isTrusted);
       case "contact": return await handleContact(body);
       case "agenda_slots": return await handleAgendaSlots(body);
+      case "agenda_hold": return await handleAgendaHold(body);
       case "agenda_book": return await handleAgendaBook(body);
       case "plan_pdf": return await handlePlanPdf(body);
+      case "plan_checkout": return await handlePlanCheckout(body);
+      case "payment_status": return await handlePaymentStatus(body);
+      case "access_unlock": return await handleAccessUnlock(body, ip);
+      case "fee_checkout": return await handleFeeCheckout(body);
+      case "fee_status": return await handleFeeStatus(body);
       default: return json({ error: "unknown_action" }, 400);
     }
   } catch (e) {
