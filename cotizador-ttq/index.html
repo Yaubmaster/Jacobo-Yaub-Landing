@@ -176,12 +176,12 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
           </div>
         </sc-if>
         <sc-if value="{{bkFormOn}}" hint-placeholder-val="{{ false }}">
-          <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;">
-            <sc-for list="{{bkDays}}" as="d" hint-placeholder-count="4"><button onClick="{{d.pick}}" style="{{d.style}}">{{d.label}}</button></sc-for>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <sc-for list="{{bkSlotList}}" as="s" hint-placeholder-count="4"><button onClick="{{s.pick}}" style="{{s.style}}">{{s.label}}</button></sc-for>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;max-height:200px;overflow-y:auto;">
-            <sc-for list="{{bkTimes}}" as="t" hint-placeholder-count="8"><button onClick="{{t_pick}}" style="{{t_style}}">{{t_label}}</button></sc-for>
-          </div>
+          <sc-if value="{{bkMoreOn}}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{bkMore}}" style="align-self:center;border:none;background:transparent;color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" style-hover="color:var(--accent);">Ver más horarios</button>
+          </sc-if>
           <div class="mOne" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
             <input value="{{bkName}}" onChange="{{onBkName}}" placeholder="{{t_ph_nombre}}" style="width:100%;box-sizing:border-box;padding:12px 15px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:#fff;font-size:13.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;">
             <input value="{{bkPhone}}" onChange="{{onBkPhone}}" placeholder="{{t_ph_wa10}}" style="width:100%;box-sizing:border-box;padding:12px 15px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:#fff;font-size:13.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;">
@@ -290,7 +290,15 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
       </sc-if>
       <sc-if value="{{c3}}" hint-placeholder-val="{{ false }}">
         <div style="display:flex;flex-direction:column;gap:6px;align-items:center;animation:fadeUp .4s ease both;">
-          <div style="text-align:center;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:22px;color:var(--ink2);">Dónde cabe en la semana de {{nombre}}</div><div style="font-size:13.5px;color:var(--muted);">{{s3sub}}</div></div>
+          <div style="text-align:center;"><div style="font-family:Manrope,sans-serif;font-weight:800;font-size:22px;color:var(--ink2);">{{planTitle}}</div><div style="font-size:13.5px;color:var(--muted);">{{s3sub}}</div></div>
+          <sc-if value="{{planLoading}}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center;padding:70px 20px;animation:fadeUp .4s ease both;">
+              <img src="uploads/yaubie.png" alt="Yaubie" style="height:82px;width:auto;animation:yaubie 4.5s ease-in-out infinite;filter:drop-shadow(0 14px 24px rgba(30,39,97,.22));">
+              <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:18px;color:var(--ink2);"><span style="animation:blink 1.2s infinite;">{{planLoadTitle}}</span></div>
+              <div style="font-size:13px;color:var(--muted);max-width:420px;">{{planLoadSub}}</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{planShown}}" hint-placeholder-val="{{ false }}">
           <div class="mStageWrap"><div class="mStage" style="position:relative;width:1080px;height:500px;flex:none;max-width:100%;">
             <svg viewBox="0 0 1080 500" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
               <defs><marker id="arrL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" opacity=".7"></path></marker></defs>
@@ -313,6 +321,7 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
             </sc-for>
           </div></div>
           <button onClick="{{goPlan}}" style="padding:14px 30px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 12px 28px var(--accent-glow);" style-hover="filter:brightness(1.06);">{{goPlanLabel}}</button>
+          </sc-if>
         </div>
       </sc-if>
       <sc-if value="{{c4}}" hint-placeholder-val="{{ false }}">
@@ -365,9 +374,50 @@ a{color:#1E2761;} a:hover{color:#EC4899;}
             <sc-if value="{{contactSent}}" hint-placeholder-val="{{ false }}">
               <div style="padding:13px;border-radius:13px;background:var(--accent-soft);border:1.5px solid var(--accent);text-align:center;font-size:13.5px;font-weight:700;color:var(--ink2);">{{t_listo_jacobo_tiene_brief}}</div>
             </sc-if>
+            <sc-if value="{{access}}" hint-placeholder-val="{{ false }}">
+              <div style="padding:13px;border-radius:13px;background:var(--accent-soft);border:1.5px solid var(--accent);text-align:center;font-size:13.5px;font-weight:700;color:var(--ink2);">{{accessMsg}}</div>
+            </sc-if>
+            <sc-if value="{{payQuote}}" hint-placeholder-val="{{ false }}">
+              <div style="padding:13px;border-radius:13px;background:rgba(30,39,97,.04);border:1.5px solid rgba(30,39,97,.16);font-size:13px;color:var(--ink2);line-height:1.5;"><strong>{{payQuotePkg}}</strong> se cotiza por persona — Jacobo te manda tu link a la medida.</div>
+            </sc-if>
+            <sc-if value="{{payOn}}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{startCheckout}}" style="padding:14px;border-radius:14px;border:none;background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);" style-hover="filter:brightness(1.06);">{{payBtn}}</button>
+            </sc-if>
+            <sc-if value="{{payErrOn}}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12.5px;font-weight:600;color:#DC2626;text-align:center;">{{payErr}}</div>
+            </sc-if>
             <button onClick="{{openBooking}}" style="padding:12px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:transparent;color:var(--ink2);font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;" style-hover="border-color:var(--accent);color:var(--accent);">{{t_agendar_min_con_jacobo}}</button>
+            <sc-if value="{{notAccess}}" hint-placeholder-val="{{ true }}">
+              <sc-if value="{{unlockClosed}}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{openUnlock}}" style="border:none;background:transparent;color:#94A3B8;font-size:11.5px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;text-decoration:underline;" style-hover="color:var(--accent);">Tengo un código de acceso</button>
+              </sc-if>
+              <sc-if value="{{unlockOpen}}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:8px;">
+                  <input value="{{unlockPw}}" onChange="{{onUnlockPw}}" type="password" placeholder="Tu código de acceso" style="flex:1;box-sizing:border-box;padding:12px 15px;border-radius:13px;border:1.5px solid rgba(30,39,97,.16);background:rgba(255,255,255,.95);font-size:13.5px;font-family:Inter,sans-serif;color:var(--ink);outline:none;">
+                  <button onClick="{{unlockAccess}}" style="padding:12px 20px;border-radius:13px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-size:13.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;white-space:nowrap;" style-hover="background:var(--accent-soft);">{{unlockBtn}}</button>
+                </div>
+                <sc-if value="{{unlockErrOn}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;font-weight:600;color:#DC2626;text-align:center;">{{unlockErr}}</div></sc-if>
+              </sc-if>
+            </sc-if>
             <button onClick="{{goStep5}}" style="border:none;background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" style-hover="color:var(--accent);">{{t_que_pasa_del_otro}}</button>
           </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{payReturn}}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;padding:30px 20px;animation:fadeUp .4s ease both;">
+          <sc-if value="{{payConfirming}}" hint-placeholder-val="{{ true }}">
+            <img src="uploads/yaubie.png" alt="Yaubie" style="height:80px;width:auto;animation:yaubie 4.5s ease-in-out infinite;filter:drop-shadow(0 14px 24px rgba(30,39,97,.22));">
+            <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:20px;color:var(--ink2);"><span style="animation:blink 1.2s infinite;">Confirmando tu pago…</span></div>
+            <div style="font-size:13.5px;color:var(--muted);max-width:460px;">Estamos verificando el cobro con MercadoPago. Toma unos segundos — no cierres esta página.</div>
+          </sc-if>
+          <sc-if value="{{access}}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:44px;">✅</div>
+            <div style="font-family:Manrope,sans-serif;font-weight:800;font-size:22px;color:var(--ink2);max-width:560px;">{{accessMsg}}</div>
+            <button onClick="{{openBooking}}" style="padding:13px 26px;border-radius:999px;border:none;background:var(--accent);color:#fff;font-size:14px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;box-shadow:0 10px 24px var(--accent-glow);">{{t_agendar_min_con_jacobo}}</button>
+          </sc-if>
+          <sc-if value="{{payErrOn}}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13.5px;font-weight:600;color:#DC2626;max-width:460px;">{{payErr}}</div>
+          </sc-if>
         </div>
       </sc-if>
       <sc-if value="{{c5}}" hint-placeholder-val="{{ false }}">
@@ -816,8 +866,11 @@ class Component extends DCLogic {
     visitorId: null, chat: [], chatDraft: '', botTyping: false,
     leadId: null, aiChips: null, aiResumen: null, aiNombre: null, aiPlan: null, planLoading: false,
     contacto: '', contactSent: false, contactSending: false,
-    bookingOpen: false, bkLoading: false, bkSlots: [], bkTz: 'America/Monterrey', bkDay: null, bkSlot: null,
-    bkName: '', bkPhone: '', bkErr: '', bkBooking: false, bkDone: false, bkDoneLabel: '' };
+    bookingOpen: false, bkLoading: false, bkSlots: [], bkTz: 'America/Monterrey', bkSlot: null, bkShown: 4,
+    bkName: '', bkPhone: '', bkErr: '', bkBooking: false, bkDone: false, bkDoneLabel: '',
+    payLoading: false, payErr: '', payQuote: false, payQuotePkg: '', payConfirming: false, payReturn: false,
+    access: false, accessReason: '',
+    unlockOpen: false, unlockPw: '', unlockErr: '', unlockBusy: false };
 
   API = 'https://xwjhuixuvmyzfhujvxhf.supabase.co/functions/v1/landing-consultor';
   WIDGET = 'https://xwjhuixuvmyzfhujvxhf.supabase.co/functions/v1/widget-chat';
@@ -834,7 +887,7 @@ class Component extends DCLogic {
   T = {
     es: {
       'llevo_anos_poniendo_agentes': '. Llevo años poniendo agentes de IA a operar de verdad: ventas por WhatsApp, voz, cobranza, reclutamiento y atención a clientes para marcas y operaciones de alto volumen. Con Yaub construí la plataforma con la que hoy corren millones de conversaciones. Esta consultoría es la versión 1 a 1 de todo eso: yo personalmente armo tu setup, te capacito sobre TU trabajo y me quedo contigo en la comunidad. Y no vengo solo del software: opero',
-      'consultor_arma_semana_contigo': 'Tu consultor de IA arma tu semana contigo: skills, Cowork y agentes hechos a tu medida. La misma gente, las mismas horas — diez veces la operación. El discovery es gratis y el plan se te descuenta completo si trabajamos juntos.',
+      'consultor_arma_semana_contigo': 'Tu consultor de IA arma tu semana contigo: skills, Cowork y agentes hechos a tu medida. La misma gente, las mismas horas — diez veces la operación. Tu plan se arma a la medida y se te reembolsa completo si trabajamos juntos.',
       'nada_teoria_poder_accion': 'Nada de teoría: el poder de la acción aplicado a tu trabajo real, con las herramientas que yo uso todos los días. Y el acompañamiento y la comunidad no son solo conmigo: son con',
       'talleres_grupales_sesion_por': '4 talleres grupales · 1 sesión 1:1 por persona · skills por rol · 10–14 → $2,490 p/p · 15+ cotización (incluye agente) · comunidad de por vida',
       'seguimiento_personal_aprueba_plan': 'Tu seguimiento es personal: él aprueba tu plan, te lo manda por WhatsApp y te acompaña desde el día uno — con todo el equipo Yaub detrás.',
@@ -846,7 +899,7 @@ class Component extends DCLogic {
       'las_herramientas_hicieron_mas': '— las herramientas de IA me hicieron más eficiente y me dieron algo que hoy quiero compartirte:',
       'ventas_atencion_cliente_cobranza': 'Ventas, atención al cliente, cobranza, reclutamiento y agenda con IA para tus clientes — 24/7.',
       'sesiones_diagnostico_propuesta_automatizacion': '6 sesiones · diagnóstico + propuesta de automatización · skills por rol + Cowork para los 3 ·',
-      'empieza_platicando_con_consultor': 'Empieza platicando con mi consultor — eso no te cuesta nada. De ahí, tú decides hasta dónde.',
+      'empieza_platicando_con_consultor': 'Empieza platicando con mi consultor. De ahí armas tu plan a la medida y tú decides hasta dónde.',
       'agenda_abierta_esta_semana': 'Agenda abierta esta semana — elige el horario que te acomode y lo tomamos desde ahí.',
       'listo_jacobo_tiene_brief': '✓ Listo — Jacobo ya tiene tu brief y tu plan. Te escribe en menos de 24 h hábiles.',
       'del_otro_lado_jacobo': 'Del otro lado, Jacobo recibe tu brief completo y tu plan — no un formulario frío.',
@@ -857,7 +910,7 @@ class Component extends DCLogic {
       'platica_plan_minutos_plan': 'De la plática al plan, en minutos — de tu plan al cambio, en semanas.',
       'sabia_nada_hoy_equipo': '“No sabía nada de IA. Hoy mi equipo no quiere volver a lo de antes.”',
       'automatiza_cualquier_flujo_vertical': 'Automatiza cualquier flujo vertical de tu negocio, de punta a punta.',
-      'los_400_plan_descuentan': 'Los $400 de tu plan se descuentan de cualquiera de estos paquetes.',
+      'los_400_plan_descuentan': 'Lo que pagas por tu plan se te reembolsa completo al contratar cualquiera de estos paquetes.',
       'agente_contesta_las_cierra': '“El agente contesta a las 11 pm y cierra ventas mientras duermo.”',
       'reporte_que_tomaba_manana': '“El reporte que me tomaba la mañana ahora sale en 10 minutos.”',
       'oficina_con_correo_calendario': 'Tu oficina con IA: correo, calendario y archivos conectados.',
@@ -881,7 +934,7 @@ class Component extends DCLogic {
       'capacitacion_vivo_comunidad_por': 'Capacitación en vivo + comunidad de por vida',
       'capacito_equipo_dos_semanas': '“Capacitó a mi equipo de 8 en dos semanas”',
       'gerente_administrativa_despacho_contable': 'Gerente administrativa · despacho contable',
-      '400_mxn_que_descuentan': '$400 MXN que se te descuentan al contratar',
+      '400_mxn_que_descuentan': 'reembolsable completo al contratar',
       'plan_esta_una_platica': 'Tu plan está a una plática de distancia.',
       'con_setup_misma_persona': ', con tu setup la misma persona entrega',
       'paquetes_precios_lanzamiento_mxn': 'PAQUETES · PRECIOS DE LANZAMIENTO · MXN',
@@ -897,11 +950,11 @@ class Component extends DCLogic {
       'rol_dolores_horas_herramientas': 'rol, dolores, horas, herramientas',
       'empresas_que_confian_respaldan': 'EMPRESAS QUE CONFÍAN Y RESPALDAN',
       'recupere_mis_viernes_completos': '“Recuperé mis viernes completos”',
-      'deposito_reembolsable_asistir': 'depósito reembolsable al asistir',
+      'deposito_reembolsable_asistir': 'reembolsable al contratar (≤24 h háb.)',
       'vivo_sobre_tus_tareas': 'en vivo, sobre tus tareas reales',
       'para_persona_semanas': 'Para ti (1 persona) · 4 semanas',
       'buscando_horarios_disponibles': 'Buscando horarios disponibles…',
-      'gratis_sin_llamadas_venta': 'gratis · sin llamadas de venta',
+      'gratis_sin_llamadas_venta': 'sin llamadas de venta',
       'dueno_personas_semanas': 'Dueño + 2 personas · 6 semanas',
       'consultor_esta_escribiendo': 'Tu consultor está escribiendo',
       'mas_entregado_misma_persona': 'más entregado, misma persona',
@@ -1035,7 +1088,7 @@ class Component extends DCLogic {
     },
     en: {
       'llevo_anos_poniendo_agentes': '. I\'ve spent years putting AI agents to real work: WhatsApp sales, voice, collections, recruiting and customer service for high-volume brands and operations. With Yaub I built the platform running millions of conversations today. This consulting is the 1-on-1 version of all that: I personally build your setup, train you on YOUR work, and stay with you in the community. And I don\'t come from software alone: I run',
-      'consultor_arma_semana_contigo': 'Your AI consultant builds your week with you: skills, Cowork and tailored agents. Same people, same hours — ten times the operation. The discovery is free, and the plan is fully credited back if we work together.',
+      'consultor_arma_semana_contigo': 'Your AI consultant builds your week with you: skills, Cowork and tailored agents. Same people, same hours — ten times the operation. Your plan is built to measure and fully refunded if we work together.',
       'nada_teoria_poder_accion': 'No theory: the power of action applied to your real work, with the tools I use every day. And the support and community aren\'t just with me: they\'re with',
       'talleres_grupales_sesion_por': '4 group workshops · 1 one-on-one session per person · skills by role · 10–14 → $2,490 each · 15+ custom quote (agent included) · lifetime community',
       'seguimiento_personal_aprueba_plan': 'Your follow-up is personal: he approves your plan, sends it over WhatsApp and walks with you from day one.',
@@ -1047,7 +1100,7 @@ class Component extends DCLogic {
       'las_herramientas_hicieron_mas': '— AI tools made me more efficient and gave me something I want to share with you today:',
       'ventas_atencion_cliente_cobranza': 'Sales, customer service, collections, recruiting and scheduling with AI for your customers — 24/7.',
       'sesiones_diagnostico_propuesta_automatizacion': '6 sessions · diagnosis + automation proposal · skills by role + Cowork for all 3 ·',
-      'empieza_platicando_con_consultor': 'Start by talking to my consultant — that costs you nothing. From there, you decide how far.',
+      'empieza_platicando_con_consultor': 'Start by talking to my consultant. From there you build your tailored plan and decide how far.',
       'agenda_abierta_esta_semana': 'Open calendar this week — pick the time that works and we take it from there.',
       'listo_jacobo_tiene_brief': '✓ Done — Jacobo has your brief and your plan. He\'ll reach out within 24 business hours.',
       'del_otro_lado_jacobo': 'On the other side, Jacobo gets your full brief and your plan — not a cold form.',
@@ -1058,7 +1111,7 @@ class Component extends DCLogic {
       'platica_plan_minutos_plan': 'From conversation to plan in minutes — from your plan to change in weeks.',
       'sabia_nada_hoy_equipo': '“I knew nothing about AI. Today my team won\'t go back.”',
       'automatiza_cualquier_flujo_vertical': 'Automate any vertical flow of your business, end to end.',
-      'los_400_plan_descuentan': 'The $400 from your plan is credited toward any of these packages.',
+      'los_400_plan_descuentan': 'What you pay for your plan is fully refunded when you sign up for any of these packages.',
       'agente_contesta_las_cierra': '“The agent answers at 11 pm and closes sales while I sleep.”',
       'reporte_que_tomaba_manana': '“The report that took me all morning now takes 10 minutes.”',
       'oficina_con_correo_calendario': 'Your office with AI: email, calendar and files connected.',
@@ -1082,7 +1135,7 @@ class Component extends DCLogic {
       'capacitacion_vivo_comunidad_por': 'Live training + lifetime community',
       'capacito_equipo_dos_semanas': '“It trained my team of 8 in two weeks”',
       'gerente_administrativa_despacho_contable': 'Admin manager · accounting firm',
-      '400_mxn_que_descuentan': '$400 MXN credited when you sign up',
+      '400_mxn_que_descuentan': 'fully refunded when you sign up',
       'plan_esta_una_platica': 'Your plan is one conversation away.',
       'con_setup_misma_persona': ', with your setup the same person delivers',
       'paquetes_precios_lanzamiento_mxn': 'PACKAGES · LAUNCH PRICING · MXN',
@@ -1098,11 +1151,11 @@ class Component extends DCLogic {
       'rol_dolores_horas_herramientas': 'role, pain points, hours, tools',
       'empresas_que_confian_respaldan': 'COMPANIES THAT TRUST AND BACK US',
       'recupere_mis_viernes_completos': '“I got my Fridays back”',
-      'deposito_reembolsable_asistir': 'refundable deposit when you show up',
+      'deposito_reembolsable_asistir': 'refundable when you sign up (≤24 business hrs)',
       'vivo_sobre_tus_tareas': 'live, on your real tasks',
       'para_persona_semanas': 'For you (1 person) · 4 weeks',
       'buscando_horarios_disponibles': 'Looking for open slots…',
-      'gratis_sin_llamadas_venta': 'free · no sales calls',
+      'gratis_sin_llamadas_venta': 'no sales calls',
       'dueno_personas_semanas': 'Owner + 2 people · 6 weeks',
       'consultor_esta_escribiendo': 'Your consultant is typing',
       'mas_entregado_misma_persona': 'more delivered, same person',
@@ -1336,15 +1389,15 @@ class Component extends DCLogic {
     es: [
       { q: '¿Necesito saber de IA?', a: 'No. Por eso el temario arranca de cero y siempre sobre TU trabajo — con tus reportes, tus formatos y tus herramientas reales.' },
       { q: '¿Qué pasa si no contrato?', a: 'El plan es tuyo y te lo llevas — está hecho sobre tu operación, no sobre un caso genérico. Muchos regresan después con él en la mano.' },
-      { q: '¿Por qué el plan tiene costo?', a: 'Porque no es un PDF de plantilla: sale de tu discovery y lo arma un consultor sobre tu operación real. Y si contratas la consultoría, te lo descontamos completo del paquete — al final el plan te salió gratis. Cuesta lo justo para que ambos lleguemos en serio.' },
-      { q: '¿Y el depósito de la cita?', a: 'Se devuelve completo cuando nos conectamos. Es solo para apartar el horario: te atiendo yo, y una silla vacía es tiempo que le quito a alguien más.' },
+      { q: '¿Por qué el plan tiene costo?', a: 'Porque no es un PDF de plantilla: sale de tu discovery y lo arma un consultor sobre tu operación real. Cuesta $99 (solo tu plan) o $499 (tu plan + tu sesión con Jacobo apartada), y se te reembolsa completo — manual, dentro de 24 h hábiles — si contratas la consultoría. Cuesta lo justo para que ambos lleguemos en serio.' },
+      { q: '¿El plan se me reembolsa?', a: 'Sí, completo, si contratas la consultoría: te lo devolvemos manual dentro de las siguientes 24 h hábiles. Si no contratas, el plan es tuyo y te lo llevas hecho sobre tu operación real.' },
       { q: '¿Facturas?', a: 'Sí, todos los paquetes se facturan.' }
     ],
     en: [
       { q: 'Do I need to know AI?', a: 'No. That is why the curriculum starts from zero and always on YOUR work — with your reports, your formats and your real tools.' },
       { q: 'What if I do not sign up?', a: 'The plan is yours to keep — it is built on your operation, not on a generic case. Many come back later with it in hand.' },
-      { q: 'Why does the plan cost?', a: 'Because it is not a template PDF: it comes out of your discovery and a consultant builds it on your real operation. And if you sign up for the consulting, we credit it back in full — in the end the plan was free. It costs just enough for both of us to show up seriously.' },
-      { q: 'What about the booking deposit?', a: 'You get it back in full when we connect. It is only to hold the slot: I run these myself, and an empty chair is time taken from someone else.' },
+      { q: 'Why does the plan cost?', a: 'Because it is not a template PDF: it comes out of your discovery and a consultant builds it on your real operation. It costs $99 (just your plan) or $499 (your plan + your session with Jacobo held), fully refunded — manually, within 24 business hours — if you sign up for the consulting. It costs just enough for both of us to show up seriously.' },
+      { q: 'Is the plan refunded?', a: 'Yes, in full, if you sign up for the consulting: we return it manually within the next 24 business hours. If you do not sign up, the plan is yours to keep, built on your real operation.' },
       { q: 'Do you invoice?', a: 'Yes, every package is invoiced.' }
     ]
   };
@@ -1432,6 +1485,27 @@ class Component extends DCLogic {
       if (l !== this.state.lang) this.setState({ lang: l });
     } catch (e) {}
 
+    // Regreso de MercadoPago (?pago=success|failure|pending&lead=<uuid>).
+    // `pago=success` en la URL no prueba nada — cualquiera puede escribirlo a mano.
+    // Solo el polling a payment_status (access_granted del webhook) da acceso.
+    try {
+      const qs = new URLSearchParams(window.location.search);
+      const pago = qs.get('pago'), lead = qs.get('lead');
+      if (pago && lead && /^[0-9a-f-]{36}$/i.test(lead)) {
+        // Panel propio: al volver de MP la página viene fresca (sin aiPlan), así que
+        // NO podemos mandar al paso 4 — renderizaría el plan vacío.
+        this.setState({ leadId: lead, payReturn: true });
+        if (pago === 'success' || pago === 'pending') {
+          this.setState({ payConfirming: true });
+          this.pollPayment(lead, 15); // 15 × 2s ≈ 30s
+        } else {
+          this.setState({ payErr: 'El pago no se completó. Puedes intentar de nuevo.' });
+        }
+        // Limpia la URL para que un reload no re-dispare el flujo.
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    } catch (e) {}
+
     setTimeout(() => this.setupYaubie(), 600);
     setTimeout(() => {
       this.io = new IntersectionObserver((es) => {
@@ -1451,7 +1525,7 @@ class Component extends DCLogic {
     const el = document.getElementById('chatCol');
     if (el) el.scrollTop = el.scrollHeight;
   }
-  componentWillUnmount() { if (this.io) this.io.disconnect(); if (this.ti) clearInterval(this.ti); if (this.hi) clearInterval(this.hi); if (this.iv) clearInterval(this.iv); if (this.yaubieBubble) { this.yaubieBubble.remove(); this.yaubieBubble = null; } }
+  componentWillUnmount() { if (this.io) this.io.disconnect(); if (this.ti) clearInterval(this.ti); if (this.hi) clearInterval(this.hi); if (this.iv) clearInterval(this.iv); if (this.pt) clearTimeout(this.pt); if (this.yaubieBubble) { this.yaubieBubble.remove(); this.yaubieBubble = null; } }
   animP3() {
     const t0 = Date.now();
     this.ti = setInterval(() => {
@@ -1573,43 +1647,119 @@ class Component extends DCLogic {
     if (!c || st.contactSending || st.contactSent) return;
     if (!st.leadId) { this.setState({ contactSent: true }); return; }
     this.setState({ contactSending: true });
-    this.api({ action: 'contact', lead_id: st.leadId, contacto: c })
+    // Mandamos nombre/telefono aparte de `contacto`: el backend los persiste en sus columnas.
+    // Sin ellas el lead queda sin forma de cobrarle ni darle seguimiento.
+    const nombre = (st.nombre || '').trim();
+    const telefono = (st.telefono || '').replace(/\D/g, '');
+    const payload = { action: 'contact', lead_id: st.leadId, contacto: c };
+    if (nombre) payload.nombre = nombre;
+    if (telefono.length >= 10) payload.telefono = telefono;
+    this.api(payload)
       .then(() => this.setState({ contactSent: true, contactSending: false }))
       .catch(e => { console.error('[consultor] contact:', e); this.setState({ contactSending: false }); });
   }
 
+  // ── Pago (MercadoPago Checkout Pro vía plan_checkout) ──
+  // El paquete sale del plan (pkg_rec); solo mandamos `pkg` si el usuario eligió otro.
+  startCheckout() {
+    const st = this.state;
+    if (!st.leadId || st.payLoading) return;
+    this.setState({ payLoading: true, payErr: '', payQuote: false });
+    const payload = { action: 'plan_checkout', lead_id: st.leadId };
+    if (st.pkg && st.pkg.name) payload.pkg = st.pkg.name;
+    this.api(payload)
+      .then(res => {
+        if (res && res.ok && res.already && res.access) {
+          // Ya pagó o entró con código: no lo mandes a pagar otra vez.
+          this.setState({ payLoading: false, access: true, accessReason: 'already' });
+          return;
+        }
+        if (res && res.ok && res.checkout_url) { window.location.href = res.checkout_url; return; }
+        if (res && res.error === 'requiere_cotizacion') {
+          this.setState({ payLoading: false, payQuote: true, payQuotePkg: res.pkg || 'MI EQUIPO' });
+          return;
+        }
+        if (res && res.error === 'rate_limited') {
+          this.setState({ payLoading: false, payErr: 'Espera un momento y vuelve a intentar.' });
+          return;
+        }
+        this.setState({ payLoading: false, payErr: (res && res.message) || 'No pude generar tu link de pago — intenta de nuevo.' });
+      })
+      .catch(e => { console.error('[pago] checkout:', e); this.setState({ payLoading: false, payErr: 'Falló la conexión — intenta de nuevo.' }); });
+  }
+
+  // Polling tras volver de MercadoPago. `?pago=success` en la URL NO da acceso:
+  // la verdad es access_granted del webhook confirmado contra MercadoPago.
+  pollPayment(leadId, tries) {
+    if (tries <= 0) {
+      this.setState({ payConfirming: false, payErr: 'Tu pago sigue en revisión. En cuanto se confirme, Jacobo te escribe por WhatsApp.' });
+      return;
+    }
+    this.api({ action: 'payment_status', lead_id: leadId })
+      .then(res => {
+        if (res && res.ok && res.access_granted) {
+          this.setState({ payConfirming: false, access: true, accessReason: res.access_reason || 'paid' });
+          return;
+        }
+        this.pt = setTimeout(() => this.pollPayment(leadId, tries - 1), 2000);
+      })
+      .catch(e => { console.error('[pago] status:', e); this.pt = setTimeout(() => this.pollPayment(leadId, tries - 1), 2000); });
+  }
+
+  // ── Bypass con master password ──
+  // La password NUNCA vive en el front: se manda tal cual y solo el servidor la valida.
+  unlockAccess() {
+    const st = this.state;
+    const pw = (st.unlockPw || '').trim();
+    if (!pw || st.unlockBusy) return;
+    this.setState({ unlockBusy: true, unlockErr: '' });
+    this.api({ action: 'access_unlock', lead_id: st.leadId, password: pw })
+      .then(res => {
+        if (res && res.ok && res.access) {
+          this.setState({ unlockBusy: false, unlockOpen: false, unlockPw: '', access: true, accessReason: res.reason || 'master_password' });
+        } else {
+          this.setState({ unlockBusy: false, unlockErr: 'Código incorrecto.' });
+        }
+      })
+      .catch(e => { console.error('[pago] unlock:', e); this.setState({ unlockBusy: false, unlockErr: 'Falló la conexión — intenta de nuevo.' }); });
+  }
+
   // ── Agenda web (Yaub Calendar del Agente Consultoría Jacobo) ──
-  dayKey(iso) { return new Intl.DateTimeFormat('en-CA', { timeZone: this.state.bkTz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(iso)); }
-  fmtDay(iso) { return new Date(iso).toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short', timeZone: this.state.bkTz }); }
-  fmtTime(iso) { return new Date(iso).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: this.state.bkTz }); }
-  openBooking() {
-    this.setState({ bookingOpen: true, bkErr: '', bkDone: false });
-    if (this.state.bkSlots.length) return;
+  // El front NO calcula ni formatea fechas: pide los slots sin rango (el servidor pone hoy → +13),
+  // pinta `label` tal cual y devuelve `start` sin tocarlo. Formatear aquí fue el bug original.
+  loadSlots() {
     this.setState({ bkLoading: true });
-    const p = n => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
-    this.api({ action: 'agenda_slots', start_date: p(0), end_date: p(13) })
+    // Sin start_date/end_date a propósito: el servidor decide el rango en su propia zona horaria.
+    return this.api({ action: 'agenda_slots' })
       .then(res => {
         if (res && res.ok) {
-          const sl = res.available_slots || [];
-          this.setState({ bkSlots: sl, bkTz: res.timezone || 'America/Monterrey', bkLoading: false, bkDay: sl.length ? this.dayKey(sl[0]) : null });
+          this.setState({ bkSlots: res.slots || [], bkTz: res.timezone || 'America/Monterrey', bkLoading: false, bkShown: 4 });
         } else this.setState({ bkLoading: false, bkErr: 'No pude cargar horarios — intenta de nuevo.' });
       })
       .catch(e => { console.error('[agenda] slots:', e); this.setState({ bkLoading: false, bkErr: 'No pude cargar horarios — intenta de nuevo.' }); });
   }
+  openBooking() {
+    this.setState({ bookingOpen: true, bkErr: '', bkDone: false });
+    if (this.state.bkSlots.length) return;
+    this.loadSlots();
+  }
   confirmBooking() {
     const st = this.state;
     const name = (st.bkName || '').trim(), phone = (st.bkPhone || '').replace(/\D/g, '');
-    if (!st.bkSlot) { this.setState({ bkErr: 'Elige un día y un horario.' }); return; }
+    if (!st.bkSlot) { this.setState({ bkErr: 'Elige un horario.' }); return; }
     if (name.length < 3 || phone.length < 10) { this.setState({ bkErr: 'Ponme tu nombre y tu WhatsApp a 10 dígitos.' }); return; }
     if (st.bkBooking) return;
     this.setState({ bkBooking: true, bkErr: '' });
+    // st.bkSlot es el ISO exacto que mandó el servidor, sin transformar.
     this.api({ action: 'agenda_book', start: st.bkSlot, name, phone: phone, lead_id: st.leadId })
       .then(res => {
+        // agenda_book responde HTTP 200 incluso en error: la verdad está en el body.
         if (res && res.ok) {
-          this.setState({ bkBooking: false, bkDone: true, bkDoneLabel: this.fmtDay(res.starts_at) + ' · ' + this.fmtTime(res.starts_at) + ' (hora MTY)' });
+          this.setState({ bkBooking: false, bkDone: true, bkDoneLabel: res.starts_at_label || '' });
         } else {
-          this.setState({ bkBooking: false, bkErr: (res && res.message) || 'Ese horario ya se ocupó — elige otro.', bkSlots: [], bkSlot: null });
-          this.openBooking();
+          // Slot pasado u ocupado: recarga horarios y ofrece los siguientes, sin drama.
+          this.setState({ bkBooking: false, bkSlot: null, bkSlots: [], bkErr: (res && res.message) || 'Ese horario ya se ocupó — elige otro.' });
+          this.loadSlots();
         }
       })
       .catch(e => { console.error('[agenda] book:', e); this.setState({ bkBooking: false, bkErr: 'Falló la conexión — intenta de nuevo.' }); });
@@ -1692,7 +1842,9 @@ class Component extends DCLogic {
     return {
       accent, accent2, accentSoft: `rgba(${r},${g},${b},0.13)`, accentGlow: `rgba(${r},${g},${b},0.35)`,
       step: st.step, stepLabel: (st.lang === 'en' ? 'YOUR CONSULTANT · STEP ' + st.step + ' OF 5 · ' : 'TU CONSULTOR · PASO ' + st.step + ' DE 5 · ') + stepLabels[st.step - 1],
-      c1: st.step === 1, c2: st.step === 2, c3: st.step === 3, c4: st.step === 4, c5: st.step === 5,
+      // payReturn toma el panel completo: al volver de MP no hay plan en memoria que mostrar.
+      c1: st.step === 1 && !st.payReturn, c2: st.step === 2 && !st.payReturn, c3: st.step === 3 && !st.payReturn,
+      c4: st.step === 4 && !st.payReturn, c5: st.step === 5 && !st.payReturn,
       prevC: () => this.goStep(st.step - 1), nextC: () => this.goStep(st.step + 1), resetC: () => this.resetCot(),
       nombreIn: st.nombre, onNombre: e => this.setState({ nombre: e.target.value, formErr: '' }),
       telefonoIn: st.telefono, onTelefono: e => this.setState({ telefono: e.target.value, formErr: '' }),
@@ -1721,6 +1873,13 @@ class Component extends DCLogic {
       goStep5: () => this.goStep(5),
       nombre,
       s3sub: st.planLoading ? 'Tu consultor está armando tu plan en vivo con lo que le platicaste…' : 'Tu operación con tu stack de IA trabajando en cada etapa.',
+      // El diagrama solo se pinta con el plan REAL. Mientras carga se muestra el loader,
+      // para no dejar ver el preset de fallback (P) un instante antes de que llegue la respuesta.
+      planTitle: 'Este es tu plan semanal',
+      planLoading: st.planLoading,
+      planShown: !st.planLoading,
+      planLoadTitle: 'Tu consultor está armando tu plan…',
+      planLoadSub: 'Cruzando lo que le platicaste con tu stack de IA. Toma unos segundos.',
       planIntro: (ai && ai.intro) ? ai.intro : '',
       folio: st.leadId ? ('YB-' + st.leadId.slice(0, 8).toUpperCase()) : 'YB-2026',
       stages, cons, links, equipos: equiposSrc.map(e => ({ ...e, left: e.cx - 109 })),
@@ -1738,17 +1897,38 @@ class Component extends DCLogic {
       closeBooking: () => this.setState({ bookingOpen: false }),
       bookingOpen: st.bookingOpen, bkLoading: st.bkLoading, bkDone: st.bkDone, bkDoneLabel: st.bkDoneLabel,
       bkFormOn: !st.bkLoading && !st.bkDone, bkErr: st.bkErr,
-      bkDays: (() => {
-        const dm = {}; st.bkSlots.forEach(iso => { const k = this.dayKey(iso); (dm[k] = dm[k] || []).push(iso); });
-        const chip = on => `padding:9px 14px;border-radius:999px;border:1.5px solid ${on ? accent : 'rgba(30,39,97,.15)'};background:${on ? `rgba(${r},${g},${b},0.13)` : 'rgba(255,255,255,.9)'};color:var(--ink2);font-size:12.5px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;flex:none;`;
-        this._bkChip = chip; this._bkDayMap = dm;
-        return Object.keys(dm).sort().map(k => ({ label: this.fmtDay(dm[k][0]), style: chip(k === st.bkDay), pick: () => this.setState({ bkDay: k, bkSlot: null }) }));
-      })(),
-      bkTimes: ((this._bkDayMap && this._bkDayMap[st.bkDay]) || []).slice(0, 24).map(iso => ({ label: this.fmtTime(iso), style: this._bkChip(iso === st.bkSlot), pick: () => this.setState({ bkSlot: iso }) })),
+      // `label` viene ya formateado del servidor (hora de Monterrey, español) — se pinta tal cual.
+      // `s.start` es el ISO exacto del servidor y viaja de regreso sin transformar.
+      bkSlotList: st.bkSlots.slice(0, st.bkShown).map(s => ({
+        label: s.label,
+        style: `text-align:left;padding:12px 15px;border-radius:13px;border:1.5px solid ${s.start === st.bkSlot ? accent : 'rgba(30,39,97,.15)'};background:${s.start === st.bkSlot ? `rgba(${r},${g},${b},0.13)` : 'rgba(255,255,255,.9)'};color:var(--ink2);font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;width:100%;box-sizing:border-box;`,
+        pick: () => this.setState({ bkSlot: s.start, bkErr: '' })
+      })),
+      bkMoreOn: st.bkSlots.length > st.bkShown,
+      bkMore: () => this.setState(s => ({ bkShown: s.bkShown + 4 })),
       bkName: st.bkName, onBkName: e => this.setState({ bkName: e.target.value }),
       bkPhone: st.bkPhone, onBkPhone: e => this.setState({ bkPhone: e.target.value }),
       confirmBooking: () => this.confirmBooking(),
       bkBtn: st.bkBooking ? 'Agendando…' : 'Confirmar mi cita',
+
+      // ── Wizard de pago ──
+      payReturn: st.payReturn, payConfirming: st.payConfirming,
+      access: st.access, notAccess: !st.access,
+      payOn: !st.access && !st.payQuote,
+      payBtn: st.payLoading ? 'Generando tu link…' : 'Quiero empezar — pagar en línea',
+      startCheckout: () => this.startCheckout(),
+      payErr: st.payErr, payErrOn: !!st.payErr,
+      payQuote: st.payQuote, payQuotePkg: st.payQuotePkg,
+      accessMsg: st.accessReason === 'master_password'
+        ? '✓ Acceso desbloqueado con tu código — Jacobo te contacta para arrancar.'
+        : '✓ Pago confirmado — ya tienes acceso. Jacobo te escribe por WhatsApp para arrancar.',
+      // Bypass: solo manda lo que el usuario escribió; la password se valida server-side.
+      unlockOpen: st.unlockOpen, unlockClosed: !st.unlockOpen,
+      openUnlock: () => this.setState({ unlockOpen: true, unlockErr: '' }),
+      unlockPw: st.unlockPw, onUnlockPw: e => this.setState({ unlockPw: e.target.value }),
+      unlockAccess: () => this.unlockAccess(),
+      unlockBtn: st.unlockBusy ? 'Validando…' : 'Desbloquear',
+      unlockErr: st.unlockErr, unlockErrOn: !!st.unlockErr,
       hr1: Math.round(7 * hpE) + ' h', hr2: (1 + 1.3 * hpE).toFixed(1) + '×', hr3: '< ' + Math.max(1, Math.round(2 * hpE)) + ' m',
       antesN: Math.round(13 * p3E), despN: Math.round(5 * p3E), barA: (100 * p3E) + '%', barB: (38 * p3E) + '%',
       d1: donut[0].da, d2: donut[1].da, o2: donut[1].off, d3: donut[2].da, o3: donut[2].off, d4: donut[3].da, o4: donut[3].off, d5: donut[4].da, o5: donut[4].off,
