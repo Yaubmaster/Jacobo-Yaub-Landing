@@ -1764,7 +1764,7 @@ class Component extends DCLogic {
         if (res && res.ok && res.checkout_url) { window.location.href = res.checkout_url; return; }
         this.setState({ feeLoading: false, feeErr: (res && res.message) || 'No pude generar tu cobro. Usa tu código de acceso o intenta de nuevo.' });
       })
-      .catch(e => { console.error('[fee] checkout:', e); this.setState({ feeLoading: false, feeErr: 'Falló la conexión — intenta de nuevo.' }); });
+      .catch(e => { console.error('[fee] checkout:', e); this.setState({ feeLoading: false, feeErr: 'No pude iniciar el cobro en este momento. Intenta de nuevo en un minuto o usa tu código de acceso.' }); });
   }
   // Desbloqueado (fee pagado o código de acceso): cierra el gate y genera el plan.
   onUnlocked() {
