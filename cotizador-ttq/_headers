@@ -1,0 +1,3 @@
+# La URL de pruebas *.workers.dev no debe indexarse.
+https://:worker.:subdomain.workers.dev/*
+  X-Robots-Tag: noindex
