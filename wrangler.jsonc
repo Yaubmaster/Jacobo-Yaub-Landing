@@ -1,0 +1,15 @@
+// jacobo.yaub.ai se sirve desde Cloudflare Workers (solo archivos estáticos, sin
+// build): la carpeta cotizador-ttq/ tal cual, que era el "Root Directory" en Vercel.
+// Lo que no se publica (notas internas) está en cotizador-ttq/.assetsignore.
+{
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "jacobo-yaub-landing",
+  "account_id": "5b949a34f95cacc109d59ae3b15ae13b",
+  "compatibility_date": "2026-09-27",
+  "assets": {
+    "directory": "./cotizador-ttq",
+    "not_found_handling": "none"
+  },
+  "routes": [{ "pattern": "jacobo.yaub.ai", "custom_domain": true }],
+  "workers_dev": true
+}
